@@ -34,37 +34,23 @@ function SidebarLayoutInner({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const [checking, setChecking] = useState(true);
+  const { user, loading } = useUser();
 
-  useEffect(() => {
-    const checkLogin = async () => {
-      try {
-        const res = await fetch(`${DOMAIN}/api/v1/user/me`, { credentials: "include" });
-        if (!res.ok) {
-          router.push("/login");
-        } else {
-          const user = await res.json();
-          if (user && user.is_active === false) {
-            router.push("/verify-email");
-          } else {
-            setChecking(false);
-          }
-        }
-      } catch (err) {
-        console.error("Error checking login", err);
-        router.push("/login");
-      }
-    };
-    checkLogin();
-  }, []);
-
-  if (checking) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <span className="text-gray-500">Checking login status...</span>
       </div>
     );
   }
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/login");
+    } else if (user && (user as any).is_active === false) {
+      router.push("/verify-email");
+    }
+  }, [user]);
 
   return (
     <div className="min-h-screen flex bg-white text-gray-800 fixed inset-0 overflow-hidden">

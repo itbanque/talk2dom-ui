@@ -7,7 +7,6 @@ import { DOMAIN } from "@/lib/constants";
 import { FaChartBar, FaUsers, FaArrowLeft } from "react-icons/fa";
 import SidebarLayout from "@/components/layout/SidebarLayout";
 import { useUser } from "@/context/UserContext";
-import { Line } from "react-chartjs-2";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend, TimeScale, BarElement } from "chart.js";
 ChartJS.register(BarElement);

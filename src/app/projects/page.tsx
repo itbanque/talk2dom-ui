@@ -149,7 +149,7 @@ export default function ProjectsPage() {
                     </div>
                   </div>
                   <Link
-                    href={`/projects/${p.id}`}
+                    href={`/project/${p.id}`}
                     className="text-sm text-gray-600 hover:text-black underline"
                   >
                     Open Project →
@@ -181,7 +181,7 @@ export default function ProjectsPage() {
                 <button
                   onClick={async () => {
                     try {
-                      const res = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/v1/project/`, {
+                      const res = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/v1/project`, {
                         method: "POST",
                         headers: {
                           "Content-Type": "application/json",

@@ -77,8 +77,9 @@ export default function DocsPage() {
               >
                 {copiedStepByStep ? "Copied" : "Copy"}
               </button>
-              <pre ref={stepByStepRef} className="bg-gray-100 p-4 rounded text-sm overflow-x-auto mt-4">
-{`POST /api/v1/inference/locator
+              <pre className="bg-gray-100 p-4 rounded text-sm overflow-x-auto mt-4">
+                <code ref={stepByStepRef} className="language-javascript">
+                  {`POST /api/v1/inference/locator
 Headers:
   X-Project-ID: your_project_id
   Authorization: Bearer your_api_key
@@ -92,6 +93,7 @@ Body:
     ["I want to click the login area", "xpath,//div/button"]
   ]
 }`}
+                </code>
               </pre>
             </div>
             <p className="text-sm text-gray-600 mt-2">
@@ -114,8 +116,9 @@ Body:
               >
                 {copiedSampleCode ? "Copied" : "Copy"}
               </button>
-              <pre ref={sampleCodeRef} className="bg-gray-100 p-4 rounded text-sm overflow-x-auto mt-4">
-{`import time
+              <pre className="bg-gray-100 p-4 rounded text-sm overflow-x-auto mt-4">
+                <code ref={sampleCodeRef} className="language-python">
+                  {`import time
 import requests
 from selenium import webdriver
 from selenium.webdriver import Keys
@@ -151,8 +154,8 @@ element.send_keys(Keys.RETURN)
 time.sleep(2)
 
 assert "No results found." not in driver.page_source
-assert "PSF PyCon Trademark Usage Policy" in driver.page_source
-`}
+assert "PSF PyCon Trademark Usage Policy" in driver.page_source`}
+                </code>
               </pre>
             </div>
             <p className="text-sm text-gray-600 mt-2">
