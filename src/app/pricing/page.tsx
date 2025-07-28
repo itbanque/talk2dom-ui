@@ -7,7 +7,7 @@ import { DOMAIN } from "@/lib/constants";
 import Footer from "@/components/layout/Footer";
 
 
-const PLAN_LEVEL = { developer: 1, pro: 2, enterprise: 3 };
+const PLAN_LEVEL: Record<string, number> = { developer: 1, pro: 2, enterprise: 3 };
 
 export default function PricingPage() {
   const { user } = useUser();
@@ -52,7 +52,7 @@ export default function PricingPage() {
               >
                 Sign up
               </Link>
-            ) : PLAN_LEVEL[user?.plan] > PLAN_LEVEL["developer"] ? (
+            ) : user?.plan && PLAN_LEVEL[user.plan] > PLAN_LEVEL["developer"] ? (
               <button className="mt-auto text-center bg-gray-200 text-gray-400 py-2 rounded cursor-not-allowed" disabled>
                 Included
               </button>
@@ -87,7 +87,7 @@ export default function PricingPage() {
               >
                 Sign up
               </Link>
-            ) : PLAN_LEVEL[user?.plan] > PLAN_LEVEL["pro"] ? (
+            ) : user?.plan && PLAN_LEVEL[user.plan] > PLAN_LEVEL["pro"] ? (
               <button className="mt-auto text-center bg-gray-200 text-gray-400 py-2 rounded cursor-not-allowed" disabled>
                 Included
               </button>

@@ -4,6 +4,7 @@
 import { FaFolderOpen, FaCog } from "react-icons/fa";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
+import React from "react";
 import { useUser } from "@/context/UserContext";
 import SidebarLayout from "@/components/layout/SidebarLayout";
 import { toast } from "react-hot-toast";
@@ -12,9 +13,10 @@ import { toast } from "react-hot-toast";
 const DOMAIN = process.env.NEXT_PUBLIC_API_DOMAIN || "";
 
 
+type Project = { id: string; name: string; description?: string };
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState([]);
-  const [openDropdownId, setOpenDropdownId] = useState(null);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
 
   const [showModal, setShowModal] = useState(false);
   const [projectName, setProjectName] = useState("");
@@ -24,7 +26,7 @@ export default function ProjectsPage() {
   const maxProjects = user?.plan === "free" ? 2 : user?.plan === "developer" ? 10 : Infinity;
   const canCreateProject = projects.length < maxProjects;
 
-  const refs = useRef({});
+  const refs = useRef<Record<string, React.RefObject<HTMLDivElement | null>>>({});
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -42,22 +44,22 @@ export default function ProjectsPage() {
     fetchProjects();
   }, []);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (openDropdownId !== null) {
-        const ref = refs.current[openDropdownId];
-        if (ref && ref.current && !ref.current.contains(event.target)) {
-          setOpenDropdownId(null);
+    useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (openDropdownId !== null) {
+          const ref = refs.current[openDropdownId];
+          if (ref && ref.current && !ref.current.contains(event.target as Node)) {
+            setOpenDropdownId(null);
+          }
         }
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [openDropdownId]);
+      };
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [openDropdownId]);
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string) => {
     try {
       const res = await fetch(`${DOMAIN}/api/v1/project/${id}`, {
         method: "DELETE",
@@ -113,15 +115,15 @@ export default function ProjectsPage() {
 
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
             {projects.map((p) => {
-              if (!refs.current[p.id]) {
-                refs.current[p.id] = { current: null };
-              }
-              return (
-                <div
-                  key={p.id}
-                  className="relative bg-gray-50 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition p-5"
-                  ref={(el) => (refs.current[p.id].current = el)}
-                >
+          if (!refs.current[p.id]) {
+            refs.current[p.id] = React.createRef<HTMLDivElement>();
+          }
+          return (
+            <div
+              key={p.id}
+              className="relative bg-gray-50 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition p-5"
+              ref={refs.current[p.id]}
+            >
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
                       <FaFolderOpen className="text-gray-500 text-xl" />
@@ -198,7 +200,11 @@ export default function ProjectsPage() {
                       setShowModal(false);
                       setProjectName("");
                     } catch (err) {
-                      toast.error(`Failed to create project: ${err.message || err}`);
+                      if (err instanceof Error) {
+                        toast.error(`Failed to create project: ${err.message}`);
+                      } else {
+                        toast.error("Failed to create project.");
+                      }
                       console.error("Error creating project:", err);
                     }
                   }}

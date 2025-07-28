@@ -12,7 +12,7 @@ export default function DocsPage() {
   const [copiedStepByStep, setCopiedStepByStep] = useState(false);
   const [copiedSampleCode, setCopiedSampleCode] = useState(false);
 
-  const handleCopy = (ref: React.RefObject<HTMLElement>, setCopied: React.Dispatch<React.SetStateAction<boolean>>) => {
+  const handleCopy = (ref: React.RefObject<HTMLElement | null>, setCopied: React.Dispatch<React.SetStateAction<boolean>>) => {
     if (ref.current) {
       navigator.clipboard.writeText(ref.current.innerText).then(() => {
         setCopied(true);

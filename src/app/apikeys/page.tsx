@@ -7,8 +7,16 @@ import { toast } from "react-hot-toast";
 const DOMAIN = process.env.NEXT_PUBLIC_API_DOMAIN || "";
 
 
+type ApiKey = {
+  id: string;
+  name?: string;
+  key?: string;
+  created_at: string;
+  is_active: boolean;
+};
+
 export default function ApiKeyPage() {
-  const [apiKeys, setApiKeys] = useState([]);
+  const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
 
   const [copiedKeyId, setCopiedKeyId] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -134,7 +142,7 @@ export default function ApiKeyPage() {
               </div>
               <div className="flex gap-2">
                 <button
-                  onClick={() => handleCopy(keyObj.key, keyObj.id)}
+                  onClick={() => handleCopy(keyObj.key!, keyObj.id)}
                   className="text-sm px-3 py-1 border rounded hover:bg-gray-100"
                 >
                   {copiedKeyId === keyObj.id ? "Copied!" : "Copy"}

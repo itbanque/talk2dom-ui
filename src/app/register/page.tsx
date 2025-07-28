@@ -17,15 +17,15 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const { user, isLoading } = useUser();
+  const { user, loading } = useUser();
 
   useEffect(() => {
-    if (!isLoading && user) {
+    if (!loading && user) {
       router.replace("/projects");
     }
-  }, [user, isLoading, router]);
+  }, [user, loading, router]);
 
-  if (isLoading || user) {
+  if (loading || user) {
     return <div className="h-screen w-screen bg-white" />;
   }
 

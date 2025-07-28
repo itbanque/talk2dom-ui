@@ -327,7 +327,11 @@ export default function ProjectDetailPage() {
                     setInviteEmail("");
                   } catch (err) {
                     console.error("Invite error:", err);
-                    toast.error(`Failed to invite user, ${err.message || err}`);
+                    if (err instanceof Error) {
+                      toast.error(`Failed to invite user, ${err.message}`);
+                    } else {
+                      toast.error("Failed to invite user.");
+                    }
                   } finally {
                     setIsInviting(false);
                   }

@@ -9,7 +9,7 @@ import { UserProvider, useUser } from "@/context/UserContext";
 
 const DOMAIN = process.env.NEXT_PUBLIC_API_DOMAIN || "";
 
-const navItems = [
+const navItems: { label: string; href: string; external?: boolean }[] = [
   { label: "Projects", href: "/projects" },
   { label: "API Keys", href: "/apikeys" },
   { label: "Billing", href: "/billing" },

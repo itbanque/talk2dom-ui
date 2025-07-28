@@ -13,7 +13,7 @@ export default function BillingPage() {
   const { user } = useUser();
   const router = useRouter();
 
-  const [invoices, setInvoices] = useState([]);
+  const [invoices, setInvoices] = useState<any[]>([]);
   const [loadingInvoices, setLoadingInvoices] = useState(true);
 
 useEffect(() => {

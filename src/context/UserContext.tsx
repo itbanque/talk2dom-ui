@@ -4,15 +4,21 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 type User = {
+  id: string,
   name: string;
   email: string;
   plan?: string;
   remain_credits?: number;
+  subscription_credits?: number;
+  one_time_credits?: number;
+  subscription_status?: string;
+  subscription_end_date?: string;
+  is_active: boolean
 };
 
 const DOMAIN = process.env.NEXT_PUBLIC_API_DOMAIN || "";
 
-const UserContext = createContext<{ user: User | null }>({ user: null });
+const UserContext = createContext<{ user: User | null; loading: boolean }>({ user: null, loading: true });
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -39,7 +45,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
   if (loading) return null;
 
-  return <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ user, loading }}>{children}</UserContext.Provider>;
 }
 
 export const useUser = () => useContext(UserContext);
