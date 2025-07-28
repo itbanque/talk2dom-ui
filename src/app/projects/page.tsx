@@ -1,7 +1,7 @@
 "use client";
 
 // app/projects/page.tsx
-import { FaFolderOpen, FaCog } from "react-icons/fa";
+import { FiFolder, FiSettings } from "react-icons/fi";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import React from "react";
@@ -13,7 +13,15 @@ import { toast } from "react-hot-toast";
 const DOMAIN = process.env.NEXT_PUBLIC_API_DOMAIN || "";
 
 
-type Project = { id: string; name: string; description?: string };
+type Project = {
+  id: string;
+  name: string;
+  created_at: string;
+  member_count: string;
+  api_calls: string;
+  is_active: boolean;
+  owner_email: string;
+};
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
@@ -88,7 +96,7 @@ export default function ProjectsPage() {
                 onClick={() => canCreateProject && setShowModal(true)}
                 className={`px-5 py-2 rounded-md transition ${
                   canCreateProject
-                    ? 'bg-black text-white hover:bg-gray-800'
+                    ? 'bg-black text-white hover:bg-gray-800 cursor-pointer'
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
                 disabled={!canCreateProject}
@@ -115,28 +123,39 @@ export default function ProjectsPage() {
 
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
             {projects.map((p) => {
-          if (!refs.current[p.id]) {
-            refs.current[p.id] = React.createRef<HTMLDivElement>();
-          }
-          return (
-            <div
-              key={p.id}
-              className="relative bg-gray-50 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition p-5"
-              ref={refs.current[p.id]}
-            >
+              if (!refs.current[p.id]) {
+                refs.current[p.id] = React.createRef<HTMLDivElement>();
+              }
+              return (
+                <div
+                  key={p.id}
+                  ref={refs.current[p.id]}
+                  onClick={(e) => {
+                    const target = e.target as HTMLElement;
+                    if (!refs.current[p.id]?.current?.querySelector(".settings-button")?.contains(target)) {
+                      window.location.href = `/project/${p.id}`;
+                    }
+                  }}
+                  className="relative overflow-hidden rounded-xl border border-gray-200 bg-gradient-to-br from-white to-slate-50 p-6 shadow hover:shadow-xl transition duration-300 group cursor-pointer"
+                >
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <FaFolderOpen className="text-gray-500 text-xl" />
-                      <h2 className="text-lg font-semibold text-gray-900">{p.name}</h2>
+                      <div className="bg-indigo-100 p-3 rounded-full">
+                        <FiFolder className="text-indigo-600 text-xl" />
+                      </div>
+                      <div>
+                        <h2 className="text-lg font-semibold text-gray-900 group-hover:text-indigo-700 transition">{p.name}</h2>
+                        <p className="text-xs text-gray-500">Created on {new Date(p.created_at).toLocaleDateString()}</p>
+                      </div>
                     </div>
-                    <div className="relative">
+                    <div className="relative settings-button">
                       <button
                         onClick={() => setOpenDropdownId(openDropdownId === p.id ? null : p.id)}
-                        className="text-gray-500 hover:text-gray-700 focus:outline-none"
+                        className="text-gray-400 hover:text-gray-600 focus:outline-none"
                         aria-haspopup="true"
                         aria-expanded={openDropdownId === p.id}
                       >
-                        <FaCog className="text-xl" />
+                        <FiSettings className="text-xl" />
                       </button>
                       {openDropdownId === p.id && (
                         <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg z-10">
@@ -150,12 +169,19 @@ export default function ProjectsPage() {
                       )}
                     </div>
                   </div>
-                  <Link
-                    href={`/project/${p.id}`}
-                    className="text-sm text-gray-600 hover:text-black underline"
-                  >
-                    Open Project →
-                  </Link>
+                  <div className="mt-2 space-y-1 text-sm text-gray-600">
+                    <p>👑 Owner: {p.owner_email}</p>
+                    <p>👥 Members: {p.member_count}</p>
+                    <p>📊 API Calls: {p.api_calls}</p>
+                    <p>📌 Status: 
+                      {p.is_active ? (
+                        <span className="inline-block px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-700 ml-1">Active</span>
+                      ) : (
+                        <span className="inline-block px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-700 ml-1">Inactive</span>
+                      )}
+                    </p>
+                  </div>
+                  
                 </div>
               );
             })}
@@ -176,12 +202,16 @@ export default function ProjectsPage() {
               <div className="flex justify-end gap-2">
                 <button
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 rounded border border-gray-300"
+                  className="px-4 py-2 rounded border border-gray-300 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={async () => {
+                    if (!projectName.trim()) {
+                      toast.error("Project name cannot be empty.");
+                      return;
+                    }
                     try {
                       const res = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/v1/project`, {
                         method: "POST",
@@ -191,7 +221,7 @@ export default function ProjectsPage() {
                         credentials: "include",
                         body: JSON.stringify({
                           name: projectName,
-                          description: "", // optionally allow input if needed
+                          description: "",
                         }),
                       });
                       if (!res.ok) throw new Error(await res.text());
@@ -208,7 +238,7 @@ export default function ProjectsPage() {
                       console.error("Error creating project:", err);
                     }
                   }}
-                  className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800"
+                  className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 cursor-pointer"
                 >
                   Create
                 </button>

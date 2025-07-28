@@ -15,6 +15,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   const { user, loading } = useUser();
@@ -42,6 +43,7 @@ export default function RegisterPage() {
     }
 
     try {
+      setIsSubmitting(true);
       const res = await fetch(`${DOMAIN}/api/v1/auth/email/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -50,7 +52,8 @@ export default function RegisterPage() {
 
       if (!res.ok) {
         const error = await res.json();
-        toast.error(error.message || "Registration failed");
+        console.log(error);
+        toast.error(error.detail || "Registration failed");
         return;
       }
 
@@ -59,6 +62,8 @@ export default function RegisterPage() {
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -97,8 +102,12 @@ export default function RegisterPage() {
             {error && (
               <div className="text-red-600 text-sm font-medium">{error}</div>
             )}
-            <button type="submit" className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition">
-              Register
+            <button
+              type="submit"
+              className={`w-full bg-black text-white py-2 rounded transition ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-800 cursor-pointer'}`}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Registering...' : 'Register'}
             </button>
           </form>
           <div className="my-6 flex items-center justify-center">
@@ -108,7 +117,7 @@ export default function RegisterPage() {
           </div>
           <button
             onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center border border-gray-300 px-4 py-2 rounded hover:bg-gray-100 transition text-black"
+            className="w-full flex items-center justify-center border border-gray-300 px-4 py-2 rounded hover:bg-gray-100 transition text-black cursor-pointer"
           >
             <img
               src="https://www.svgrepo.com/show/475656/google-color.svg"

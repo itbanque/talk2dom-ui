@@ -55,9 +55,14 @@ function SidebarLayoutInner({
   return (
     <div className="min-h-screen flex bg-white text-gray-800 fixed inset-0 overflow-hidden">
       {/* Sidebar */}
-      <aside className="w-60 border-r border-gray-200 p-6 flex flex-col h-screen">
+      <aside className="w-60 bg-white text-gray-800 p-6 flex flex-col h-screen shadow-xl">
         <div className="flex-grow">
-          <h2 className="text-xl font-bold mb-6">Talk2Dom</h2>
+          <Link
+            href="/projects"
+            className="inline-block text-xl font-bold px-4 py-2 mb-8 rounded hover:bg-gray-100 transition hover:shadow-md"
+          >
+            Talk2Dom
+          </Link>
           <nav className="flex flex-col space-y-4">
             {navItems.map((item) =>
               item.external ? (
@@ -77,10 +82,14 @@ function SidebarLayoutInner({
                   className={`text-sm font-medium hover:text-black ${
                     pathname.startsWith(item.href)
                       ? "text-black font-semibold"
-                      : "text-gray-500"
+                      : "text-gray-600"
                   }`}
                 >
-                  {item.label}
+                  <>
+                    {item.label === "Projects" && <>📁 {item.label}</>}
+                    {item.label === "API Keys" && <>🔑 {item.label}</>}
+                    {item.label === "Billing" && <>💳 {item.label}</>}
+                  </>
                 </Link>
               )
             )}
@@ -91,9 +100,11 @@ function SidebarLayoutInner({
             href="/docs"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-medium text-gray-500 hover:text-black"
+            className="text-sm font-medium text-gray-400 hover:text-black"
           >
-            Docs
+            <>
+              📚 Docs
+            </>
           </a>
         </div>
         <SidebarUserMenu />
@@ -131,16 +142,16 @@ function SidebarUserMenu() {
         onClick={() => setMenuOpen((prev) => !prev)}
         className="flex items-center space-x-3 focus:outline-none"
       >
-        <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center text-sm font-bold text-white">
+        <div className="w-9 h-9 rounded-full bg-gray-600 flex items-center justify-center text-sm font-bold text-white">
           {user?.name?.[0] || "U"}
         </div>
-        <div className="text-sm font-medium text-gray-700">
+        <div className="text-sm font-medium text-black">
           {user?.name || user?.email?.split("@")[0] || "Username"}
         </div>
       </button>
       {menuOpen && (
-        <div className="absolute bottom-12 left-0 w-48 bg-white border border-gray-200 rounded shadow-lg">
-          <div className="px-4 py-2 text-sm text-gray-700">{user?.email || "user@example.com"}</div>
+        <div className="absolute bottom-12 left-0 w-48 bg-white text-black border border-gray-700 rounded shadow-lg">
+          <div className="px-4 py-2 text-sm text-black">{user?.email || "user@example.com"}</div>
           <hr className="border-gray-200" />
           <a
             href={`${DOMAIN}/api/v1/user/logout`}

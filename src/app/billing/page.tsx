@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import FullPageLoader from "@/components/ui/FullPageLoader"
 
 const DOMAIN = process.env.NEXT_PUBLIC_API_DOMAIN || "";
 
@@ -44,6 +45,9 @@ useEffect(() => {
     fetchInvoices();
   }, []);
 
+  if (loadingInvoices) {
+    return <FullPageLoader message="Loading billing details..." />;
+  }
   return (
     <SidebarLayout>
       <main className="min-h-screen bg-white text-gray-800 px-6 py-12">
@@ -111,9 +115,7 @@ useEffect(() => {
             <h2 className="text-xl font-semibold mb-4">Billing History</h2>
             <p className="text-sm text-gray-500 mb-2">  Displaying your 10 most recent invoices. For older billing records, please contact support.
 </p>
-            {loadingInvoices ? (
-              <p className="text-sm text-gray-600">Loading...</p>
-            ) : invoices.length === 0 ? (
+            {invoices.length === 0 ? (
               <p className="text-sm text-gray-600">No billing history yet.</p>
             ) : (
               <div className="overflow-x-auto">

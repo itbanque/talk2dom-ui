@@ -14,6 +14,7 @@ const DOMAIN = process.env.NEXT_PUBLIC_API_DOMAIN || "";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
   const { user, loading } = useUser();
@@ -31,6 +32,7 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       const response = await fetch(`${DOMAIN}/api/v1/auth/email/login`, {
         method: "POST",
@@ -49,6 +51,8 @@ export default function LoginPage() {
       window.location.href = "/projects";
     } catch (error: any) {
       toast.error(error.message || "Login failed");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -95,9 +99,10 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className="w-full bg-black text-white py-2 rounded hover:bg-gray-900 transition"
+              className="w-full bg-black text-white py-2 rounded hover:bg-gray-900 transition disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+              disabled={isSubmitting}
             >
-              Sign in
+              {isSubmitting ? "Signing in..." : "Sign in"}
             </button>
           </form>
 
@@ -109,7 +114,7 @@ export default function LoginPage() {
 
           <button
             onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center border border-gray-300 px-4 py-2 rounded hover:bg-gray-100 transition text-black"
+            className="w-full flex items-center justify-center border border-gray-300 px-4 py-2 rounded hover:bg-gray-100 transition text-black cursor-pointer"
           >
             <img
               src="https://www.svgrepo.com/show/475656/google-color.svg"

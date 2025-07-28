@@ -171,11 +171,14 @@ export default function ProjectDetailPage() {
             </button>
             <h1 className="text-3xl font-bold">Project Dashboard</h1>
           </div>
-          <div className="mb-8 text-sm text-gray-600 flex items-center gap-2">
-            <span>Project ID:</span>
-            <span className="font-mono text-black">{projectId}</span>
+          <p className="text-gray-500 text-sm mt-1">Manage members, monitor API usage, and invite collaborators.</p>
+          <div className="mb-8 p-4 border rounded bg-gray-50 flex items-center justify-between">
+            <div className="text-sm text-gray-600">
+              <div className="font-semibold">Project ID</div>
+              <div className="font-mono text-black">{projectId}</div>
+            </div>
             <button
-              className="text-blue-600 text-xs border border-blue-600 px-2 py-0.5 rounded hover:bg-blue-50"
+              className="text-blue-600 text-xs border border-blue-600 px-3 py-1 rounded hover:bg-blue-50"
               onClick={() => {
                 if (projectId) {
                   navigator.clipboard.writeText(projectId);
@@ -191,7 +194,7 @@ export default function ProjectDetailPage() {
             <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
               <FaChartBar /> API Usage (Last 30 Days)
             </h2>
-            <div className="w-full min-h-[400px] bg-white border border-gray-300 rounded p-4">
+            <div className="w-full min-h-[400px] bg-white border border-gray-200 shadow-sm rounded p-4">
               {apiUsage.length > 0 ? (
                 <Bar
                   data={{
@@ -233,65 +236,65 @@ export default function ProjectDetailPage() {
 
           <section>
             <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <FaUsers /> Team Members
+              <FaUsers /> Team & Invitations
             </h2>
-        <div className="bg-white border border-gray-200 rounded p-4 text-gray-800">
-          {(members === null || invites === null) ? (
-            <p className="text-gray-500">Loading members...</p>
-          ) : members.length === 0 && invites.filter(invite => invite.accepted === false).length === 0 ? (
-            <p className="text-gray-500">No members found.</p>
-          ) : (
-            <ul className="space-y-2">
-              {members.map((member) => {
-                // Only allow removing if:
-                // - not self
-                // - current user's role is higher than member's role
-                const canRemove =
-                  user?.id !== member.user_id &&
-                  (ROLE_RANK[currentUserRole] ?? 0) > (ROLE_RANK[member.role ?? "member"] ?? 0);
-                return (
-                  <li key={member.user_id} className="flex justify-between items-center border-b py-2">
-                    <div>
-                      <p className="font-medium">{member.name}</p>
-                      <p className="text-sm text-gray-500">{member.email}</p>
-                    </div>
-                    <span className="flex items-center gap-2 text-xs text-gray-500 italic">
-                      {member.role ?? "member"}
-                      {canRemove && (
+            <div className="bg-white border border-gray-200 rounded shadow-sm p-4 text-gray-800">
+              {(members === null || invites === null) ? (
+                <p className="text-gray-500">Loading members...</p>
+              ) : members.length === 0 && invites.filter(invite => invite.accepted === false).length === 0 ? (
+                <p className="text-gray-500">No members found.</p>
+              ) : (
+                <ul className="space-y-2">
+                  {members.map((member) => {
+                    // Only allow removing if:
+                    // - not self
+                    // - current user's role is higher than member's role
+                    const canRemove =
+                      user?.id !== member.user_id &&
+                      (ROLE_RANK[currentUserRole] ?? 0) > (ROLE_RANK[member.role ?? "member"] ?? 0);
+                    return (
+                      <li key={member.user_id} className="flex justify-between items-center border-b py-2">
+                        <div>
+                          <p className="font-medium">{member.name}</p>
+                          <p className="text-sm text-gray-500">{member.email}</p>
+                        </div>
+                        <span className="flex items-center gap-2 text-xs text-gray-500 italic">
+                          {member.role ?? "member"}
+                          {canRemove && (
+                            <button
+                              className="text-red-500 hover:text-red-700"
+                              onClick={() => handleRemoveMember(member.user_id)}
+                              aria-label="Remove member"
+                            >
+                              Remove
+                            </button>
+                          )}
+                        </span>
+                      </li>
+                    );
+                  })}
+                  {invites.filter(invite => invite.accepted === false).map((invite) => (
+                    <li key={invite.id} className="flex justify-between items-center border-b py-2">
+                      <div>
+                        <p className="font-medium">{invite.email}</p>
+                      </div>
+                      <span className="flex items-center gap-2 text-xs text-gray-500 italic">
+                        pending
                         <button
                           className="text-red-500 hover:text-red-700"
-                          onClick={() => handleRemoveMember(member.user_id)}
-                          aria-label="Remove member"
+                          onClick={() => handleRemoveInvite(invite.id)}
+                          aria-label="Remove invite"
                         >
                           Remove
                         </button>
-                      )}
-                    </span>
-                  </li>
-                );
-              })}
-              {invites.filter(invite => invite.accepted === false).map((invite) => (
-                <li key={invite.id} className="flex justify-between items-center border-b py-2">
-                  <div>
-                    <p className="font-medium">{invite.email}</p>
-                  </div>
-                  <span className="flex items-center gap-2 text-xs text-gray-500 italic">
-                    pending
-                    <button
-                      className="text-red-500 hover:text-red-700"
-                      onClick={() => handleRemoveInvite(invite.id)}
-                      aria-label="Remove invite"
-                    >
-                      Remove
-                    </button>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </section>
-          <div className="mt-6">
+          <div className="mt-6 border border-gray-200 rounded shadow-sm p-4">
             <h3 className="text-md font-medium mb-2">Invite New Member</h3>
             <div
               className="flex items-center gap-2 relative"
