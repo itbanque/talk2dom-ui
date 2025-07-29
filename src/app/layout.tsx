@@ -4,6 +4,7 @@ import "./globals.css";
 import { UserProvider } from "@/context/UserContext";
 import { Toaster } from "react-hot-toast";
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/next"
 
 
 const geistSans = Geist({
@@ -37,6 +38,7 @@ export default function RootLayout({
         <UserProvider>
           <Toaster position="top-right" />
           <SpeedInsights />
+          <Analytics />
           {children}
         </UserProvider>
       </body>
