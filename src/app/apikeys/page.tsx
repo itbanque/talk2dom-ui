@@ -110,7 +110,7 @@ export default function ApiKeyPage() {
         <div className="mb-8">
           <button
             onClick={() => setShowModal(true)}
-            className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
+            className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 cursor-pointer"
           >
             + Create API Key
           </button>
@@ -143,13 +143,13 @@ export default function ApiKeyPage() {
               <div className="flex gap-2">
                 <button
                   onClick={() => handleCopy(keyObj.key!, keyObj.id)}
-                  className="text-sm px-3 py-1 border rounded hover:bg-gray-100"
+                  className="text-sm px-3 py-1 border rounded hover:bg-gray-100 cursor-pointer"
                 >
                   {copiedKeyId === keyObj.id ? "Copied!" : "Copy"}
                 </button>
                 <button
                   onClick={() => setKeyToDelete(keyObj.id)}
-                  className="text-sm px-3 py-1 border rounded hover:bg-red-50 text-red-600 border-red-300"
+                  className="text-sm px-3 py-1 border rounded hover:bg-red-50 text-red-600 border-red-300 cursor-pointer"
                 >
                   Delete
                 </button>
@@ -174,13 +174,13 @@ export default function ApiKeyPage() {
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-4 py-2 text-sm border rounded hover:bg-gray-100"
+                className="px-4 py-2 text-sm border rounded hover:bg-gray-100 cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleCreateKey}
-                className="px-4 py-2 text-sm bg-black text-white rounded hover:bg-gray-800"
+                className="px-4 py-2 text-sm bg-black text-white rounded hover:bg-gray-800 cursor-pointer"
               >
                 Confirm
               </button>
@@ -197,7 +197,7 @@ export default function ApiKeyPage() {
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setKeyToDelete(null)}
-                className="px-4 py-2 text-sm border rounded hover:bg-gray-100"
+                className="px-4 py-2 text-sm border rounded hover:bg-gray-100 cursor-pointer"
               >
                 Cancel
               </button>
@@ -206,7 +206,7 @@ export default function ApiKeyPage() {
                   await handleDeleteKey(keyToDelete);
                   setKeyToDelete(null);
                 }}
-                className="px-4 py-2 text-sm bg-red-600 text-white rounded hover:bg-red-700"
+                className="px-4 py-2 text-sm bg-red-600 text-white rounded hover:bg-red-700 cursor-pointer"
               >
                 Delete
               </button>

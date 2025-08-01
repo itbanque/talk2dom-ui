@@ -71,13 +71,13 @@ useEffect(() => {
 
             <div className={`flex gap-4 mt-4 ${user?.plan === "free" ? "justify-start" : "justify-start flex-wrap"}`}>
               <button
-                className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 text-sm"
+                className="cursor-pointer bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 text-sm"
                 onClick={() => router.push("/pricing")}
               >
                 Upgrade Plan
               </button>
               <button
-                className="border border-gray-400 text-gray-700 px-4 py-2 rounded hover:bg-gray-100 text-sm"
+                className="cursor-pointer border border-gray-400 text-gray-700 px-4 py-2 rounded hover:bg-gray-100 text-sm"
                 onClick={() => router.push("/add-credits")}
                 >
                 Add Credits
@@ -85,7 +85,7 @@ useEffect(() => {
               {user?.plan !== "free" && (
                 <>
                   <button
-                    className="border border-gray-400 text-gray-700 px-4 py-2 rounded hover:bg-gray-100 text-sm"
+                    className="cursor-pointer border border-gray-400 text-gray-700 px-4 py-2 rounded hover:bg-gray-100 text-sm"
                     onClick={async () => {
                       try {
                         const res = await fetch(`${DOMAIN}/api/v1/subscription/cancel`, {
