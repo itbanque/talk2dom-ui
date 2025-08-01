@@ -164,7 +164,7 @@ export default function ProjectDetailPage() {
           <div className="flex items-center gap-3 mb-4">
             <button
               onClick={() => router.back()}
-              className="p-2 rounded-full hover:bg-gray-100 focus:outline-none border border-gray-300 text-gray-600"
+              className="p-2 rounded-full hover:bg-gray-100 focus:outline-none border border-gray-300 text-gray-600 cursor-pointer"
               aria-label="Back"
             >
               <FaArrowLeft />
@@ -178,7 +178,7 @@ export default function ProjectDetailPage() {
               <div className="font-mono text-black">{projectId}</div>
             </div>
             <button
-              className="text-blue-600 text-xs border border-blue-600 px-3 py-1 rounded hover:bg-blue-50"
+              className="text-blue-600 text-xs border border-blue-600 px-3 py-1 rounded hover:bg-blue-50 cursor-pointer"
               onClick={() => {
                 if (projectId) {
                   navigator.clipboard.writeText(projectId);
@@ -262,7 +262,7 @@ export default function ProjectDetailPage() {
                           {member.role ?? "member"}
                           {canRemove && (
                             <button
-                              className="text-red-500 hover:text-red-700"
+                              className="text-red-500 hover:text-red-700 cursor-pointer"
                               onClick={() => handleRemoveMember(member.user_id)}
                               aria-label="Remove member"
                             >
@@ -281,7 +281,7 @@ export default function ProjectDetailPage() {
                       <span className="flex items-center gap-2 text-xs text-gray-500 italic">
                         pending
                         <button
-                          className="text-red-500 hover:text-red-700"
+                          className="text-red-500 hover:text-red-700 cursor-pointer"
                           onClick={() => handleRemoveInvite(invite.id)}
                           aria-label="Remove invite"
                         >
@@ -311,7 +311,7 @@ export default function ProjectDetailPage() {
                 onChange={(e) => setInviteEmail(e.target.value)}
               />
               <button
-                className="bg-black text-white px-3 py-1 rounded text-sm disabled:opacity-50"
+                className="bg-black text-white px-3 py-1 rounded text-sm disabled:opacity-50 cursor-pointer"
                 disabled={!inviteEmail || isInviting || !canAddMoreMembers}
                 onClick={async () => {
                   if (!projectId) return;
@@ -348,7 +348,7 @@ export default function ProjectDetailPage() {
                   Your team currently has {members?.length ?? 0} members, which exceeds your plan&apos;s limit ({memberLimit}). Please upgrade your plan or remove extra members to continue.
                 </div>
                 <button
-                  className="bg-white text-black px-3 py-1 rounded text-xs"
+                  className="bg-white text-black px-3 py-1 rounded text-xs cursor-pointer"
                   onClick={() => {
                     window.open("/pricing", "_blank");
                   }}

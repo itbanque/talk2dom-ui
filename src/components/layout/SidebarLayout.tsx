@@ -137,30 +137,32 @@ function SidebarUserMenu() {
   }, []);
 
   return (
-    <div className="relative" ref={menuRef}>
-      <button
-        onClick={() => setMenuOpen((prev) => !prev)}
-        className="flex items-center space-x-3 focus:outline-none"
-      >
-        <div className="w-9 h-9 rounded-full bg-gray-600 flex items-center justify-center text-sm font-bold text-white">
-          {user?.name?.[0] || "U"}
-        </div>
-        <div className="text-sm font-medium text-black">
-          {user?.name || user?.email?.split("@")[0] || "Username"}
-        </div>
-      </button>
-      {menuOpen && (
-        <div className="absolute bottom-12 left-0 w-48 bg-white text-black border border-gray-700 rounded shadow-lg">
-          <div className="px-4 py-2 text-sm text-black">{user?.email || "user@example.com"}</div>
-          <hr className="border-gray-200" />
-          <a
-            href={`${DOMAIN}/api/v1/user/logout`}
-            className="block px-4 py-2 text-sm hover:bg-gray-100"
-          >
-            Logout
-          </a>
-        </div>
-      )}
+    <div className="mt-auto">
+      <div className="relative" ref={menuRef}>
+        <button
+          onClick={() => setMenuOpen((prev) => !prev)}
+          className="flex items-center space-x-3 focus:outline-none cursor-pointer"
+        >
+          <div className="w-9 h-9 rounded-full bg-gray-600 flex items-center justify-center text-sm font-bold text-white">
+            {user?.name?.[0] || "U"}
+          </div>
+          <div className="text-sm font-medium text-black">
+            {user?.name || user?.email?.split("@")[0] || "Username"}
+          </div>
+        </button>
+        {menuOpen && (
+          <div className="absolute bottom-12 left-0 w-48 bg-white text-black border border-gray-700 rounded shadow-lg">
+            <div className="px-4 py-2 text-sm text-black">{user?.email || "user@example.com"}</div>
+            <hr className="border-gray-200" />
+            <a
+              href={`${DOMAIN}/api/v1/user/logout`}
+              className="block px-4 py-2 text-sm hover:bg-gray-100"
+            >
+              Logout
+            </a>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
