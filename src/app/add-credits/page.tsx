@@ -1,10 +1,20 @@
 "use client";
 
+declare global {
+  interface Window {
+    dataLayer?: {
+      push: (event: Record<string, any>) => void;
+    };
+  }
+}
+export {};
+
 import { useRouter } from "next/navigation";
 import { DOMAIN } from "@/lib/constants";
 import Navbar from "@/components/layout/Navbar";
 import { useUser } from "@/context/UserContext";
 import Link from "next/link";
+import { useEffect } from "react";
 
 const creditOptions = [
   { label: "$9.99 → 1000 credits", plan: "10" },
@@ -16,8 +26,19 @@ export default function AddCreditsPage() {
   const { user } = useUser();
   const isLoggedIn = !!user;
 
+  useEffect(() => {
+    window.dataLayer?.push({
+      event: "page_view",
+      page_name: "add_credit_page",
+    });
+  }, []);
+
   const handleSelect = async (plan: string) => {
     try {
+      window.dataLayer?.push({
+        event: "add_credit_click",
+        amount: plan,
+      });
       const res = await fetch(`${DOMAIN}/api/v1/subscription/create-one-time?plan=${plan}`, {
         method: "POST",
         credentials: "include",

@@ -1,5 +1,14 @@
 "use client";
 
+declare global {
+  interface Window {
+    dataLayer?: {
+      push: (event: Record<string, any>) => void;
+    };
+  }
+}
+export {};
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
@@ -24,6 +33,12 @@ export default function RegisterPage() {
     if (!loading && user) {
       router.replace("/projects");
     }
+    if (!loading && !user) {
+      window.dataLayer?.push({
+        event: "page_view",
+        page_name: "register",
+      });
+    }
   }, [user, loading, router]);
 
   if (loading || user) {
@@ -32,6 +47,10 @@ export default function RegisterPage() {
 
   
   const handleGoogleLogin = () => {
+    window.dataLayer?.push({
+      event: "register_submit",
+      method: "google",
+    });
     window.location.href = `${DOMAIN}/api/v1/auth/google/login`;
   };
 
@@ -44,6 +63,10 @@ export default function RegisterPage() {
 
     try {
       setIsSubmitting(true);
+      window.dataLayer?.push({
+        event: "register_submit",
+        method: "email",
+      });
       const res = await fetch(`${DOMAIN}/api/v1/auth/email/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

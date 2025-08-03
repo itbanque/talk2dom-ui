@@ -1,9 +1,20 @@
 "use client";
+"use client";
+
+// Declare window.dataLayer type for TypeScript
+declare global {
+  interface Window {
+    dataLayer?: {
+      push: (event: Record<string, any>) => void;
+    };
+  }
+}
+export {};
 
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 export default function DocsPage() {
   const stepByStepRef = useRef<HTMLElement | null>(null);
@@ -20,6 +31,13 @@ export default function DocsPage() {
       });
     }
   };
+
+  useEffect(() => {
+    window.dataLayer?.push({
+      event: "page_view",
+      page_name: "docs_page",
+    });
+  }, []);
 
   return (
     <main className="min-h-screen bg-white text-gray-800 px-6 pb-20">

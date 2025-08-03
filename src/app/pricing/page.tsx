@@ -1,19 +1,39 @@
 "use client";
 
+declare global {
+  interface Window {
+    dataLayer?: {
+      push: (event: Record<string, any>) => void;
+    };
+  }
+}
+export {};
+
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import { useUser } from "@/context/UserContext";
 import { DOMAIN } from "@/lib/constants";
 import Footer from "@/components/layout/Footer";
-
+import { useEffect } from "react";
 
 const PLAN_LEVEL: Record<string, number> = { developer: 1, pro: 2, enterprise: 3 };
 
 export default function PricingPage() {
   const { user } = useUser();
 
+  useEffect(() => {
+    window.dataLayer?.push({
+      event: "page_view",
+      page_name: "pricing_page",
+    });
+  }, []);
+
   const handleUpgrade = async (plan: string) => {
     try {
+      window.dataLayer?.push({
+        event: "pricing_upgrade_click",
+        plan: plan,
+      });
       const res = await fetch(`${DOMAIN}/api/v1/subscription/create-subscription?plan=${plan}`, {
         method: "POST",
         credentials: "include",

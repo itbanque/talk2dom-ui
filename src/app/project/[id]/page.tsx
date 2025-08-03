@@ -1,4 +1,14 @@
+
 "use client";
+
+declare global {
+  interface Window {
+    dataLayer?: {
+      push: (event: Record<string, any>) => void;
+    };
+  }
+}
+export {};
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -39,6 +49,16 @@ export default function ProjectDetailPage() {
 
   useEffect(() => {
     setProjectId(id as string);
+  }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      window.dataLayer?.push({
+        event: "page_view",
+        page_name: "project_detail",
+        project_id: id,
+      });
+    }
   }, [id]);
 
   useEffect(() => {
@@ -182,6 +202,10 @@ export default function ProjectDetailPage() {
               onClick={() => {
                 if (projectId) {
                   navigator.clipboard.writeText(projectId);
+                  window.dataLayer?.push({
+                    event: "project_id_copied",
+                    project_id: projectId,
+                  });
                   toast.success("Project ID copied to clipboard");
                 }
               }}

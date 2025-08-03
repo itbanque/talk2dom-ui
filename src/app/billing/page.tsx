@@ -1,5 +1,14 @@
 "use client";
 
+declare global {
+  interface Window {
+    dataLayer?: {
+      push: (event: Record<string, any>) => void;
+    };
+  }
+}
+export {};
+
 import SidebarLayout from "@/components/layout/SidebarLayout";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -17,7 +26,14 @@ export default function BillingPage() {
   const [invoices, setInvoices] = useState<any[]>([]);
   const [loadingInvoices, setLoadingInvoices] = useState(true);
 
-useEffect(() => {
+  useEffect(() => {
+    window.dataLayer?.push({
+      event: "page_view",
+      page_name: "billing_page",
+    });
+  }, []);
+
+  useEffect(() => {
     const fetchInvoices = async () => {
       try {
         const res = await fetch(`${DOMAIN}/api/v1/subscription/history`, {
@@ -72,13 +88,23 @@ useEffect(() => {
             <div className={`flex gap-4 mt-4 ${user?.plan === "free" ? "justify-start" : "justify-start flex-wrap"}`}>
               <button
                 className="cursor-pointer bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 text-sm"
-                onClick={() => router.push("/pricing")}
+                onClick={() => {
+                  window.dataLayer?.push({
+                    event: "billing_upgrade_click"
+                  });
+                  router.push("/pricing");
+                }}
               >
                 Upgrade Plan
               </button>
               <button
                 className="cursor-pointer border border-gray-400 text-gray-700 px-4 py-2 rounded hover:bg-gray-100 text-sm"
-                onClick={() => router.push("/add-credits")}
+                onClick={() => {
+                  window.dataLayer?.push({
+                    event: "billing_add_credit_click"
+                  });
+                  router.push("/add-credits");
+                }}
                 >
                 Add Credits
               </button>
@@ -94,6 +120,9 @@ useEffect(() => {
                         });
                         const data = await res.json();
                         if (res.ok) {
+                          window.dataLayer?.push({
+                            event: "billing_cancel_subscription"
+                          });
                           toast.success("Subscription cancellation scheduled.");
                         } else {
                           toast.error(data.detail || "Failed to cancel subscription.");

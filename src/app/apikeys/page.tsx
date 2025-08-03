@@ -1,4 +1,14 @@
+
 "use client";
+
+declare global {
+  interface Window {
+    dataLayer?: {
+      push: (event: Record<string, any>) => void;
+    };
+  }
+}
+export {};
 
 import SidebarLayout from "@/components/layout/SidebarLayout";
 import { useState, useEffect } from "react";
@@ -25,6 +35,10 @@ export default function ApiKeyPage() {
 
   const handleCopy = (key: string, id: string) => {
     navigator.clipboard.writeText(key);
+    window.dataLayer?.push({
+      event: "api_key_copied",
+      api_key_id: id,
+    });
     toast.success("API key copied to clipboard");
     setCopiedKeyId(id);
     setTimeout(() => setCopiedKeyId(null), 2000);
@@ -42,6 +56,10 @@ export default function ApiKeyPage() {
       }
 
       setApiKeys((prevKeys) => prevKeys.filter((key) => key.id !== keyId));
+      window.dataLayer?.push({
+        event: "api_key_deleted",
+        api_key_id: keyId,
+      });
       toast.success("API key deleted");
     } catch (error) {
       console.error("Error deleting API key:", error);
@@ -89,6 +107,10 @@ export default function ApiKeyPage() {
 
       await response.json();
       setShowModal(false);
+      window.dataLayer?.push({
+        event: "api_key_created",
+        key_name: newKeyName,
+      });
       toast.success("API key created");
       fetchApiKeys(); // refresh keys after modal closes
     } catch (error) {
@@ -99,6 +121,13 @@ export default function ApiKeyPage() {
 
   useEffect(() => {
     fetchApiKeys();
+  }, []);
+
+  useEffect(() => {
+    window.dataLayer?.push({
+      event: "page_view",
+      page_name: "apikey_page",
+    });
   }, []);
 
   return (

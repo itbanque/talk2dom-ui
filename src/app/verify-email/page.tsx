@@ -1,4 +1,14 @@
+
 "use client"
+
+declare global {
+  interface Window {
+    dataLayer?: {
+      push: (event: Record<string, any>) => void;
+    };
+  }
+}
+export {};
 
 import { useState, useEffect } from "react";
 import { useUser } from "@/context/UserContext";
@@ -13,6 +23,15 @@ export default function VerifyEmailPage() {
   useEffect(() => {
     if (user !== undefined) {
       setIsLoadingUser(false);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      window.dataLayer?.push({
+        event: "page_view",
+        page_name: "verify_email_page",
+      });
     }
   }, [user]);
   if (isLoadingUser) {
@@ -33,6 +52,9 @@ export default function VerifyEmailPage() {
         credentials: "include",
       });
       if (!response.ok) throw new Error("Failed to resend verification email");
+      window.dataLayer?.push({
+        event: "resend_verification_email",
+      });
       toast.success("Sent verification email");
       setResendStatus("sent");
     } catch (e) {

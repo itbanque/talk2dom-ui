@@ -1,4 +1,12 @@
 "use client";
+declare global {
+  interface Window {
+    dataLayer?: {
+      push: (event: Record<string, any>) => void;
+    };
+  }
+}
+export {};
 
 import { useEffect, useState } from "react";
 import { useUser } from "@/context/UserContext";
@@ -22,6 +30,12 @@ export default function LoginPage() {
   useEffect(() => {
     if (!loading && user) {
       router.replace("/projects");
+    }
+    if (!loading && !user) {
+      window.dataLayer?.push({
+        event: "page_view",
+        page_name: "login",
+      });
     }
   }, [user, loading]);
 
@@ -48,6 +62,11 @@ export default function LoginPage() {
         throw new Error(errorData.detail || "Login failed");
       }
 
+      window.dataLayer?.push({
+        event: "login_submit",
+        method: "email",
+      });
+
       window.location.href = "/projects";
     } catch (error: any) {
       toast.error(error.message || "Login failed");
@@ -57,6 +76,10 @@ export default function LoginPage() {
   };
 
   const handleGoogleLogin = () => {
+    window.dataLayer?.push({
+      event: "login_submit",
+      method: "google",
+    });
     let url = `${DOMAIN}/api/v1/auth/google/login`;
     window.location.href = `${DOMAIN}/api/v1/auth/google/login`;
   };

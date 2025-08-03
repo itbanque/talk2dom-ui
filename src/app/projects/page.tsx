@@ -1,5 +1,14 @@
 "use client";
 
+declare global {
+  interface Window {
+    dataLayer?: {
+      push: (event: Record<string, any>) => void;
+    };
+  }
+}
+export {};
+
 // app/projects/page.tsx
 import { FiFolder, FiSettings } from "react-icons/fi";
 import Link from "next/link";
@@ -50,6 +59,13 @@ export default function ProjectsPage() {
       }
     };
     fetchProjects();
+  }, []);
+
+  useEffect(() => {
+    window.dataLayer?.push({
+      event: "page_view",
+      page_name: "project_list",
+    });
   }, []);
 
     useEffect(() => {
@@ -133,6 +149,11 @@ export default function ProjectsPage() {
                   onClick={(e) => {
                     const target = e.target as HTMLElement;
                     if (!refs.current[p.id]?.current?.querySelector(".settings-button")?.contains(target)) {
+                      window.dataLayer?.push({
+                        event: "project_card_click",
+                        project_id: p.id,
+                        project_name: p.name,
+                      });
                       window.location.href = `/project/${p.id}`;
                     }
                   }}
@@ -226,6 +247,10 @@ export default function ProjectsPage() {
                       });
                       if (!res.ok) throw new Error(await res.text());
                       const newProject = await res.json();
+                      window.dataLayer?.push({
+                        event: "project_created",
+                        project_name: projectName,
+                      });
                       setProjects((prev) => [...prev, newProject]);
                       setShowModal(false);
                       setProjectName("");
