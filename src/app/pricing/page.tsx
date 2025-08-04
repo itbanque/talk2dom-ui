@@ -14,12 +14,23 @@ import Navbar from "@/components/layout/Navbar";
 import { useUser } from "@/context/UserContext";
 import { DOMAIN } from "@/lib/constants";
 import Footer from "@/components/layout/Footer";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { CardElement, useStripe, useElements, Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { toast } from "react-hot-toast";
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+
 
 const PLAN_LEVEL: Record<string, number> = { developer: 1, pro: 2, enterprise: 3 };
 
 export default function PricingPage() {
   const { user } = useUser();
+
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [showConfirmPopup, setShowConfirmPopup] = useState(false);
 
   useEffect(() => {
     window.dataLayer?.push({
@@ -28,22 +39,36 @@ export default function PricingPage() {
     });
   }, []);
 
-  const handleUpgrade = async (plan: string) => {
-    try {
-      window.dataLayer?.push({
-        event: "pricing_upgrade_click",
-        plan: plan,
-      });
-      const res = await fetch(`${DOMAIN}/api/v1/subscription/create-subscription?plan=${plan}`, {
-        method: "POST",
-        credentials: "include",
-      });
-      if (!res.ok) throw new Error("Failed to create subscription");
-      const { checkout_url } = await res.json();
-      window.location.href = checkout_url;
-    } catch (error) {
-      console.error("Upgrade failed:", error);
+  const confirmUpgrade = async () => {
+    if (!selectedPlan) return;
+    const isExistingSubscription = !!user?.subscription_status && user.subscription_status !== "canceled";
+    const endpoint = isExistingSubscription
+      ? `${DOMAIN}/api/v1/payment/update-subscription?plan=${selectedPlan}`
+      : `${DOMAIN}/api/v1/payment/create-subscription?plan=${selectedPlan}`;
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: null,
+    });
+    const data = await res.json();
+    setClientSecret(data.clientSecret);
+    setShowModal(true);
+    setShowConfirmPopup(false);
+    if (isExistingSubscription) {
+        toast.success("Subscription updated.")
+    } else {
+        toast.success("Subscription updated. Please enter payment details.");
     }
+  };
+
+  const handleUpgrade = (plan: string) => {
+    window.dataLayer?.push({
+      event: "pricing_upgrade_click",
+      plan,
+    });
+    setSelectedPlan(plan);
+    setShowConfirmPopup(true);
   };
 
   if (user === undefined) return null; // Wait for user state to resolve
@@ -84,6 +109,7 @@ export default function PricingPage() {
               <button
                 onClick={() => handleUpgrade("developer")}
                 className="mt-auto text-center bg-black text-white py-2 rounded hover:bg-gray-900"
+                style={{ cursor: "pointer" }}
               >
                 Upgrade
               </button>
@@ -119,6 +145,7 @@ export default function PricingPage() {
               <button
                 onClick={() => handleUpgrade("pro")}
                 className="mt-auto text-center bg-black text-white py-2 rounded hover:bg-gray-900"
+                style={{ cursor: "pointer" }}
               >
                 Upgrade
               </button>
@@ -145,7 +172,83 @@ export default function PricingPage() {
           </div>
         </div>
       </main>
+      {showConfirmPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">Confirm Plan Upgrade</h2>
+            <p className="mb-4">Are you sure you want to upgrade to the {selectedPlan} plan?</p>
+            <div className="flex justify-end gap-2">
+              <button onClick={() => setShowConfirmPopup(false)} className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer">Cancel</button>
+              <button onClick={confirmUpgrade} className="px-4 py-2 bg-black text-white rounded hover:bg-gray-900 cursor-pointer" style={{ cursor: "pointer" }}>Confirm</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showModal && clientSecret && (
+        <Elements stripe={stripePromise} options={{ clientSecret }}>
+          <PaymentModal
+            selectedPlan={selectedPlan}
+            onClose={() => setShowModal(false)}
+            clientSecret={clientSecret}
+          />
+        </Elements>
+      )}
     <Footer />
     </>
+  );
+}
+
+function PaymentModal({
+  selectedPlan,
+  onClose,
+  clientSecret,
+}: {
+  selectedPlan: string | null;
+  onClose: () => void;
+  clientSecret: string;
+}) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!stripe || !elements) return;
+    setLoading(true);
+    const result = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: { card: elements.getElement(CardElement)! },
+    });
+    setLoading(false);
+    if (result.error) {
+      toast.error("Payment failed!");
+    } else if (result.paymentIntent?.status === "succeeded") {
+      toast.success("Payment successful!");
+      onClose();
+      window.location.reload(); // 刷新页面
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-lg w-full max-w-md">
+        <h2 className="text-xl font-bold mb-4">Enter Payment Info for {selectedPlan} Plan</h2>
+        <div className="mb-4 border rounded p-2">
+          <CardElement />
+        </div>
+        <div className="flex justify-end gap-2">
+          <button type="button" onClick={onClose} className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={!stripe || loading}
+            className="px-4 py-2 bg-black text-white rounded hover:bg-gray-900"
+            style={{ cursor: "pointer" }}
+          >
+            {loading ? "Processing..." : "Confirm"}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
