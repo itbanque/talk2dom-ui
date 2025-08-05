@@ -55,9 +55,11 @@ export default function HomePage() {
       {/* Accuracy Section */}
       <section className="py-20 px-6 bg-gray-50 text-gray-900">
         <div className="max-w-4xl mx-auto text-center mb-10">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Powered by Cutting-Edge Models</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Powered by <span className="bg-gradient-to-r from-red-500 to-blue-500 bg-clip-text text-transparent">Gemini</span>
+          </h2>
           <p className="text-lg text-gray-700">
-            Talk2Dom uses Gemini — one of the world’s most advanced language models — to deeply understand HTML structure, text content, and visual layout. Combined with our in-house selector engine and fallback heuristics, this enables precise, reliable element targeting.
+            One of the world’s most advanced language models — is at the heart of Talk2Dom. It deeply understands HTML structure, text content, and visual layout. Combined with our in-house selector engine and fallback heuristics, this enables precise, reliable element targeting.
           </p>
         </div>
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto text-center">
