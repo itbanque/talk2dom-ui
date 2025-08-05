@@ -173,16 +173,11 @@ export default function PricingPage() {
         </div>
       </main>
       {showConfirmPopup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4">Confirm Plan Upgrade</h2>
-            <p className="mb-4">Are you sure you want to upgrade to the {selectedPlan} plan?</p>
-            <div className="flex justify-end gap-2">
-              <button onClick={() => setShowConfirmPopup(false)} className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer">Cancel</button>
-              <button onClick={confirmUpgrade} className="px-4 py-2 bg-black text-white rounded hover:bg-gray-900 cursor-pointer" style={{ cursor: "pointer" }}>Confirm</button>
-            </div>
-          </div>
-        </div>
+        <ConfirmPopup
+          selectedPlan={selectedPlan}
+          onCancel={() => setShowConfirmPopup(false)}
+          onConfirm={confirmUpgrade}
+        />
       )}
       {showModal && clientSecret && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
@@ -215,8 +210,12 @@ function PaymentModal({
     e.preventDefault();
     if (!stripe || !elements) return;
     setLoading(true);
+    const cardholderName = (document.getElementById("card-name") as HTMLInputElement)?.value;
     const result = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: { card: elements.getElement(CardElement)! },
+      payment_method: {
+        card: elements.getElement(CardElement)!,
+        billing_details: { name: cardholderName },
+      },
     });
     setLoading(false);
     if (result.error) {
@@ -231,12 +230,30 @@ function PaymentModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-        <h2 className="text-xl font-bold mb-4">Enter Payment Info for {selectedPlan} Plan</h2>
+        <h2 className="text-xl font-bold mb-4">
+          Enter Payment Info for{" "}
+          <span className="text-black underline uppercase">{selectedPlan}</span> Plan
+        </h2>
+        <div className="mb-4">
+          <label htmlFor="card-name" className="block text-sm font-medium text-gray-700 mb-1">Name on Card</label>
+          <input
+            id="card-name"
+            type="text"
+            className="w-full border rounded px-3 py-2"
+            placeholder="Jane Doe"
+            required
+          />
+        </div>
         <div className="mb-4 border rounded p-2">
           <CardElement />
         </div>
         <div className="flex justify-end gap-2">
-          <button type="button" onClick={onClose} className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+            style={{ cursor: "pointer" }}
+          >
             Cancel
           </button>
           <button
@@ -249,6 +266,67 @@ function PaymentModal({
           </button>
         </div>
       </form>
+    </div>
+  );
+}
+function ConfirmPopup({
+  selectedPlan,
+  onCancel,
+  onConfirm,
+}: {
+  selectedPlan: string | null;
+  onCancel: () => void;
+  onConfirm: () => Promise<void>;
+}) {
+  const [confirming, setConfirming] = useState(false);
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
+        <h2 className="text-xl font-bold mb-4">Confirm Plan Upgrade</h2>
+        <p className="mb-4">Are you sure you want to upgrade to the {selectedPlan} plan?</p>
+        <div className="flex justify-end gap-2">
+          <button
+            onClick={onCancel}
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={async () => {
+              setConfirming(true);
+              await onConfirm();
+              setConfirming(false);
+            }}
+            className="px-4 py-2 bg-black text-white rounded hover:bg-gray-900 cursor-pointer flex items-center gap-2"
+            style={{ cursor: "pointer" }}
+            disabled={confirming}
+          >
+            {confirming && (
+              <svg
+                className="animate-spin h-4 w-4 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z"
+                ></path>
+              </svg>
+            )}
+            {confirming ? "Upgrading..." : "Confirm"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
