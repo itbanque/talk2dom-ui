@@ -42,7 +42,8 @@ export default function DocsPage() {
   return (
     <main className="min-h-screen bg-white text-gray-800 px-6 pb-20">
       <Navbar />
-      <section className="max-w-4xl mx-auto py-20">
+      <div className="h-12" />
+      <section className="max-w-4xl mx-auto pt-20 pb-20">
         <h1 className="text-4xl font-bold mb-6 text-center">How Talk2Dom Works</h1>
         <p className="text-lg text-gray-600 mb-12 text-center">
           Talk2Dom brings AI-native element location to your workflow. Instead of writing and maintaining brittle selectors, you can describe elements in natural language—making automation, scraping, and validation more robust as your frontend evolves. Built for developers, testers, and automation engineers, Talk2Dom is framework-agnostic and works with any language or browser via a simple API.

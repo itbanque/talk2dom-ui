@@ -30,6 +30,7 @@ export default function Navbar() {
         <div className={`flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6 ${menuOpen ? "flex" : "hidden"} sm:flex`}>
           <a href="/pricing" className="text-gray-700 hover:text-black">Pricing</a>
           <a href="/docs" className="text-gray-700 hover:text-black">Docs</a>
+          <a href="/about" className="text-gray-700 hover:text-black">About</a>
           <a
             href="https://github.com/itbanque/talk2dom"
             target="_blank"

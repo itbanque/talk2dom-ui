@@ -5,6 +5,7 @@ export default function Footer() {
       <div className="mb-2">
         <a href="/terms" className="mx-2 hover:underline">Terms</a>|
         <a href="/privacy" className="mx-2 hover:underline">Privacy</a>|
+        <a href="/about" className="mx-2 hover:underline">About</a>|
         <a href="/status" className="mx-2 hover:underline">Status</a>
       </div>
       © {new Date().getFullYear()} Talk2Dom – Built with ❤️ from Itbanque
