@@ -1,5 +1,4 @@
 "use client";
-"use client";
 
 // Declare window.dataLayer type for TypeScript
 declare global {

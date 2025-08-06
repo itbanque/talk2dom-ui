@@ -10,6 +10,7 @@ import { UserProvider, useUser } from "@/context/UserContext";
 const DOMAIN = process.env.NEXT_PUBLIC_API_DOMAIN || "";
 
 const navItems: { label: string; href: string; external?: boolean }[] = [
+  { label: "Playground", href: "/playground" },
   { label: "Projects", href: "/projects" },
   { label: "API Keys", href: "/apikeys" },
   { label: "Billing", href: "/billing" },
@@ -86,6 +87,7 @@ function SidebarLayoutInner({
                   }`}
                 >
                   <>
+                    {item.label === "Playground" && <>🧪 {item.label}</>}
                     {item.label === "Projects" && <>📁 {item.label}</>}
                     {item.label === "API Keys" && <>🔑 {item.label}</>}
                     {item.label === "Billing" && <>💳 {item.label}</>}
