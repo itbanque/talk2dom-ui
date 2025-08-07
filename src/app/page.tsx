@@ -78,32 +78,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Time Saved Metrics Section */}  
-      <section className="py-16 px-6 bg-white text-gray-900">
-        <div className="max-w-4xl mx-auto text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">See the Impact</h2>
-          <p className="text-lg text-gray-600">
-            Real metrics from teams using Talk2Dom — stop wasting hours on manual selectors.
-          </p>
-        </div>
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto text-center">
-          <div className="bg-white rounded-xl p-6 shadow-md">
-            <h3 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 text-transparent bg-clip-text mb-2 transition-opacity duration-700 ease-out transform-gpu animate-fade-up">+120h</h3>
-            <p className="text-gray-700 text-sm">Average dev hours saved per team per month</p>
-          </div>
-          <div className="bg-white rounded-xl p-6 shadow-md">
-            <h3 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 text-transparent bg-clip-text mb-2 transition-opacity duration-700 ease-out transform-gpu animate-fade-up">85%</h3>
-            <p className="text-gray-700 text-sm">Reduction in selector-related test failures</p>
-          </div>
-          <div className="bg-white rounded-xl p-6 shadow-md">
-            <h3 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 text-transparent bg-clip-text mb-2 transition-opacity duration-700 ease-out transform-gpu animate-fade-up">65%</h3>
-            <p className="text-gray-700 text-sm">Drop in test maintenance workload</p>
-          </div>
-        </div>
-      </section>
-
       {/* Advantages Section */}
-      <section className="relative py-24 px-6 bg-gray-50 text-gray-900">
+      <section className="relative py-24 px-6 bg-gray-50 bg-white">
         <div className="max-w-6xl mx-auto text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Talk2Dom?</h2>
           <p className="text-lg text-gray-700">Experience a new way to interact with the DOM across any platform or framework.</p>
@@ -123,6 +99,30 @@ export default function HomePage() {
             <div className="text-3xl mb-4">⚡</div>
             <h3 className="text-xl font-semibold mb-2">Easy Integration</h3>
             <p className="text-gray-700 text-sm">Effortlessly integrate with your existing stack — whether you're using Playwright, Selenium, or custom automation tools.</p>
+          </div>
+        </div>
+      </section>
+      
+      {/* Time Saved Metrics Section */}  
+      <section className="py-16 px-6 bg-gray-50 text-gray-900">
+        <div className="max-w-4xl mx-auto text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">See the Impact</h2>
+          <p className="text-lg text-gray-600">
+            Real metrics from teams using Talk2Dom — stop wasting hours on manual selectors.
+          </p>
+        </div>
+        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto text-center">
+          <div className="bg-white rounded-xl p-6 shadow-md">
+            <h3 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 text-transparent bg-clip-text mb-2 transition-opacity duration-700 ease-out transform-gpu animate-fade-up">+120h</h3>
+            <p className="text-gray-700 text-sm">Average dev hours saved per team per month</p>
+          </div>
+          <div className="bg-white rounded-xl p-6 shadow-md">
+            <h3 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 text-transparent bg-clip-text mb-2 transition-opacity duration-700 ease-out transform-gpu animate-fade-up">85%</h3>
+            <p className="text-gray-700 text-sm">Reduction in selector-related test failures</p>
+          </div>
+          <div className="bg-white rounded-xl p-6 shadow-md">
+            <h3 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 text-transparent bg-clip-text mb-2 transition-opacity duration-700 ease-out transform-gpu animate-fade-up">65%</h3>
+            <p className="text-gray-700 text-sm">Drop in test maintenance workload</p>
           </div>
         </div>
       </section>

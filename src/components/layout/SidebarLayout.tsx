@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { UserProvider, useUser } from "@/context/UserContext";
+import { BeakerIcon, FolderIcon, KeyIcon, CreditCardIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
 
 
 const DOMAIN = process.env.NEXT_PUBLIC_API_DOMAIN || "";
@@ -80,17 +81,37 @@ function SidebarLayoutInner({
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`text-sm font-medium hover:text-black ${
+                  className={`text-sm font-medium rounded px-2 py-1 transition ${
                     pathname.startsWith(item.href)
-                      ? "text-black font-semibold"
-                      : "text-gray-600"
+                      ? "bg-gray-100 text-black font-semibold"
+                      : "text-gray-600 hover:text-black hover:bg-gray-50"
                   }`}
                 >
                   <>
-                    {item.label === "Playground" && <>🧪 {item.label}</>}
-                    {item.label === "Projects" && <>📁 {item.label}</>}
-                    {item.label === "API Keys" && <>🔑 {item.label}</>}
-                    {item.label === "Billing" && <>💳 {item.label}</>}
+                    {item.label === "Playground" && (
+                      <>
+                        <BeakerIcon className="w-5 h-5 inline mr-2" />
+                        {item.label}
+                      </>
+                    )}
+                    {item.label === "Projects" && (
+                      <>
+                        <FolderIcon className="w-5 h-5 inline mr-2" />
+                        {item.label}
+                      </>
+                    )}
+                    {item.label === "API Keys" && (
+                      <>
+                        <KeyIcon className="w-5 h-5 inline mr-2" />
+                        {item.label}
+                      </>
+                    )}
+                    {item.label === "Billing" && (
+                      <>
+                        <CreditCardIcon className="w-5 h-5 inline mr-2" />
+                        {item.label}
+                      </>
+                    )}
                   </>
                 </Link>
               )
@@ -102,11 +123,10 @@ function SidebarLayoutInner({
             href="/docs"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-medium text-gray-400 hover:text-black"
+            className="text-sm font-medium text-gray-400 hover:text-black flex items-center space-x-2"
           >
-            <>
-              📚 Docs
-            </>
+            <DocumentTextIcon className="w-5 h-5" />
+            <span>Docs</span>
           </a>
         </div>
         <SidebarUserMenu />
