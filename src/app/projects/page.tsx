@@ -25,11 +25,13 @@ const DOMAIN = process.env.NEXT_PUBLIC_API_DOMAIN || "";
 type Project = {
   id: string;
   name: string;
+  description: string | null;
+  owner_id: string;
   created_at: string;
-  member_count: string;
-  api_calls: string;
-  is_active: boolean;
   owner_email: string;
+  member_count: number;
+  api_calls: number;
+  is_active: boolean;
 };
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -39,27 +41,49 @@ export default function ProjectsPage() {
   const [projectName, setProjectName] = useState("");
   const [showTooltip, setShowTooltip] = useState(false);
 
+  const [limit, setLimit] = useState(9);
+  const [offset, setOffset] = useState(0);
+
   const { user } = useUser();
   const maxProjects = user?.plan === "free" ? 2 : user?.plan === "developer" ? 10 : Infinity;
   const canCreateProject = projects.length < maxProjects;
 
   const refs = useRef<Record<string, React.RefObject<HTMLDivElement | null>>>({});
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const res = await fetch(`${DOMAIN}/api/v1/project`, {
-          credentials: "include",
-        });
-        if (!res.ok) throw new Error("Failed to fetch projects");
-        const data = await res.json();
-        setProjects(data);
-      } catch (err) {
-        console.error("Error loading projects:", err);
+  // fetchProjects 支持 limit 和 offset 参数
+  const [hasMore, setHasMore] = useState(false);
+  const [total, setTotal] = useState<number | null>(null);
+  const fetchProjects = async (limit: number, offset: number) => {
+    try {
+      const params = new URLSearchParams({ limit: limit.toString(), offset: offset.toString() });
+      const res = await fetch(`${DOMAIN}/api/v1/project?${params.toString()}`, {
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("Failed to fetch projects");
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        const list = data as Project[];
+        setProjects(list);
+        // If returned items are exactly `limit`, assume there may be a next page
+        setHasMore(list.length === limit);
+        setTotal(null);
+        // Edge case: if not first page and API returns empty (e.g., after deletions), jump back a page
+        if (offset > 0 && list.length === 0) {
+          setOffset(Math.max(offset - limit, 0));
+        }
+      } else {
+        setProjects([]);
+        setHasMore(false);
+        setTotal(null);
       }
-    };
-    fetchProjects();
-  }, []);
+    } catch (err) {
+      console.error("Error loading projects:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjects(limit, offset);
+  }, [limit, offset]);
 
   useEffect(() => {
     window.dataLayer?.push({
@@ -207,6 +231,24 @@ export default function ProjectsPage() {
               );
             })}
           </div>
+        </div>
+
+        <div className="mt-8 flex justify-center gap-4">
+          <button
+            onClick={() => setOffset(Math.max(offset - limit, 0))}
+            disabled={offset === 0}
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Previous
+          </button>
+          <button
+            onClick={() => setOffset(offset + limit)}
+            disabled={!hasMore}
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-disabled={!hasMore}
+          >
+            Next
+          </button>
         </div>
 
         {showModal && (

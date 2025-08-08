@@ -1,4 +1,3 @@
-
 "use client";
 
 declare global {
@@ -32,6 +31,10 @@ export default function ApiKeyPage() {
   const [showModal, setShowModal] = useState(false);
   const [newKeyName, setNewKeyName] = useState("");
   const [keyToDelete, setKeyToDelete] = useState<string | null>(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleCopy = (key: string, id: string) => {
     navigator.clipboard.writeText(key);
@@ -68,9 +71,12 @@ export default function ApiKeyPage() {
   };
 
   // Move fetchApiKeys outside useEffect for reuse
-  const fetchApiKeys = async () => {
+  const fetchApiKeys = async (page: number = 1) => {
+    setLoading(true);
     try {
-      const response = await fetch(`${DOMAIN}/api/v1/user/api-keys`, {
+      const limit = 10;
+      const offset = (page - 1) * limit;
+      const response = await fetch(`${DOMAIN}/api/v1/user/api-keys?limit=${limit}&offset=${offset}`, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -84,8 +90,12 @@ export default function ApiKeyPage() {
 
       const data = await response.json();
       setApiKeys(data);
+      setHasNextPage(data.length === limit);
+      setCurrentPage(page);
     } catch (error) {
       console.error("Error fetching API keys:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -112,7 +122,7 @@ export default function ApiKeyPage() {
         key_name: newKeyName,
       });
       toast.success("API key created");
-      fetchApiKeys(); // refresh keys after modal closes
+      fetchApiKeys(currentPage); // refresh keys after modal closes
     } catch (error) {
       console.error("Error creating API key:", error);
       toast.error("Failed to create API key");
@@ -185,6 +195,31 @@ export default function ApiKeyPage() {
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="flex justify-center gap-4 mt-6">
+          <button
+            onClick={() => fetchApiKeys(currentPage - 1)}
+            disabled={currentPage === 1 || loading}
+            className={`px-4 py-2 border rounded ${
+              currentPage === 1 || loading
+                ? "text-gray-400 border-gray-300 cursor-not-allowed"
+                : "hover:bg-gray-100 cursor-pointer"
+            }`}
+          >
+            Previous
+          </button>
+          <button
+            onClick={() => fetchApiKeys(currentPage + 1)}
+            disabled={!hasNextPage || loading}
+            className={`px-4 py-2 border rounded ${
+              !hasNextPage || loading
+                ? "text-gray-400 border-gray-300 cursor-not-allowed"
+                : "hover:bg-gray-100 cursor-pointer"
+            }`}
+          >
+            Next
+          </button>
         </div>
       </div>
 

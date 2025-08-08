@@ -159,8 +159,9 @@ export default function PricingPage() {
             <div className="text-3xl font-bold mb-4">Custom</div>
             <ul className="flex-1 space-y-2 mb-6 text-sm text-left">
               <li>✅ Unlimited API calls</li>
-              <li>✅ Role-based access control</li>
-              <li>✅ SLA support & self-host options</li>
+              <li>✅ Act as product quality advisor or contributor</li>
+              <li>✅ SLA support</li>
+              <li>✅ Comprehensive self-host support</li>
             </ul>
             {user?.plan === "enterprise" ? (
               <button className="mt-auto text-center bg-gray-300 text-gray-600 py-2 rounded cursor-not-allowed" disabled>

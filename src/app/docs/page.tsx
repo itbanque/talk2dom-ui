@@ -43,7 +43,7 @@ export default function DocsPage() {
       <Navbar />
       <div className="h-12" />
       <section className="max-w-4xl mx-auto pt-20 pb-20">
-        <h1 className="text-4xl font-bold mb-6 text-center">How Talk2Dom Works</h1>
+        <h1 className="text-4xl font-bold mb-6 text-center">Developer Documentation – How Talk2Dom Works</h1>
         <p className="text-lg text-gray-600 mb-12 text-center">
           Talk2Dom brings AI-native element location to your workflow. Instead of writing and maintaining brittle selectors, you can describe elements in natural language—making automation, scraping, and validation more robust as your frontend evolves. Built for developers, testers, and automation engineers, Talk2Dom is framework-agnostic and works with any language or browser via a simple API.
         </p>
@@ -88,7 +88,7 @@ export default function DocsPage() {
             </ol>
             <div className="relative">
               <button
-                className="absolute top-2 right-2 bg-gray-200 hover:bg-gray-300 text-xs px-2 py-1 rounded"
+                className="absolute top-3 right-3 bg-white/80 hover:bg-gray-300 text-xs px-2 py-1 rounded"
                 onClick={() => handleCopy(stepByStepRef, setCopiedStepByStep)}
                 aria-label="Copy code"
                 type="button"
@@ -121,13 +121,13 @@ Body:
 
           {/* Section: Sample Code */}
           <div>
-            <h2 className="text-2xl font-semibold mb-4">Sample End-to-End Script (Python + Selenium)</h2>
+            <h2 className="text-2xl font-semibold mb-4">Sample End-to-End Script (Python + Selenium):</h2>
             <p className="text-gray-700">
               Here’s a minimal working example showing how to use Talk2Dom with Python and Selenium:
             </p>
             <div className="relative">
               <button
-                className="absolute top-2 right-2 bg-gray-200 hover:bg-gray-300 text-xs px-2 py-1 rounded"
+                className="absolute top-3 right-3 bg-white/80 hover:bg-gray-300 text-xs px-2 py-1 rounded"
                 onClick={() => handleCopy(sampleCodeRef, setCopiedSampleCode)}
                 aria-label="Copy code"
                 type="button"
@@ -183,7 +183,7 @@ assert "PSF PyCon Trademark Usage Policy" in driver.page_source`}
 
           {/* Section: Integration */}
           <div>
-            <h2 className="text-2xl font-semibold mb-4">Integrate with Your Stack</h2>
+            <h2 className="text-2xl font-semibold mb-4">Integrate with Your Stack:</h2>
             <p className="text-gray-700">
               Talk2Dom can be used alongside any UI framework or automation tool, such as Cypress, Selenium, or Playwright.
               Simply use the API response to trigger actions, validations, or visual cues.
@@ -194,11 +194,10 @@ assert "PSF PyCon Trademark Usage Policy" in driver.page_source`}
           <div>
             <h2 className="text-2xl font-semibold mb-4">Self-Host with Confidence</h2>
             <p className="text-gray-700">
-              Our system is fully open-source and can be deployed with Docker. Enjoy full control over your data and
-              customize the AI behavior to suit your workflows.
+              Our system is fully open-source and can be deployed with Docker. Both self-hosting and secondary development support — including installation guides, updates, troubleshooting, and customization — are available exclusively for <strong>Enterprise</strong> customers. This ensures you have full control over your data while tailoring the AI behavior to your specific workflows.
             </p>
             <p className="mt-2">
-              <Link href="https://github.com/itbanque/talk2dom" className="text-black underline hover:text-gray-800">
+              <Link href="https://github.com/itbanque/talk2dom" className="text-blue-600 hover:text-blue-800">
                 View on GitHub ↗
               </Link>
             </p>
@@ -211,7 +210,7 @@ assert "PSF PyCon Trademark Usage Policy" in driver.page_source`}
               <li><strong>Q:</strong> Does it support Shadow DOM? <br /> <strong>A:</strong> Yes, our selector engine is Shadow DOM-aware.</li>
               <li><strong>Q:</strong> Can I use this in mobile web testing? <br /> <strong>A:</strong> Yes, as long as the page can be rendered in a browser context.</li>
               <li><strong>Q:</strong> How is privacy handled? <br /> <strong>A:</strong> Self-hosting lets you keep data entirely in-house.</li>
-              <li><strong>Q:</strong> Is it only for testers? <br /> <strong>A:</strong> Not at all. It's great for anyone who wants to automate interaction with the DOM — developers, analysts, internal tool builders, and more.</li>
+              <li><strong>Q:</strong> Is it only for testers? <br /> <strong>A:</strong> No. It works for developers, testers, analysts, or anyone automating DOM interactions.</li>
             </ul>
           </div>
         </div>

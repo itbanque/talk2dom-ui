@@ -91,16 +91,16 @@ export default function PlaygroundPage() {
           case "id":
             el = doc.getElementById(locator.selector_value);
             break;
-          case "tag":
+          case "tag name":
             el = doc.getElementsByTagName(locator.selector_value)[0];
             break;
           case "name":
             el = doc.getElementsByName(locator.selector_value)[0];
             break;
-          case "class":
+          case "class name":
             el = doc.getElementsByClassName(locator.selector_value)[0];
             break;
-          case "css":
+          case "css selector":
             el = doc.querySelector(locator.selector_value);
             break;
           case "xpath":
