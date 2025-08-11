@@ -76,12 +76,12 @@ export default function PricingPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-white text-gray-800 px-6 py-24 max-w-7xl mx-auto flex flex-col items-center justify-center text-center">
-        <h1 className="text-4xl md:text-5xl font-bold text-center mb-12">Choose Your Plan</h1>
+      <main className="min-h-screen bg-white text-gray-800 px-4 py-10 md:px-6 md:py-24 max-w-7xl mx-auto flex flex-col items-center text-center">
+        <h1 className="text-3xl md:text-5xl font-bold text-center mb-8 md:mb-12">Choose Your Plan</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
 
           {/* Developer Plan */}
-          <div className="w-full max-w-xs border border-gray-200 rounded-lg p-6 shadow-sm flex flex-col">
+          <div className="w-full max-w-md md:max-w-xs border border-gray-200 rounded-lg p-4 md:p-6 shadow-sm flex flex-col">
             <h2 className="text-xl font-bold mb-2">Developer</h2>
             <p className="text-gray-600 mb-4">For solo developers building serious projects</p>
             <div className="text-3xl font-bold mb-4">$9.99<span className="text-base font-medium">/mo</span></div>
@@ -93,22 +93,22 @@ export default function PricingPage() {
             {user === null ? (
               <Link
                 href="/register"
-                className="mt-auto text-center bg-black text-white py-2 rounded hover:bg-gray-900"
+                className="mt-auto w-full text-center bg-black text-white py-2 rounded hover:bg-gray-900"
               >
                 Sign up
               </Link>
             ) : user?.plan && PLAN_LEVEL[user.plan] > PLAN_LEVEL["developer"] ? (
-              <button className="mt-auto text-center bg-gray-200 text-gray-400 py-2 rounded cursor-not-allowed" disabled>
+              <button className="mt-auto w-full text-center bg-gray-200 text-gray-400 py-2 rounded cursor-not-allowed" disabled>
                 Included
               </button>
             ) : user?.plan === "developer" ? (
-              <button className="mt-auto text-center bg-gray-300 text-gray-600 py-2 rounded cursor-not-allowed" disabled>
+              <button className="mt-auto w-full text-center bg-gray-300 text-gray-600 py-2 rounded cursor-not-allowed" disabled>
                 Current Plan
               </button>
             ) : (
               <button
                 onClick={() => handleUpgrade("developer")}
-                className="mt-auto text-center bg-black text-white py-2 rounded hover:bg-gray-900"
+                className="mt-auto w-full text-center bg-black text-white py-2 rounded hover:bg-gray-900"
                 style={{ cursor: "pointer" }}
               >
                 Upgrade
@@ -117,7 +117,7 @@ export default function PricingPage() {
           </div>
 
           {/* Pro Plan */}
-          <div className="w-full max-w-xs border border-gray-200 rounded-lg p-6 shadow-sm flex flex-col">
+          <div className="w-full max-w-md md:max-w-xs border border-gray-200 rounded-lg p-4 md:p-6 shadow-sm flex flex-col">
             <h2 className="text-xl font-bold mb-2">Pro</h2>
             <p className="text-gray-600 mb-4">Unlock full capacity for teams and advanced workflows</p>
             <div className="text-3xl font-bold mb-4">$39.99<span className="text-base font-medium">/mo</span></div>
@@ -129,22 +129,22 @@ export default function PricingPage() {
             {user === null ? (
               <Link
                 href="/register"
-                className="mt-auto text-center bg-black text-white py-2 rounded hover:bg-gray-900"
+                className="mt-auto w-full text-center bg-black text-white py-2 rounded hover:bg-gray-900"
               >
                 Sign up
               </Link>
             ) : user?.plan && PLAN_LEVEL[user.plan] > PLAN_LEVEL["pro"] ? (
-              <button className="mt-auto text-center bg-gray-200 text-gray-400 py-2 rounded cursor-not-allowed" disabled>
+              <button className="mt-auto w-full text-center bg-gray-200 text-gray-400 py-2 rounded cursor-not-allowed" disabled>
                 Included
               </button>
             ) : user?.plan === "pro" ? (
-              <button className="mt-auto text-center bg-gray-300 text-gray-600 py-2 rounded cursor-not-allowed" disabled>
+              <button className="mt-auto w-full text-center bg-gray-300 text-gray-600 py-2 rounded cursor-not-allowed" disabled>
                 Current Plan
               </button>
             ) : (
               <button
                 onClick={() => handleUpgrade("pro")}
-                className="mt-auto text-center bg-black text-white py-2 rounded hover:bg-gray-900"
+                className="mt-auto w-full text-center bg-black text-white py-2 rounded hover:bg-gray-900"
                 style={{ cursor: "pointer" }}
               >
                 Upgrade
@@ -153,7 +153,7 @@ export default function PricingPage() {
           </div>
 
           {/* Enterprise Plan */}
-          <div className="w-full max-w-xs border border-gray-200 rounded-lg p-6 shadow-sm flex flex-col">
+          <div className="w-full max-w-md md:max-w-xs border border-gray-200 rounded-lg p-4 md:p-6 shadow-sm flex flex-col">
             <h2 className="text-xl font-bold mb-2">Enterprise</h2>
             <p className="text-gray-600 mb-4">Partner with us for stable, high‑quality QA at scale.</p>
             <div className="text-3xl font-bold mb-4">Custom</div>
@@ -166,11 +166,11 @@ export default function PricingPage() {
               <li>✅ Quality advisory & hands-on contribution</li>
             </ul>
             {user?.plan === "enterprise" ? (
-              <button className="mt-auto text-center bg-gray-300 text-gray-600 py-2 rounded cursor-not-allowed" disabled>
+              <button className="mt-auto w-full text-center bg-gray-300 text-gray-600 py-2 rounded cursor-not-allowed" disabled>
                 Current Plan
               </button>
             ) : (
-              <a href="mailto:sales@talk2dom.com" className="mt-auto text-center bg-black text-white py-2 rounded hover:bg-gray-900">Contact Sales</a>
+              <a href="mailto:sales@talk2dom.com" className="mt-auto w-full text-center bg-black text-white py-2 rounded hover:bg-gray-900">Contact Sales</a>
             )}
           </div>
         </div>
@@ -232,7 +232,7 @@ function PaymentModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-lg w-full max-w-md">
+      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-lg w-full max-w-md mx-4">
         <h2 className="text-xl font-bold mb-4">
           Enter Payment Info for{" "}
           <span className="text-black underline uppercase">{selectedPlan}</span> Plan
@@ -250,11 +250,11 @@ function PaymentModal({
         <div className="mb-4 border rounded p-2">
           <CardElement />
         </div>
-        <div className="flex justify-end gap-2">
+        <div className="flex flex-col-reverse md:flex-row justify-end gap-2">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 w-full md:w-auto"
             style={{ cursor: "pointer" }}
           >
             Cancel
@@ -262,7 +262,7 @@ function PaymentModal({
           <button
             type="submit"
             disabled={!stripe || loading}
-            className="px-4 py-2 bg-black text-white rounded hover:bg-gray-900"
+            className="px-4 py-2 bg-black text-white rounded hover:bg-gray-900 w-full md:w-auto"
             style={{ cursor: "pointer" }}
           >
             {loading ? "Processing..." : "Confirm"}
@@ -284,13 +284,13 @@ function ConfirmPopup({
   const [confirming, setConfirming] = useState(false);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
+      <div className="bg-white p-6 rounded shadow-lg w-full max-w-md mx-4">
         <h2 className="text-xl font-bold mb-4">Confirm Plan Upgrade</h2>
         <p className="mb-4">Are you sure you want to upgrade to the {selectedPlan} plan?</p>
-        <div className="flex justify-end gap-2">
+        <div className="flex flex-col-reverse md:flex-row justify-end gap-2">
           <button
             onClick={onCancel}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer w-full md:w-auto"
           >
             Cancel
           </button>
@@ -300,7 +300,7 @@ function ConfirmPopup({
               await onConfirm();
               setConfirming(false);
             }}
-            className="px-4 py-2 bg-black text-white rounded hover:bg-gray-900 cursor-pointer flex items-center gap-2"
+            className="px-4 py-2 bg-black text-white rounded hover:bg-gray-900 cursor-pointer flex items-center gap-2 w-full md:w-auto"
             style={{ cursor: "pointer" }}
             disabled={confirming}
           >

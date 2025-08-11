@@ -384,7 +384,7 @@ export default function ProjectDetailPage() {
 
   return (
     <SidebarLayout>
-      <main className="min-h-screen bg-white text-gray-800 px-6 py-12">
+      <main className="min-h-screen bg-white text-gray-800 px-4 py-4 md:px-6 md:py-12">
         <div className="max-w-5xl mx-auto">
           <div className="mb-6">
             <button
@@ -396,9 +396,9 @@ export default function ProjectDetailPage() {
             </button>
           </div>
           <p className="text-gray-500 text-sm mt-1">Manage members, monitor API usage, and invite collaborators.</p>
-          <div className="mb-8 flex justify-end items-center text-sm text-gray-600">
+          <div className="mb-6 md:mb-8 flex flex-col md:flex-row md:justify-end items-stretch gap-2 text-sm text-gray-600">
             <button
-              className="flex items-center gap-2 bg-gray-100 text-black font-mono px-3 py-1 rounded border hover:bg-gray-200 cursor-pointer"
+              className="flex items-center gap-2 bg-gray-100 text-black font-mono px-3 py-2 rounded border hover:bg-gray-200 cursor-pointer w-full md:w-auto justify-between md:justify-center overflow-hidden"
               onClick={() => {
                 if (projectId) {
                   navigator.clipboard.writeText(projectId);
@@ -411,7 +411,7 @@ export default function ProjectDetailPage() {
               }}
               aria-label="Copy Project ID"
             >
-              {projectId}
+              <span className="truncate">{projectId}</span>
               <FaRegClipboard />
             </button>
           </div>
@@ -420,7 +420,7 @@ export default function ProjectDetailPage() {
             <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
               <FaChartBar /> API Usage (Last 30 Days)
             </h2>
-            <div className="w-full min-h-[400px] bg-white border border-gray-200 shadow-sm rounded p-4">
+            <div className="w-full h-[320px] md:h-[400px] bg-white border border-gray-200 shadow-sm rounded p-3 md:p-4">
               {apiUsage.length > 0 ? (
                 <Bar
                   data={{
@@ -464,7 +464,7 @@ export default function ProjectDetailPage() {
             <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
               <FaFile className="w-5 h-5" /> Locator Records
             </h2>
-            <div className="w-full bg-white border border-gray-200 shadow-sm rounded p-4">
+            <div className="w-full bg-white border border-gray-200 shadow-sm rounded p-3 md:p-4 overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="text-gray-600 border-b">
@@ -513,11 +513,11 @@ export default function ProjectDetailPage() {
                   )}
                 </tbody>
               </table>
-              <div className="mt-4 flex items-center justify-between">
+              <div className="mt-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
                 <div className="text-xs text-gray-500">
                   Showing {lcOffset + 1}-{lcOffset + (locatorCache?.length || 0)}
                 </div>
-                <div className="flex gap-2 items-center">
+                <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center w-full md:w-auto">
                   {/* Page size selector */}
                   <div className="flex items-center gap-2 text-xs text-gray-600">
                     <span>Page size:</span>
@@ -527,7 +527,7 @@ export default function ProjectDetailPage() {
                         setLcLimit(Number(e.target.value));
                         setLcOffset(0);
                       }}
-                      className="border rounded px-2 py-1 ml-2 cursor-pointer"
+                      className="border rounded px-2 py-1 ml-2 cursor-pointer w-full sm:w-auto"
                       aria-label="Select number of records per page"
                     >
                       <option value={5}>5</option>
@@ -538,14 +538,14 @@ export default function ProjectDetailPage() {
                   <button
                     onClick={() => setLcOffset(Math.max(lcOffset - lcLimit, 0))}
                     disabled={lcLoading || lcOffset === 0}
-                    className="px-3 py-1 text-sm bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
                   >
                     Previous
                   </button>
                   <button
                     onClick={() => setLcOffset(lcOffset + lcLimit)}
                     disabled={lcLoading || !lcHasMore}
-                    className="px-3 py-1 text-sm bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
                   >
                     Next
                   </button>
@@ -562,9 +562,9 @@ export default function ProjectDetailPage() {
               {(members === null || invites === null) ? (
                 <p className="text-gray-500">Loading...</p>
               ) : (
-                <div className="flex items-center gap-3">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                   <button
-                    className="px-3 py-2 rounded border bg-gray-100 hover:bg-gray-200 text-sm cursor-pointer flex items-center gap-2"
+                    className="px-3 py-2 rounded border bg-gray-100 hover:bg-gray-200 text-sm cursor-pointer flex items-center gap-2 w-full sm:w-auto"
                     onClick={() => setShowMembersModal(true)}
                   >
                     Members
@@ -573,7 +573,7 @@ export default function ProjectDetailPage() {
                     </span>
                   </button>
                   <button
-                    className="px-3 py-2 rounded border bg-gray-100 hover:bg-gray-200 text-sm cursor-pointer flex items-center gap-2"
+                    className="px-3 py-2 rounded border bg-gray-100 hover:bg-gray-200 text-sm cursor-pointer flex items-center gap-2 w-full sm:w-auto"
                     onClick={() => setShowPendingModal(true)}
                   >
                     Pending
@@ -588,7 +588,7 @@ export default function ProjectDetailPage() {
           <div className="mt-6 border border-gray-200 rounded shadow-sm p-4">
             <h3 className="text-md font-medium mb-2">Invite New Member</h3>
             <div
-              className="flex items-center gap-2 relative"
+              className="flex flex-col md:flex-row items-stretch md:items-center gap-2 relative"
               onMouseEnter={() => {
                 if (!canAddMoreMembers) setShowTooltip(true);
               }}
@@ -596,13 +596,13 @@ export default function ProjectDetailPage() {
             >
               <input
                 type="email"
-                className="border border-gray-300 rounded px-3 py-1 flex-grow"
+                className="border border-gray-300 rounded px-3 py-2 flex-grow w-full"
                 placeholder="Enter email"
                 value={inviteEmail}
                 onChange={(e) => setInviteEmail(e.target.value)}
               />
               <button
-                className="bg-black text-white px-3 py-1 rounded text-sm disabled:opacity-50 cursor-pointer"
+                className="bg-black text-white px-4 py-2 rounded text-sm disabled:opacity-50 cursor-pointer w-full md:w-auto"
                 disabled={!inviteEmail || isInviting || !canAddMoreMembers}
                 onClick={async () => {
                   if (!projectId) return;
@@ -653,12 +653,12 @@ export default function ProjectDetailPage() {
       {/* Delete Locator Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
+          <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full mx-4">
             <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
             <p className="text-sm text-gray-700 mb-6">Are you sure you want to delete this locator?</p>
-            <div className="flex justify-end gap-2">
+            <div className="flex flex-col-reverse md:flex-row justify-end gap-2">
               <button
-                className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 cursor-pointer"
+                className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 cursor-pointer w-full md:w-auto"
                 onClick={() => {
                   setShowDeleteModal(false);
                   setPendingDeleteLocatorId(null);
@@ -667,7 +667,7 @@ export default function ProjectDetailPage() {
                 Cancel
               </button>
               <button
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 cursor-pointer"
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 cursor-pointer w-full md:w-auto"
                 onClick={async () => {
                   if (pendingDeleteLocatorId) {
                     await handleDeleteLocator(pendingDeleteLocatorId);
@@ -687,7 +687,7 @@ export default function ProjectDetailPage() {
       {showMembersModal && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-30">
           <div className="flex items-center justify-center h-full">
-            <div className="relative bg-white rounded-lg shadow-lg max-w-lg w-full max-h-[80vh] overflow-y-auto p-6">
+            <div className="relative bg-white rounded-lg shadow-lg max-w-lg w-full max-h-[80vh] overflow-y-auto p-6 mx-4">
               <button
                 className="absolute top-3 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold cursor-pointer"
                 onClick={() => setShowMembersModal(false)}
@@ -724,17 +724,17 @@ export default function ProjectDetailPage() {
                 <p className="text-gray-500">No members found.</p>
               )}
 
-              <div className="mt-4 flex items-center justify-between">
+              <div className="mt-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
                 <div className="text-xs text-gray-500">
                   Showing {memOffset + 1}-{memOffset + (members?.length || 0)}
                 </div>
-                <div className="flex gap-2 items-center">
+                <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center w-full md:w-auto">
                   <div className="flex items-center gap-2 text-xs text-gray-600">
                     <span>Page size:</span>
                     <select
                       value={memLimit}
                       onChange={(e) => { setMemLimit(Number(e.target.value)); setMemOffset(0); }}
-                      className="border rounded px-2 py-1 cursor-pointer"
+                      className="border rounded px-2 py-1 cursor-pointer w-full sm:w-auto"
                     >
                       <option value={5}>5</option>
                       <option value={10}>10</option>
@@ -744,14 +744,14 @@ export default function ProjectDetailPage() {
                   <button
                     onClick={() => setMemOffset(Math.max(memOffset - memLimit, 0))}
                     disabled={memLoading || memOffset === 0}
-                    className="px-3 py-1 text-sm bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
                   >
                     Previous
                   </button>
                   <button
                     onClick={() => setMemOffset(memOffset + memLimit)}
                     disabled={memLoading || !memHasMore}
-                    className="px-3 py-1 text-sm bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
                   >
                     Next
                   </button>
@@ -765,7 +765,7 @@ export default function ProjectDetailPage() {
       {showPendingModal && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-30">
           <div className="flex items-center justify-center h-full">
-            <div className="relative bg-white rounded-lg shadow-lg max-w-lg w-full max-h-[80vh] overflow-y-auto p-6">
+            <div className="relative bg-white rounded-lg shadow-lg max-w-lg w-full max-h-[80vh] overflow-y-auto p-6 mx-4">
               <button
                 className="absolute top-3 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold cursor-pointer"
                 onClick={() => setShowPendingModal(false)}
@@ -794,17 +794,17 @@ export default function ProjectDetailPage() {
                 <p className="text-gray-500">No pending invitations.</p>
               )}
 
-              <div className="mt-4 flex items-center justify-between">
+              <div className="mt-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
                 <div className="text-xs text-gray-500">
                   Showing {invOffset + 1}-{invOffset + (invites?.filter(i => i.accepted === false).length || 0)}
                 </div>
-                <div className="flex gap-2 items-center">
+                <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center w-full md:w-auto">
                   <div className="flex items-center gap-2 text-xs text-gray-600">
                     <span>Page size:</span>
                     <select
                       value={invLimit}
                       onChange={(e) => { setInvLimit(Number(e.target.value)); setInvOffset(0); }}
-                      className="border rounded px-2 py-1 cursor-pointer"
+                      className="border rounded px-2 py-1 cursor-pointer w-full sm:w-auto"
                     >
                       <option value={5}>5</option>
                       <option value={10}>10</option>
@@ -814,14 +814,14 @@ export default function ProjectDetailPage() {
                   <button
                     onClick={() => setInvOffset(Math.max(invOffset - invLimit, 0))}
                     disabled={invLoading || invOffset === 0}
-                    className="px-3 py-1 text-sm bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
                   >
                     Previous
                   </button>
                   <button
                     onClick={() => setInvOffset(invOffset + invLimit)}
                     disabled={invLoading || !invHasMore}
-                    className="px-3 py-1 text-sm bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
                   >
                     Next
                   </button>
@@ -841,7 +841,7 @@ export default function ProjectDetailPage() {
             &times;
           </button>
           <div className="flex items-center justify-center h-full">
-            <div className="relative bg-white rounded-lg shadow-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto mt-12">
+            <div className="relative bg-white rounded-lg shadow-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto mt-12 mx-4">
               <div className="sticky top-0 z-10 bg-white p-6 border-b">
                 <h3 className="text-lg font-semibold">Locator Detail</h3>
                 <p className="text-xs text-gray-500 mt-1">
@@ -865,7 +865,7 @@ export default function ProjectDetailPage() {
                 </div>
                 <div className="flex justify-end">
                   <button
-                    className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 cursor-pointer"
+                    className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 cursor-pointer w-full md:w-auto"
                     onClick={() => setLocatorDetail(null)}
                   >
                     Close

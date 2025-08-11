@@ -1,4 +1,3 @@
-
 "use client"
 
 declare global {
@@ -36,7 +35,7 @@ export default function VerifyEmailPage() {
   }, [user]);
   if (isLoadingUser) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-6 md:py-12">
         <div className="text-gray-600">Loading...</div>
       </div>
     );
@@ -63,14 +62,14 @@ export default function VerifyEmailPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="bg-white p-8 rounded shadow-md max-w-md w-full">
-        <h1 className="text-xl font-semibold mb-4">Verify Your Email</h1>
-        <p className="text-gray-700 mb-6">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-6 md:py-12">
+      <div className="bg-white p-6 md:p-8 rounded shadow-md max-w-md w-full">
+        <h1 className="text-lg md:text-xl font-semibold mb-4 text-center">Verify Your Email</h1>
+        <p className="text-gray-700 mb-6 text-base md:text-lg leading-relaxed">
           We've sent a verification link to your email address. Please check your inbox
           and click the link to activate your account.
         </p>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm md:text-base text-gray-500 leading-relaxed">
           Didn't receive the email? Check your spam folder or contact support for help.
         </p>
         {!user?.is_active && (
@@ -78,7 +77,7 @@ export default function VerifyEmailPage() {
             <button
               onClick={resendVerificationEmail}
               disabled={resendStatus === "sending" || resendStatus === "sent"}
-              className="text-sm text-blue-600 hover:underline disabled:opacity-50"
+              className="w-full md:w-auto text-sm md:text-base text-blue-600 hover:underline disabled:opacity-50 mt-2 md:mt-0"
             >
               {resendStatus === "sending"
                 ? "Sending..."
@@ -92,7 +91,7 @@ export default function VerifyEmailPage() {
           </div>
         )}
         <div className="mt-6 text-center">
-          <a href="/" className="text-sm text-gray-600 hover:text-blue-600 underline">
+          <a href="/" className="inline-block w-full md:w-auto text-center text-sm md:text-base text-gray-600 hover:text-blue-600 underline py-2">
             Return to homepage
           </a>
         </div>

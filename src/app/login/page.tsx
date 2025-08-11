@@ -23,6 +23,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
   const { user, loading } = useUser();
@@ -87,8 +88,8 @@ export default function LoginPage() {
   return (
     <>
     <Navbar />
-      <main className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-        <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+      <main className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-6 md:py-12">
+        <div className="w-full max-w-md p-6 md:p-8 bg-white rounded-lg shadow-lg">
           <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">Welcome Back</h1>
 
           <form onSubmit={handleLogin} className="space-y-4">
@@ -99,7 +100,11 @@ export default function LoginPage() {
               <input
                 id="email"
                 type="email"
-                className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-black text-black placeholder-gray-500"
+                inputMode="email"
+                autoComplete="email"
+                autoCapitalize="none"
+                autoCorrect="off"
+                className="w-full border border-gray-300 px-3 py-3 rounded focus:outline-none focus:ring-2 focus:ring-black text-black placeholder-gray-500 text-base"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -110,26 +115,37 @@ export default function LoginPage() {
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                 Password
               </label>
-              <input
-                id="password"
-                type="password"
-                className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-black text-black placeholder-gray-500"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  className="w-full border border-gray-300 px-3 py-3 rounded focus:outline-none focus:ring-2 focus:ring-black text-black placeholder-gray-500 text-base pr-12"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute inset-y-0 right-0 px-3 flex items-center text-sm text-gray-600 hover:text-black focus:outline-none"
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
             </div>
 
             <button
               type="submit"
-              className="w-full bg-black text-white py-2 rounded hover:bg-gray-900 transition disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+              className="w-full bg-black text-white py-3 rounded hover:bg-gray-900 transition disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Signing in..." : "Sign in"}
             </button>
           </form>
 
-          <div className="my-6 flex items-center">
+          <div className="my-4 md:my-6 flex items-center">
             <div className="flex-grow h-px bg-gray-300"></div>
             <span className="mx-4 text-sm text-gray-500">OR</span>
             <div className="flex-grow h-px bg-gray-300"></div>
@@ -137,14 +153,14 @@ export default function LoginPage() {
 
           <button
             onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center border border-gray-300 px-4 py-2 rounded hover:bg-gray-100 transition text-black cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 border border-gray-300 px-4 py-3 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 transition text-black cursor-pointer"
           >
             <img
               src="https://www.svgrepo.com/show/475656/google-color.svg"
               alt="Google"
-              className="w-5 h-5 mr-2"
+              className="w-5 h-5"
             />
-            Continue with Google
+            <span>Continue with Google</span>
           </button>
         </div>
       </main>

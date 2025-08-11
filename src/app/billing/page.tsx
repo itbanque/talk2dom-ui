@@ -55,9 +55,9 @@ function CreditModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md mx-4">
         <h2 className="text-lg font-semibold mb-4">Purchase Credits</h2>
-        <div className="space-y-3 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
           {[{ amount: 1000, price: 999 }, { amount: 2200, price: 1999 }, { amount: 5500, price: 4999 }].map((opt) => (
             <div
               key={opt.amount}
@@ -103,10 +103,10 @@ function CreditModal({
             <CardElement options={{ hidePostalCode: true }} />
           </div>
         </div>
-        <div className="flex justify-end gap-2">
+        <div className="flex flex-col-reverse md:flex-row justify-end gap-2">
           <button
             onClick={() => setShow(false)}
-            className="cursor-pointer px-4 py-2 bg-white text-gray-800 border border-gray-300 rounded hover:bg-gray-100 text-sm"
+            className="cursor-pointer px-4 py-2 bg-white text-gray-800 border border-gray-300 rounded hover:bg-gray-100 text-sm w-full md:w-auto"
             disabled={paying}
           >
             Cancel
@@ -141,7 +141,7 @@ function CreditModal({
                 setShow(false);
               }
             }}
-            className="cursor-pointer px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 text-sm disabled:opacity-50"
+            className="cursor-pointer px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 text-sm disabled:opacity-50 w-full md:w-auto"
           >
             {paying ? "Processing..." : "Pay"}
           </button>
@@ -209,12 +209,12 @@ export default function BillingPage() {
           setSelectedCredit={setSelectedCredit}
         />
       </Elements>
-      <main className="min-h-screen bg-white text-gray-800 px-6 py-12">
+      <main className="min-h-screen bg-white text-gray-800 px-4 py-4 md:px-6 md:py-12">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold mb-6">Billing & Subscription</h1>
+          <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Billing & Subscription</h1>
 
           {/* Current Plan */}
-          <section className="mb-10 bg-white border border-gray-200 rounded p-6">
+          <section className="mb-10 bg-white border border-gray-200 rounded p-4 md:p-6">
             <h2 className="text-xl font-semibold mb-4">Current Plan</h2>
             <p className="mb-2">Plan: <strong>{user?.plan || "N/A"}</strong></p>
             <p className="mb-2">Subscription Credits: <strong>{user?.subscription_credits ?? "N/A"}</strong></p>
@@ -228,9 +228,9 @@ export default function BillingPage() {
               </p>
             )}
 
-            <div className={`flex gap-4 mt-4 ${user?.plan === "free" ? "justify-start" : "justify-start flex-wrap"}`}>
+            <div className={`flex flex-col sm:flex-row gap-2 mt-4 ${user?.plan === "free" ? "" : "flex-wrap"}`}>
               <button
-                className="cursor-pointer bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 text-sm"
+                className="cursor-pointer bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 text-sm w-full md:w-auto"
                 onClick={() => {
                   window.dataLayer?.push({
                     event: "billing_upgrade_click"
@@ -241,7 +241,7 @@ export default function BillingPage() {
                 Upgrade Plan
               </button>
               <button
-                className="cursor-pointer border border-gray-400 text-gray-700 px-4 py-2 rounded hover:bg-gray-100 text-sm"
+                className="cursor-pointer border border-gray-400 text-gray-700 px-4 py-2 rounded hover:bg-gray-100 text-sm w-full md:w-auto"
                 onClick={() => {
                   window.dataLayer?.push({
                     event: "billing_add_credit_click"
@@ -254,7 +254,7 @@ export default function BillingPage() {
               {user?.plan !== "free" && (
                 <>
                   <button
-                    className="cursor-pointer border border-gray-400 text-gray-700 px-4 py-2 rounded hover:bg-gray-100 text-sm"
+                    className="cursor-pointer border border-gray-400 text-gray-700 px-4 py-2 rounded hover:bg-gray-100 text-sm w-full md:w-auto"
                     onClick={async () => {
                       try {
                         const res = await fetch(`${DOMAIN}/api/v1/subscription/cancel`, {
@@ -283,7 +283,7 @@ export default function BillingPage() {
           </section>
 
           {/* Billing History */}
-          <section className="mb-10 bg-white border border-gray-200 rounded p-6">
+          <section className="mb-10 bg-white border border-gray-200 rounded p-4 md:p-6">
             <h2 className="text-xl font-semibold mb-4">Billing History</h2>
             <p className="text-sm text-gray-500 mb-2">  Displaying your 10 most recent invoices. For older billing records, please contact support.
 </p>
@@ -291,24 +291,24 @@ export default function BillingPage() {
               <p className="text-sm text-gray-600">No billing history yet.</p>
             ) : (
               <div className="overflow-x-auto">
-                <table className="min-w-full text-sm text-left">
+                <table className="min-w-full text-xs md:text-sm text-left">
                   <thead>
                     <tr>
-                      <th className="px-4 py-2 border-b">Date</th>
-                      <th className="px-4 py-2 border-b">Amount</th>
-                      <th className="px-4 py-2 border-b">Status</th>
-                      <th className="px-4 py-2 border-b">Invoice</th>
+                      <th className="px-3 py-2 md:px-4 border-b">Date</th>
+                      <th className="px-3 py-2 md:px-4 border-b">Amount</th>
+                      <th className="px-3 py-2 md:px-4 border-b">Status</th>
+                      <th className="px-3 py-2 md:px-4 border-b">Invoice</th>
                     </tr>
                   </thead>
                   <tbody>
                     {invoices.map((inv: any) => (
                       <tr key={inv.id}>
-                        <td className="px-4 py-2 border-b">{new Date(inv.created * 1000).toISOString().split("T")[0]}</td>
-                        <td className="px-4 py-2 border-b">
+                        <td className="px-3 py-2 md:px-4 border-b">{new Date(inv.created * 1000).toISOString().split("T")[0]}</td>
+                        <td className="px-3 py-2 md:px-4 border-b">
                           ${(inv.amount_paid / 100).toFixed(2)} {inv.currency.toUpperCase()}
                         </td>
-                        <td className="px-4 py-2 border-b capitalize">{inv.status}</td>
-                        <td className="px-4 py-2 border-b">
+                        <td className="px-3 py-2 md:px-4 border-b capitalize">{inv.status}</td>
+                        <td className="px-3 py-2 md:px-4 border-b">
                           <a
                             href={inv.invoice_pdf}
                             target="_blank"

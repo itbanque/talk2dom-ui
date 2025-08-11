@@ -15,7 +15,9 @@ export default function PlaygroundPage() {
     Array<{ selector_type: string; selector_value: string }>
   >([]);
   const [loading, setLoading] = useState(false);
-  const [view, setView] = useState<"desktop" | "mobile">("desktop");
+  const [view, setView] = useState<"desktop" | "mobile">(
+    typeof window !== "undefined" && window.innerWidth < 768 ? "mobile" : "desktop"
+  );
 
   const handleGo = async () => {
     if (!url) return;
@@ -133,18 +135,18 @@ export default function PlaygroundPage() {
 
   const iframeClass =
     view === "mobile"
-      ? "w-[390px] h-[844px] mx-auto border border-gray-300 rounded pointer-events-none"
-      : "w-[1280px] h-[1024px] mx-auto border border-gray-300 rounded pointer-events-none";
+      ? "w-[360px] md:w-[390px] h-[640px] md:h-[844px] mx-auto border border-gray-300 rounded pointer-events-none"
+      : "w-full md:w-[1280px] h-[70vh] md:h-[1024px] mx-auto border border-gray-300 rounded pointer-events-none";
 
   return (
     <SidebarLayout>
-      <div className="flex flex-col gap-6 px-6 py-10">
+      <div className="flex flex-col gap-6 px-4 py-4 md:px-6 md:py-10">
         {/* Top Panel - Controls */}
         <div className="space-y-6">
           <div>
             <h1 className="text-2xl font-bold mb-3">Playground</h1>
           </div>
-          <div className="flex gap-4">
+          <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <label htmlFor="url-input" className="block text-sm font-medium text-gray-700 mb-1">
                 Enter a public website URL
@@ -158,7 +160,7 @@ export default function PlaygroundPage() {
                 className="border px-4 py-2 rounded w-full"
               />
             </div>
-            <div className="w-40">
+            <div className="w-full md:w-40">
               <label htmlFor="view-select" className="block text-sm font-medium text-gray-700 mb-1">
                 View Mode
               </label>
@@ -177,7 +179,7 @@ export default function PlaygroundPage() {
             <label htmlFor="instruction-input" className="block text-sm font-medium text-gray-700 mb-1">
               Describe the element to locate, then Click "Go" to highlight it
             </label>
-            <div className="flex gap-4">
+            <div className="flex flex-col md:flex-row gap-4">
               <input
                 id="instruction-input"
                 type="text"
@@ -188,7 +190,7 @@ export default function PlaygroundPage() {
               />
               <button
                 onClick={handleGo}
-                className="bg-black text-white px-5 py-2 rounded hover:bg-gray-800 transition flex items-center justify-center min-w-[80px] cursor-pointer"
+                className="bg-black text-white px-5 py-2 rounded hover:bg-gray-800 transition flex items-center justify-center min-w-[80px] cursor-pointer w-full md:w-auto"
                 disabled={loading}
               >
                 {loading ? (
@@ -221,7 +223,7 @@ export default function PlaygroundPage() {
         </div>
 
         {/* Bottom Panel - Iframe Preview */}
-        <div className="border rounded bg-white overflow-auto relative flex justify-center">
+        <div className="border rounded bg-white overflow-auto relative flex justify-center p-2 md:p-4">
           <iframe
             srcDoc={html}
             className={iframeClass}

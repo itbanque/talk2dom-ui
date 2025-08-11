@@ -148,14 +148,14 @@ export default function ApiKeyPage() {
 
   return (
     <SidebarLayout>
-      <main className="min-h-screen bg-white text-gray-800 px-6 py-12">
+      <main className="min-h-screen bg-white text-gray-800 px-4 py-4 md:px-6 md:py-12">
       <div className="max-w-5xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">API Keys</h1>
+        <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">API Keys</h1>
 
-        <div className="mb-8">
+        <div className="mb-6 md:mb-8">
           <button
             onClick={() => setShowModal(true)}
-            className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 cursor-pointer"
+            className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 cursor-pointer w-full md:w-auto"
           >
             + Create API Key
           </button>
@@ -163,21 +163,21 @@ export default function ApiKeyPage() {
 
         <div className="grid gap-4">
           {apiKeys.length === 0 ? (
-            <iframe
-              width="100%"
-              height="400"
-              src="https://www.youtube.com/embed/n6a6qqpZq3o"
-              title="YouTube video"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              style={{ borderRadius: "8px", maxWidth: "100%" }}
-            ></iframe>
+            <div className="relative w-full overflow-hidden rounded" style={{ paddingTop: "56.25%" }}>
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src="https://www.youtube.com/embed/n6a6qqpZq3o"
+                title="YouTube video"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
           ) : (
             apiKeys.map((keyObj) => (
               <div
                 key={keyObj.id}
-                className="bg-white p-4 rounded shadow-sm border border-gray-200 flex justify-between items-center"
+                className="bg-white p-4 rounded shadow-sm border border-gray-200 flex flex-col md:flex-row md:justify-between md:items-center gap-3"
               >
                 <div className="flex flex-col">
                   <span className="font-semibold text-sm text-gray-900">
@@ -197,16 +197,16 @@ export default function ApiKeyPage() {
                     </span>
                   </span>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 w-full md:w-auto md:justify-end">
                   <button
                     onClick={() => handleCopy(keyObj.key!, keyObj.id)}
-                    className="text-sm px-3 py-1 border rounded hover:bg-gray-100 cursor-pointer"
+                    className="text-sm px-3 py-2 border rounded hover:bg-gray-100 cursor-pointer w-full md:w-auto"
                   >
                     {copiedKeyId === keyObj.id ? "Copied!" : "Copy"}
                   </button>
                   <button
                     onClick={() => setKeyToDelete(keyObj.id)}
-                    className="text-sm px-3 py-1 border rounded hover:bg-red-50 text-red-600 border-red-300 cursor-pointer"
+                    className="text-sm px-3 py-2 border rounded hover:bg-red-50 text-red-600 border-red-300 cursor-pointer w-full md:w-auto"
                   >
                     Delete
                   </button>
@@ -216,7 +216,7 @@ export default function ApiKeyPage() {
           )}
         </div>
 
-        <div className="flex justify-center gap-4 mt-6">
+        <div className="flex flex-col md:flex-row justify-center gap-3 mt-6 px-2">
           <button
             onClick={() => fetchApiKeys(currentPage - 1)}
             disabled={currentPage === 1 || loading}
@@ -224,7 +224,7 @@ export default function ApiKeyPage() {
               currentPage === 1 || loading
                 ? "text-gray-400 border-gray-300 cursor-not-allowed"
                 : "hover:bg-gray-100 cursor-pointer"
-            }`}
+            } w-full md:w-auto`}
           >
             Previous
           </button>
@@ -235,7 +235,7 @@ export default function ApiKeyPage() {
               !hasNextPage || loading
                 ? "text-gray-400 border-gray-300 cursor-not-allowed"
                 : "hover:bg-gray-100 cursor-pointer"
-            }`}
+            } w-full md:w-auto`}
           >
             Next
           </button>

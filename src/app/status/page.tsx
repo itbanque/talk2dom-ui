@@ -8,19 +8,19 @@ export default function StatusPage() {
   return (
     <main className="min-h-screen bg-white text-gray-800">
       <Navbar />
-      <section className="max-w-4xl mx-auto py-20 px-6 text-center">
-        <h1 className="text-3xl font-bold mb-4">System Status</h1>
-        <p className="text-green-600 text-lg font-semibold mb-6">✅ All Systems Operational</p>
+      <section className="max-w-4xl mx-auto py-12 md:py-20 px-4 md:px-6 text-center">
+        <h1 className="text-2xl md:text-3xl font-bold mb-4">System Status</h1>
+        <p className="text-green-600 text-base md:text-lg font-semibold mb-6">✅ All Systems Operational</p>
 
         <div className="text-left">
-          <h2 className="text-xl font-semibold mb-2">Components</h2>
-          <ul className="mb-8">
+          <h2 className="text-lg md:text-xl font-semibold mb-2">Components</h2>
+          <ul className="mb-8 space-y-2">
             <li>🌐 Website — <span className="text-green-600">Operational</span></li>
             <li>🧠 AI Model API — <span className="text-green-600">Operational</span></li>
             <li>💳 Billing System — <span className="text-green-600">Operational</span></li>
           </ul>
 
-          <h2 className="text-xl font-semibold mb-2">Past Incidents</h2>
+          <h2 className="text-lg md:text-xl font-semibold mb-2">Past Incidents</h2>
           <ul>
           </ul>
         </div>
