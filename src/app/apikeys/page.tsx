@@ -58,7 +58,11 @@ export default function ApiKeyPage() {
         throw new Error("Failed to delete API key");
       }
 
-      setApiKeys((prevKeys) => prevKeys.filter((key) => key.id !== keyId));
+      const result = await fetchApiKeys(currentPage);
+      // If the current page becomes empty and it's not the first page, go back one page
+      if (result && result.count === 0 && currentPage > 1) {
+        await fetchApiKeys(currentPage - 1);
+      }
       window.dataLayer?.push({
         event: "api_key_deleted",
         api_key_id: keyId,
@@ -89,11 +93,13 @@ export default function ApiKeyPage() {
       }
 
       const data = await response.json();
-      setApiKeys(data);
-      setHasNextPage(data.length === limit);
+      setApiKeys(data.items);
+      setHasNextPage(data.has_next);
       setCurrentPage(page);
+      return { count: data.items.length, hasNext: !!data.has_next };
     } catch (error) {
       console.error("Error fetching API keys:", error);
+      return undefined;
     } finally {
       setLoading(false);
     }
@@ -156,45 +162,58 @@ export default function ApiKeyPage() {
         </div>
 
         <div className="grid gap-4">
-          {apiKeys.map((keyObj) => (
-            <div
-              key={keyObj.id}
-              className="bg-white p-4 rounded shadow-sm border border-gray-200 flex justify-between items-center"
-            >
-              <div className="flex flex-col">
-                <span className="font-semibold text-sm text-gray-900">
-                  {keyObj.name || "Unnamed Key"}
-                </span>
-                <span className="font-mono text-sm text-gray-700 mt-1">
-                  {keyObj.key ? `${keyObj.key.slice(0, 6)}••••••••••••` : "sk-xxxxxx••••••"}
-                </span>
-                <span className="text-xs text-gray-500 mt-1">
-                  Created at: {keyObj.created_at} • Status:{" "}
-                  <span
-                    className={
-                      keyObj.is_active ? "text-green-600" : "text-red-500"
-                    }
-                  >
-                    {keyObj.is_active ? "Active" : "Inactive"}
+          {apiKeys.length === 0 ? (
+            <iframe
+              width="100%"
+              height="400"
+              src="https://www.youtube.com/embed/n6a6qqpZq3o"
+              title="YouTube video"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              style={{ borderRadius: "8px", maxWidth: "100%" }}
+            ></iframe>
+          ) : (
+            apiKeys.map((keyObj) => (
+              <div
+                key={keyObj.id}
+                className="bg-white p-4 rounded shadow-sm border border-gray-200 flex justify-between items-center"
+              >
+                <div className="flex flex-col">
+                  <span className="font-semibold text-sm text-gray-900">
+                    {keyObj.name || "Unnamed Key"}
                   </span>
-                </span>
+                  <span className="font-mono text-sm text-gray-700 mt-1">
+                    {keyObj.key ? `${keyObj.key.slice(0, 6)}••••••••••••` : "sk-xxxxxx••••••"}
+                  </span>
+                  <span className="text-xs text-gray-500 mt-1">
+                    Created at: {keyObj.created_at} • Status:{" "}
+                    <span
+                      className={
+                        keyObj.is_active ? "text-green-600" : "text-red-500"
+                      }
+                    >
+                      {keyObj.is_active ? "Active" : "Inactive"}
+                    </span>
+                  </span>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleCopy(keyObj.key!, keyObj.id)}
+                    className="text-sm px-3 py-1 border rounded hover:bg-gray-100 cursor-pointer"
+                  >
+                    {copiedKeyId === keyObj.id ? "Copied!" : "Copy"}
+                  </button>
+                  <button
+                    onClick={() => setKeyToDelete(keyObj.id)}
+                    className="text-sm px-3 py-1 border rounded hover:bg-red-50 text-red-600 border-red-300 cursor-pointer"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleCopy(keyObj.key!, keyObj.id)}
-                  className="text-sm px-3 py-1 border rounded hover:bg-gray-100 cursor-pointer"
-                >
-                  {copiedKeyId === keyObj.id ? "Copied!" : "Copy"}
-                </button>
-                <button
-                  onClick={() => setKeyToDelete(keyObj.id)}
-                  className="text-sm px-3 py-1 border rounded hover:bg-red-50 text-red-600 border-red-300 cursor-pointer"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
 
         <div className="flex justify-center gap-4 mt-6">

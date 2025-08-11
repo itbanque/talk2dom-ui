@@ -61,14 +61,13 @@ export default function ProjectsPage() {
       });
       if (!res.ok) throw new Error("Failed to fetch projects");
       const data = await res.json();
-      if (Array.isArray(data)) {
-        const list = data as Project[];
-        setProjects(list);
-        // If returned items are exactly `limit`, assume there may be a next page
-        setHasMore(list.length === limit);
+      // Expect API to return { items: Project[], has_next: boolean }
+      if (data && data.items) {
+        setProjects(data.items);
+        setHasMore(!!data.has_next);
         setTotal(null);
         // Edge case: if not first page and API returns empty (e.g., after deletions), jump back a page
-        if (offset > 0 && list.length === 0) {
+        if (offset > 0 && data.items.length === 0) {
           setOffset(Math.max(offset - limit, 0));
         }
       } else {
@@ -114,7 +113,7 @@ export default function ProjectsPage() {
         credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to delete project");
-      setProjects((prev) => prev.filter((p) => p.id !== id));
+      await fetchProjects(limit, offset);
       setOpenDropdownId(null);
     } catch (err) {
       console.error("Error deleting project:", err);
@@ -162,6 +161,19 @@ export default function ProjectsPage() {
           </div>
 
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+            {projects.length === 0 && (
+              <div className="col-span-full flex justify-center">
+                <iframe
+                  width="800"
+                  height="450"
+                  src="https://www.youtube.com/embed/V-5IKCwtQ_g"
+                  title="How to create your first project"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            )}
             {projects.map((p) => {
               if (!refs.current[p.id]) {
                 refs.current[p.id] = React.createRef<HTMLDivElement>();
@@ -293,7 +305,7 @@ export default function ProjectsPage() {
                         event: "project_created",
                         project_name: projectName,
                       });
-                      setProjects((prev) => [...prev, newProject]);
+                      await fetchProjects(limit, offset);
                       setShowModal(false);
                       setProjectName("");
                     } catch (err) {

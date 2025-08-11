@@ -155,13 +155,15 @@ export default function PricingPage() {
           {/* Enterprise Plan */}
           <div className="w-full max-w-xs border border-gray-200 rounded-lg p-6 shadow-sm flex flex-col">
             <h2 className="text-xl font-bold mb-2">Enterprise</h2>
-            <p className="text-gray-600 mb-4">Custom needs, team scaling, and dedicated support</p>
+            <p className="text-gray-600 mb-4">Partner with us for stable, high‑quality QA at scale.</p>
             <div className="text-3xl font-bold mb-4">Custom</div>
             <ul className="flex-1 space-y-2 mb-6 text-sm text-left">
               <li>✅ Unlimited API calls</li>
-              <li>✅ Act as product quality advisor or contributor</li>
-              <li>✅ SLA support</li>
+              <li>✅ Dedicated QA partnership</li>
+              <li>✅ High-quality, stable delivery with comprehensive quality assurance</li>
+              <li>✅ SLA-backed support</li>
               <li>✅ Comprehensive self-host support</li>
+              <li>✅ Quality advisory & hands-on contribution</li>
             </ul>
             {user?.plan === "enterprise" ? (
               <button className="mt-auto text-center bg-gray-300 text-gray-600 py-2 rounded cursor-not-allowed" disabled>

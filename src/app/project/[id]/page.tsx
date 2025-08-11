@@ -56,42 +56,84 @@ export default function ProjectDetailPage() {
   const [invOffset, setInvOffset] = useState(0);
   const [invHasMore, setInvHasMore] = useState(false);
   const [invLoading, setInvLoading] = useState(false);
-  useEffect(() => {
-    const fetchLocatorCache = async (limit: number, offset: number) => {
-      if (!id) return;
-      setLcLoading(true);
-      try {
-        const params = new URLSearchParams({
-          limit: String(limit),
-          offset: String(offset),
-        });
-        const res = await fetch(`${DOMAIN}/api/v1/project/${id}/locator-cache?${params.toString()}`, {
-          credentials: "include",
-        });
-        if (!res.ok) throw new Error("Failed to fetch locator cache");
-        const data = await res.json();
-        if (Array.isArray(data)) {
-          setLocatorCache(data);
-          setLcHasMore(data.length === limit);
-          // Edge case: if not first page and got empty page (e.g., after deletions), step back
-          if (offset > 0 && data.length === 0) {
-            setLcOffset(Math.max(offset - limit, 0));
-          }
-        } else {
-          // Fallback if backend changes to object in future
-          const list = Array.isArray((data as any).items) ? (data as any).items : [];
-          setLocatorCache(list);
-          setLcHasMore(list.length === limit);
-        }
-      } catch (err) {
-        console.error("Locator cache fetch error:", err);
-        setLocatorCache([]);
-        setLcHasMore(false);
-      } finally {
-        setLcLoading(false);
+  // Reusable fetch functions for locator cache, members, and invites
+  const fetchLocatorCachePage = async (limit: number, offset: number) => {
+    if (!id) return { count: 0, hasNext: false };
+    setLcLoading(true);
+    try {
+      const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+      const res = await fetch(`${DOMAIN}/api/v1/project/${id}/locator-cache?${params.toString()}`, { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch locator cache");
+      const data = await res.json();
+      const items = data?.items || [];
+      setLocatorCache(items);
+      setLcHasMore(!!data?.has_next);
+      if (offset > 0 && items.length === 0) {
+        setLcOffset(Math.max(offset - limit, 0));
       }
-    };
-    fetchLocatorCache(lcLimit, lcOffset);
+      return { count: items.length, hasNext: !!data?.has_next };
+    } catch (err) {
+      console.error("Locator cache fetch error:", err);
+      setLocatorCache([]);
+      setLcHasMore(false);
+      return { count: 0, hasNext: false };
+    } finally {
+      setLcLoading(false);
+    }
+  };
+
+  const fetchMembersPage = async (limit: number, offset: number) => {
+    if (!id) return { count: 0, hasNext: false };
+    setMemLoading(true);
+    try {
+      const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+      const res = await fetch(`${DOMAIN}/api/v1/project/${id}/members?${params.toString()}`, { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch members");
+      const data = await res.json();
+      const items = (data && Array.isArray(data.items)) ? data.items : [];
+      setMembers(items);
+      setMemHasMore(!!data?.has_next);
+      if (offset > 0 && items.length === 0) {
+        setMemOffset(Math.max(offset - limit, 0));
+      }
+      return { count: items.length, hasNext: !!data?.has_next };
+    } catch (error) {
+      console.error("Error fetching members:", error);
+      setMembers([]);
+      setMemHasMore(false);
+      return { count: 0, hasNext: false };
+    } finally {
+      setMemLoading(false);
+    }
+  };
+
+  const fetchInvitesPage = async (limit: number, offset: number) => {
+    if (!id) return { count: 0, hasNext: false };
+    setInvLoading(true);
+    try {
+      const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+      const res = await fetch(`${DOMAIN}/api/v1/project/${id}/invites?${params.toString()}`, { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch invites");
+      const data = await res.json();
+      const items = (data && Array.isArray(data.items)) ? data.items : [];
+      setInvites(items);
+      setInvHasMore(!!data?.has_next);
+      if (offset > 0 && items.length === 0) {
+        setInvOffset(Math.max(offset - limit, 0));
+      }
+      return { count: items.length, hasNext: !!data?.has_next };
+    } catch (error) {
+      console.error("Error fetching invites:", error);
+      setInvites([]);
+      setInvHasMore(false);
+      return { count: 0, hasNext: false };
+    } finally {
+      setInvLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchLocatorCachePage(lcLimit, lcOffset);
   }, [id, user, lcLimit, lcOffset]);
 
   const memberLimit =
@@ -121,57 +163,12 @@ export default function ProjectDetailPage() {
 
   useEffect(() => {
     if (!id) return;
-    const fetchMembers = async (limit: number, offset: number) => {
-      setMemLoading(true);
-      try {
-        const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
-        const res = await fetch(`${DOMAIN}/api/v1/project/${id}/members?${params.toString()}`, {
-          credentials: "include",
-        });
-        if (!res.ok) throw new Error("Failed to fetch members");
-        const data = await res.json();
-        setMembers(Array.isArray(data) ? data : []);
-        setMemHasMore(Array.isArray(data) && data.length === limit);
-        if (offset > 0 && Array.isArray(data) && data.length === 0) {
-          setMemOffset(Math.max(offset - limit, 0));
-        }
-      } catch (error) {
-        console.error("Error fetching members:", error);
-        setMembers([]);
-        setMemHasMore(false);
-      } finally {
-        setMemLoading(false);
-      }
-    };
-    fetchMembers(memLimit, memOffset);
+    fetchMembersPage(memLimit, memOffset);
   }, [id, memLimit, memOffset]);
 
   useEffect(() => {
     if (!id) return;
-    const fetchInvites = async (limit: number, offset: number) => {
-      setInvLoading(true);
-      try {
-        const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
-        const res = await fetch(`${DOMAIN}/api/v1/project/${id}/invites?${params.toString()}`, {
-          credentials: "include",
-        });
-        if (!res.ok) throw new Error("Failed to fetch invites");
-        const data = await res.json();
-        setInvites(Array.isArray(data) ? data : []);
-        // hasMore 仅针对 pending 列表的 UI 体验，这里按返回条数判断
-        setInvHasMore(Array.isArray(data) && data.length === limit);
-        if (offset > 0 && Array.isArray(data) && data.length === 0) {
-          setInvOffset(Math.max(offset - limit, 0));
-        }
-      } catch (error) {
-        console.error("Error fetching invites:", error);
-        setInvites([]);
-        setInvHasMore(false);
-      } finally {
-        setInvLoading(false);
-      }
-    };
-    fetchInvites(invLimit, invOffset);
+    fetchInvitesPage(invLimit, invOffset);
   }, [id, invLimit, invOffset]);
 
   useEffect(() => {
@@ -211,7 +208,10 @@ export default function ProjectDetailPage() {
         return;
       }
       toast.success("Invite removed");
-      setInvites((prev) => prev ? prev.filter(invite => invite.id !== userId) : null);
+      const r = await fetchInvitesPage(invLimit, invOffset);
+      if (r.count === 0 && invOffset > 0) {
+        await fetchInvitesPage(invLimit, Math.max(invOffset - invLimit, 0));
+      }
     } catch (err) {
       toast.error(String(err));
     }
@@ -246,9 +246,10 @@ export default function ProjectDetailPage() {
         return;
       }
       toast.success("Member removed");
-      setMembers((prev) =>
-        prev ? prev.filter((m) => m.user_id !== userId) : null
-      );
+      const r = await fetchMembersPage(memLimit, memOffset);
+      if (r.count === 0 && memOffset > 0) {
+        await fetchMembersPage(memLimit, Math.max(memOffset - memLimit, 0));
+      }
     } catch (err) {
       toast.error(String(err));
     }
@@ -264,7 +265,10 @@ export default function ProjectDetailPage() {
       });
       if (!res.ok) throw new Error("Failed to delete locator");
       toast.success("Locator deleted");
-      setLocatorCache(prev => prev.filter(item => item.id !== locatorId));
+      const r = await fetchLocatorCachePage(lcLimit, lcOffset);
+      if (r.count === 0 && lcOffset > 0) {
+        await fetchLocatorCachePage(lcLimit, Math.max(lcOffset - lcLimit, 0));
+      }
     } catch (err) {
       console.error("Delete error:", err);
       toast.error("Failed to delete locator");
