@@ -56,6 +56,14 @@ export default function RegisterPage() {
     window.location.href = `${DOMAIN}/api/v1/auth/google/login`;
   };
 
+  const handleGithubLogin = () => {
+    window.dataLayer?.push({
+      event: "register_submit",
+      method: "github",
+    });
+    window.location.href = `${DOMAIN}/api/v1/auth/github/login`;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
@@ -176,6 +184,17 @@ export default function RegisterPage() {
               className="w-5 h-5"
             />
             Continue with Google
+          </button>
+          <button
+            onClick={handleGithubLogin}
+            className="mt-3 w-full flex items-center justify-center gap-2 border border-gray-300 px-4 py-3 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 transition text-black cursor-pointer"
+          >
+            <img
+              src="https://www.svgrepo.com/show/512317/github-142.svg"
+              alt="GitHub"
+              className="w-5 h-5"
+            />
+            Continue with GitHub
           </button>
           <p className="mt-6 text-sm text-center text-gray-600">
             Already have an account? <a href="/login" className="text-black hover:underline">Log in</a>

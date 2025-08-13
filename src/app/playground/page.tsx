@@ -9,7 +9,7 @@ const DOMAIN = process.env.NEXT_PUBLIC_API_DOMAIN || "";
 
 export default function PlaygroundPage() {
   const [url, setUrl] = useState("https://python.org");
-  const [instruction, setInstruction] = useState("Find the search button on the top");
+  const [instruction, setInstruction] = useState("Find the donate button on the top");
   const [html, setHtml] = useState("");
   const [locators, setLocators] = useState<
     Array<{ selector_type: string; selector_value: string }>

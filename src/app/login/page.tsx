@@ -85,6 +85,14 @@ export default function LoginPage() {
     window.location.href = `${DOMAIN}/api/v1/auth/google/login`;
   };
 
+  const handleGithubLogin = () => {
+    window.dataLayer?.push({
+      event: "login_submit",
+      method: "github",
+    });
+    window.location.href = `${DOMAIN}/api/v1/auth/github/login`;
+  };
+
   return (
     <>
     <Navbar />
@@ -161,6 +169,17 @@ export default function LoginPage() {
               className="w-5 h-5"
             />
             <span>Continue with Google</span>
+          </button>
+          <button
+            onClick={handleGithubLogin}
+            className="mt-3 w-full flex items-center justify-center gap-2 border border-gray-300 px-4 py-3 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 transition text-black cursor-pointer"
+          >
+            <img
+              src="https://www.svgrepo.com/show/512317/github-142.svg"
+              alt="GitHub"
+              className="w-5 h-5"
+            />
+            <span>Continue with GitHub</span>
           </button>
         </div>
       </main>

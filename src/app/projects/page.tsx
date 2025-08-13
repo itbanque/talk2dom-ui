@@ -38,6 +38,9 @@ export default function ProjectsPage() {
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
 
   const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editProjectId, setEditProjectId] = useState<string | null>(null);
+  const [editProjectName, setEditProjectName] = useState("");
   const [projectName, setProjectName] = useState("");
   const [showTooltip, setShowTooltip] = useState(false);
 
@@ -218,6 +221,17 @@ export default function ProjectsPage() {
                       {openDropdownId === p.id && (
                         <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg z-10">
                           <button
+                            onClick={() => {
+                              setEditProjectId(p.id);
+                              setEditProjectName(p.name);
+                              setShowEditModal(true);
+                              setOpenDropdownId(null);
+                            }}
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded"
+                          >
+                            Edit
+                          </button>
+                          <button
                             onClick={() => handleDelete(p.id)}
                             className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-100 rounded"
                           >
@@ -263,6 +277,77 @@ export default function ProjectsPage() {
             Next
           </button>
         </div>
+
+        {showEditModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 shadow-lg w-full max-w-lg mx-4">
+              <h2 className="text-xl font-bold mb-4">Edit Project</h2>
+              <input
+                type="text"
+                placeholder="New project name"
+                className="w-full border border-gray-300 rounded px-4 py-2 mb-4"
+                value={editProjectName}
+                onChange={(e) => setEditProjectName(e.target.value)}
+              />
+              <div className="flex flex-col-reverse md:flex-row justify-end gap-2">
+                <button
+                  onClick={() => {
+                    setShowEditModal(false);
+                    setEditProjectId(null);
+                    setEditProjectName("");
+                  }}
+                  className="px-4 py-2 rounded border border-gray-300 cursor-pointer w-full md:w-auto"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={async () => {
+                    const name = editProjectName.trim();
+                    if (!name) {
+                      toast.error("Project name cannot be empty.");
+                      return;
+                    }
+                    if (!editProjectId) {
+                      toast.error("Missing project id.");
+                      return;
+                    }
+                    try {
+                      const res = await fetch(`${DOMAIN}/api/v1/project/${editProjectId}`, {
+                        method: "PUT",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        credentials: "include",
+                        body: JSON.stringify({ name }),
+                      });
+                      if (!res.ok) throw new Error(await res.text());
+                      window.dataLayer?.push({
+                        event: "project_renamed",
+                        project_id: editProjectId,
+                        project_name: name,
+                      });
+                      await fetchProjects(limit, offset);
+                      toast.success("Project name updated.");
+                      setShowEditModal(false);
+                      setEditProjectId(null);
+                      setEditProjectName("");
+                    } catch (err) {
+                      if (err instanceof Error) {
+                        toast.error(`Failed to update project: ${err.message}`);
+                      } else {
+                        toast.error("Failed to update project.");
+                      }
+                      console.error("Error updating project:", err);
+                    }
+                  }}
+                  className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 cursor-pointer w-full md:w-auto"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
