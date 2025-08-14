@@ -429,7 +429,10 @@ export default function ProjectDetailPage() {
                       {
                         label: "API Calls",
                         data: apiUsage.map((u) => u.count),
-                        backgroundColor: "rgba(0,0,0,0.7)",
+                        backgroundColor: "rgba(30, 64, 175, 0.9)",
+                        hoverBackgroundColor: "rgba(30, 64, 175, 1)",
+                        borderRadius: 6,
+                        maxBarThickness: 40,
                       },
                     ],
                   }}
@@ -439,6 +442,7 @@ export default function ProjectDetailPage() {
                     plugins: {
                       legend: { display: false },
                     },
+                    animation: { duration: 800, easing: 'easeOutQuart' },
                     scales: {
                       x: {
                         type: "time",
