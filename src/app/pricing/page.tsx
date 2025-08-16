@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import { CardElement, useStripe, useElements, Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { toast } from "react-hot-toast";
+import Script from "next/script";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -37,6 +38,67 @@ export default function PricingPage() {
       event: "page_view",
       page_name: "pricing_page",
     });
+
+    // SEO: Pricing page meta
+    try {
+      const origin = typeof window !== 'undefined' ? window.location.origin : '';
+      const url = `${origin}/pricing`;
+
+      // Title
+      document.title = 'Pricing | Talk2Dom – AI-Powered UI Element Locator';
+
+      // Meta description
+      const ensureMeta = (name: string, content: string) => {
+        let m = document.querySelector(`meta[name="${name}"]`);
+        if (!m) {
+          m = document.createElement('meta');
+          m.setAttribute('name', name);
+          document.head.appendChild(m);
+        }
+        m.setAttribute('content', content);
+      };
+      ensureMeta('description', 'Choose a plan for Talk2Dom. AI-powered element location for Selenium, Playwright, and more. Developer, Pro, and Enterprise options.');
+
+      // Canonical
+      let canonical = document.querySelector('link[rel="canonical"]');
+      if (!canonical) {
+        canonical = document.createElement('link');
+        canonical.setAttribute('rel', 'canonical');
+        document.head.appendChild(canonical);
+      }
+      canonical.setAttribute('href', url);
+
+      // Open Graph
+      const ensureOG = (property: string, content: string) => {
+        let t = document.querySelector(`meta[property="${property}"]`);
+        if (!t) {
+          t = document.createElement('meta');
+          t.setAttribute('property', property);
+          document.head.appendChild(t);
+        }
+        t.setAttribute('content', content);
+      };
+      ensureOG('og:title', 'Pricing | Talk2Dom');
+      ensureOG('og:description', 'Plans for AI-powered UI element location. Developer, Pro, and Enterprise.');
+      ensureOG('og:type', 'website');
+      ensureOG('og:url', url);
+      ensureOG('og:image', `${origin}/images/video-fallback.png`);
+
+      // Twitter Card
+      const ensureTwitter = (name: string, content: string) => {
+        let t = document.querySelector(`meta[name="${name}"]`);
+        if (!t) {
+          t = document.createElement('meta');
+          t.setAttribute('name', name);
+          document.head.appendChild(t);
+        }
+        t.setAttribute('content', content);
+      };
+      ensureTwitter('twitter:card', 'summary_large_image');
+      ensureTwitter('twitter:title', 'Pricing | Talk2Dom');
+      ensureTwitter('twitter:description', 'Select a plan for AI-powered element location.');
+      ensureTwitter('twitter:image', `${origin}/images/video-fallback.png`);
+    } catch (_) {}
   }, []);
 
   const confirmUpgrade = async () => {
@@ -76,6 +138,48 @@ export default function PricingPage() {
   return (
     <>
       <Navbar />
+      <Script id="ldjson-product-developer" type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": "Talk2Dom Developer Plan",
+          "brand": {"@type": "Brand", "name": "Talk2Dom"},
+          "description": "Developer plan for AI-powered UI element location.",
+          "offers": {
+            "@type": "Offer",
+            "price": "9.99",
+            "priceCurrency": "USD",
+            "priceSpecification": {"@type": "UnitPriceSpecification", "price": 9.99, "priceCurrency": "USD", "billingDuration": "P1M"},
+            "availability": "https://schema.org/InStock"
+          }
+        })}
+      </Script>
+      <Script id="ldjson-product-pro" type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": "Talk2Dom Pro Plan",
+          "brand": {"@type": "Brand", "name": "Talk2Dom"},
+          "description": "Pro plan for teams using AI-powered UI element location.",
+          "offers": {
+            "@type": "Offer",
+            "price": "39.99",
+            "priceCurrency": "USD",
+            "priceSpecification": {"@type": "UnitPriceSpecification", "price": 39.99, "priceCurrency": "USD", "billingDuration": "P1M"},
+            "availability": "https://schema.org/InStock"
+          }
+        })}
+      </Script>
+      <Script id="ldjson-product-enterprise" type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": "Talk2Dom Enterprise",
+          "brand": {"@type": "Brand", "name": "Talk2Dom"},
+          "description": "Enterprise partnership with SLA and deployment options.",
+          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+        })}
+      </Script>
       <main className="min-h-screen bg-white text-gray-800 px-4 py-10 md:px-6 md:py-24 max-w-7xl mx-auto flex flex-col items-center text-center">
         <h1 className="text-3xl md:text-5xl font-bold text-center mb-8 md:mb-12">Choose Your Plan</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
@@ -155,15 +259,15 @@ export default function PricingPage() {
           {/* Enterprise Plan */}
           <div className="w-full max-w-md md:max-w-xs border border-gray-200 rounded-lg p-4 md:p-6 shadow-sm flex flex-col">
             <h2 className="text-xl font-bold mb-2">Enterprise</h2>
-            <p className="text-gray-600 mb-4">Partner with us for stable, high‑quality QA at scale.</p>
+            <p className="text-gray-600 mb-4">Partner with us for stable, high‑quality delivery at scale.</p>
             <div className="text-3xl font-bold mb-4">Custom</div>
             <ul className="flex-1 space-y-2 mb-6 text-sm text-left">
               <li>✅ Unlimited API calls</li>
-              <li>✅ Dedicated QA partnership</li>
-              <li>✅ High-quality, stable delivery with comprehensive quality assurance</li>
+              <li>✅ Dedicated engineering partnership</li>
+              <li>✅ High-quality, stable delivery across environments</li>
               <li>✅ SLA-backed support</li>
               <li>✅ Comprehensive self-host support</li>
-              <li>✅ Quality advisory & hands-on contribution</li>
+              <li>✅ Architecture & workflow advisory</li>
             </ul>
             {user?.plan === "enterprise" ? (
               <button className="mt-auto w-full text-center bg-gray-300 text-gray-600 py-2 rounded cursor-not-allowed" disabled>

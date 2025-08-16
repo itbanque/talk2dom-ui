@@ -14,6 +14,7 @@ import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { useRef, useState, useEffect } from "react";
+import Script from "next/script";
 
 export default function DocsPage() {
   const stepByStepRef = useRef<HTMLElement | null>(null);
@@ -36,11 +37,100 @@ export default function DocsPage() {
       event: "page_view",
       page_name: "docs_page",
     });
+
+    // SEO: Docs page meta
+    try {
+      const origin = typeof window !== 'undefined' ? window.location.origin : '';
+      const url = `${origin}/docs`;
+
+      // Title
+      document.title = 'Docs | Talk2Dom – AI-Powered UI Element Locator';
+
+      // Meta description
+      const ensureMeta = (name: string, content: string) => {
+        let m = document.querySelector(`meta[name="${name}"]`);
+        if (!m) {
+          m = document.createElement('meta');
+          m.setAttribute('name', name);
+          document.head.appendChild(m);
+        }
+        m.setAttribute('content', content);
+      };
+      ensureMeta('description', 'Developer documentation for Talk2Dom. Learn how to convert natural language into robust UI selectors via API with Selenium, Playwright, and more.');
+
+      // Canonical
+      let canonical = document.querySelector('link[rel="canonical"]');
+      if (!canonical) {
+        canonical = document.createElement('link');
+        canonical.setAttribute('rel', 'canonical');
+        document.head.appendChild(canonical);
+      }
+      canonical.setAttribute('href', url);
+
+      // Open Graph
+      const ensureOG = (property: string, content: string) => {
+        let t = document.querySelector(`meta[property="${property}"]`);
+        if (!t) {
+          t = document.createElement('meta');
+          t.setAttribute('property', property);
+          document.head.appendChild(t);
+        }
+        t.setAttribute('content', content);
+      };
+      ensureOG('og:title', 'Talk2Dom Documentation');
+      ensureOG('og:description', 'How Talk2Dom works with Selenium, Playwright, and more.');
+      ensureOG('og:type', 'article');
+      ensureOG('og:url', url);
+      ensureOG('og:image', `${origin}/images/video-fallback.png`);
+
+      // Twitter Card
+      const ensureTwitter = (name: string, content: string) => {
+        let t = document.querySelector(`meta[name="${name}"]`);
+        if (!t) {
+          t = document.createElement('meta');
+          t.setAttribute('name', name);
+          document.head.appendChild(t);
+        }
+        t.setAttribute('content', content);
+      };
+      ensureTwitter('twitter:card', 'summary_large_image');
+      ensureTwitter('twitter:title', 'Talk2Dom Documentation');
+      ensureTwitter('twitter:description', 'Developer docs for AI-powered UI element location.');
+      ensureTwitter('twitter:image', `${origin}/images/video-fallback.png`);
+    } catch (_) {}
   }, []);
 
   return (
     <main className="min-h-screen bg-white text-gray-800 px-6 pb-20">
       <Navbar />
+      <Script id="ldjson-docs-org" type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "Talk2Dom",
+          "url": "https://www.itbanque.com/",
+          "logo": "https://www.itbanque.com/icon.png",
+          "sameAs": [
+            "https://github.com/itbanque/talk2dom"
+          ]
+        })}
+      </Script>
+      <Script id="ldjson-docs-webpage" type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Talk2Dom Documentation",
+          "url": "https://www.itbanque.com/docs",
+          "description": "Developer documentation for Talk2Dom: convert natural language into robust UI selectors via API.",
+          "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.itbanque.com/"},
+              {"@type": "ListItem", "position": 2, "name": "Docs", "item": "https://www.itbanque.com/docs"}
+            ]
+          }
+        })}
+      </Script>
       <div className="h-12" />
       <section className="max-w-4xl mx-auto pt-20 pb-20">
         <h1 className="text-4xl font-bold mb-6 text-center">Developer Documentation – How Talk2Dom Works</h1>
@@ -62,6 +152,17 @@ export default function DocsPage() {
               language-based way to find the elements you care about. Use it with any language, any framework, and any browser — via a
               simple API.
             </p>
+            <div className="mb-8 flex justify-center">
+              <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/embed/XsEYvdffQjE"
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
           </div>
           {/* Section: Designed for Real Workflows */}
           <div>

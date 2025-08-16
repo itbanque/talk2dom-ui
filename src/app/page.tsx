@@ -1,16 +1,111 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import Script from "next/script";
 
 
 
 export default function HomePage() {
+  useEffect(() => {
+    try {
+      const origin = typeof window !== 'undefined' ? window.location.origin : '';
+      const url = `${origin}/`;
+
+      // Title
+      document.title = "Talk2Dom – AI-Powered UI Element Locator for Selenium & Playwright";
+
+      // Meta description
+      const ensureMeta = (name: string, content: string) => {
+        let m = document.querySelector(`meta[name="${name}"]`);
+        if (!m) {
+          m = document.createElement('meta');
+          m.setAttribute('name', name);
+          document.head.appendChild(m);
+        }
+        m.setAttribute('content', content);
+      };
+      ensureMeta(
+        'description',
+        'Talk2Dom turns plain-language descriptions into robust UI selectors. AI-powered element location for Playwright, Selenium, and more.'
+      );
+
+      // Canonical
+      let canonical = document.querySelector('link[rel="canonical"]');
+      if (!canonical) {
+        canonical = document.createElement('link');
+        canonical.setAttribute('rel', 'canonical');
+        document.head.appendChild(canonical);
+      }
+      canonical.setAttribute('href', url);
+
+      // Open Graph
+      const ensureOG = (property: string, content: string) => {
+        let t = document.querySelector(`meta[property="${property}"]`);
+        if (!t) {
+          t = document.createElement('meta');
+          t.setAttribute('property', property);
+          document.head.appendChild(t);
+        }
+        t.setAttribute('content', content);
+      };
+      ensureOG('og:title', 'Talk2Dom – AI-Powered UI Element Locator');
+      ensureOG(
+        'og:description',
+        'AI-powered service that converts natural language into reliable UI selectors for Selenium, Playwright, and more.'
+      );
+      ensureOG('og:type', 'website');
+      ensureOG('og:url', url);
+      ensureOG('og:image', `${origin}/images/video-fallback.png`);
+
+      // Twitter Card
+      const ensureTwitter = (name: string, content: string) => {
+        let t = document.querySelector(`meta[name="${name}"]`);
+        if (!t) {
+          t = document.createElement('meta');
+          t.setAttribute('name', name);
+          document.head.appendChild(t);
+        }
+        t.setAttribute('content', content);
+      };
+      ensureTwitter('twitter:card', 'summary_large_image');
+      ensureTwitter('twitter:title', 'Talk2Dom – AI-Powered UI Element Locator');
+      ensureTwitter('twitter:description', 'Natural language → robust UI selectors. Works with Selenium & Playwright.');
+      ensureTwitter('twitter:image', `${origin}/images/video-fallback.png`);
+    } catch (_) {}
+  }, []);
   return (
     <main className="min-h-screen bg-gray-50 text-gray-900">
       <Navbar />
+      <Script id="ldjson-org" type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "Talk2Dom",
+          "url": "https://www.itbanque.com/",
+          "logo": "https://www.itbanque.com/icon.png",
+          "sameAs": [
+            "https://github.com/itbanque/talk2dom"
+          ]
+        })}
+      </Script>
+      <Script id="ldjson-app" type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Talk2Dom",
+          "applicationCategory": "DeveloperApplication",
+          "operatingSystem": "Web",
+          "description": "AI-powered service that turns plain-language descriptions into robust UI element locators for Playwright, Selenium, and more.",
+          "url": "https://www.itbanque.com/",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          }
+        })}
+      </Script>
       {/* Hero Section */}
       <section className="flex flex-col md:flex-row items-center justify-between px-6 md:px-12 pt-32 pb-20 bg-white text-center">
         {/* Left: Text & CTA */}
