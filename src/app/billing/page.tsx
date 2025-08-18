@@ -55,13 +55,13 @@ function CreditModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md mx-4">
-        <h2 className="text-lg font-semibold mb-4">Purchase Credits</h2>
+      <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-6 rounded-lg shadow-lg w-full max-w-md mx-4 border border-gray-200 dark:border-gray-700">
+        <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Purchase Credits</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
           {[{ amount: 1000, price: 999 }, { amount: 2200, price: 1999 }, { amount: 5500, price: 4999 }].map((opt) => (
             <div
               key={opt.amount}
-              className={`border rounded p-3 cursor-pointer ${selectedCredit === opt.amount ? "border-blue-500 bg-blue-50" : "border-gray-300"}`}
+              className={`border rounded p-3 cursor-pointer ${selectedCredit === opt.amount ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20" : "border-gray-300 dark:border-gray-600"}`}
               onClick={async () => {
                 setSelectedCredit(opt.amount);
                 try {
@@ -82,31 +82,31 @@ function CreditModal({
               }}
             >
               <p className="font-medium">{opt.amount} credits</p>
-              <p className="text-sm text-gray-500">${(opt.price / 100).toFixed(2)}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">${(opt.price / 100).toFixed(2)}</p>
             </div>
           ))}
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="cardholder-name">Name on Card</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" htmlFor="cardholder-name">Name on Card</label>
           <input
             id="cardholder-name"
             type="text"
-            className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+            className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
             value={cardholderName}
             onChange={(e) => setCardholderName(e.target.value)}
             placeholder="Jane Doe"
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Card Info</label>
-          <div className="border border-gray-300 rounded px-3 py-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Card Info</label>
+          <div className="border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-900">
             <CardElement options={{ hidePostalCode: true }} />
           </div>
         </div>
         <div className="flex flex-col-reverse md:flex-row justify-end gap-2">
           <button
             onClick={() => setShow(false)}
-            className="cursor-pointer px-4 py-2 bg-white text-gray-800 border border-gray-300 rounded hover:bg-gray-100 text-sm w-full md:w-auto"
+            className="cursor-pointer px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-200 dark:hover:bg-gray-600 text-sm w-full md:w-auto"
             disabled={paying}
           >
             Cancel
@@ -141,7 +141,7 @@ function CreditModal({
                 setShow(false);
               }
             }}
-            className="cursor-pointer px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 text-sm disabled:opacity-50 w-full md:w-auto"
+            className="cursor-pointer px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded text-sm disabled:opacity-50 w-full md:w-auto"
           >
             {paying ? "Processing..." : "Pay"}
           </button>
@@ -209,28 +209,28 @@ export default function BillingPage() {
           setSelectedCredit={setSelectedCredit}
         />
       </Elements>
-      <main className="min-h-screen bg-white text-gray-800 px-4 py-4 md:px-6 md:py-12">
+      <main className="min-h-screen text-gray-900 dark:text-gray-100 px-4 py-4 md:px-6 md:py-12">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Billing & Subscription</h1>
+          <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-gray-900 dark:text-gray-100">Billing & Subscription</h1>
 
           {/* Current Plan */}
-          <section className="mb-10 bg-white border border-gray-200 rounded p-4 md:p-6">
-            <h2 className="text-xl font-semibold mb-4">Current Plan</h2>
+          <section className="mb-10 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded p-4 md:p-6 !bg-white dark:!bg-gray-900 !text-gray-900 dark:!text-gray-100">
+            <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Current Plan</h2>
             <p className="mb-2">Plan: <strong>{user?.plan || "N/A"}</strong></p>
             <p className="mb-2">Subscription Credits: <strong>{user?.subscription_credits ?? "N/A"}</strong></p>
             <p className="mb-2">One-Time Credits: <strong>{user?.one_time_credits ?? "N/A"}</strong></p>
             <p className="mb-2">Subscription Status: <strong>{user?.subscription_status ?? "N/A"}</strong></p>
-            <p className="mb-4 text-sm text-gray-500">Next Billing Date: {user?.subscription_end_date?.split("T")[0] ?? "N/A"}</p>
+            <p className="mb-4 text-sm text-gray-500 dark:text-gray-400">Next Billing Date: {user?.subscription_end_date?.split("T")[0] ?? "N/A"}</p>
 
             {user?.plan === "free" && (
-              <p className="mb-4 text-sm text-yellow-700 bg-yellow-100 p-3 rounded">
+              <p className="mb-4 text-sm text-yellow-700 dark:text-yellow-300 bg-yellow-100 dark:bg-yellow-900/30 p-3 rounded">
                 You are currently on the Free plan. Upgrade to unlock more features and increase your usage limits.
               </p>
             )}
 
             <div className={`flex flex-col sm:flex-row gap-2 mt-4 ${user?.plan === "free" ? "" : "flex-wrap"}`}>
               <button
-                className="cursor-pointer bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 text-sm w-full md:w-auto"
+                className="cursor-pointer px-4 py-2 rounded text-sm w-full md:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
                 onClick={() => {
                   window.dataLayer?.push({
                     event: "billing_upgrade_click"
@@ -241,7 +241,7 @@ export default function BillingPage() {
                 Upgrade Plan
               </button>
               <button
-                className="cursor-pointer border border-gray-400 text-gray-700 px-4 py-2 rounded hover:bg-gray-100 text-sm w-full md:w-auto"
+                className="cursor-pointer border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-sm w-full md:w-auto"
                 onClick={() => {
                   window.dataLayer?.push({
                     event: "billing_add_credit_click"
@@ -254,7 +254,7 @@ export default function BillingPage() {
               {user?.plan !== "free" && (
                 <>
                   <button
-                    className="cursor-pointer border border-gray-400 text-gray-700 px-4 py-2 rounded hover:bg-gray-100 text-sm w-full md:w-auto"
+                    className="cursor-pointer border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-sm w-full md:w-auto"
                     onClick={async () => {
                       try {
                         const res = await fetch(`${DOMAIN}/api/v1/subscription/cancel`, {
@@ -283,37 +283,37 @@ export default function BillingPage() {
           </section>
 
           {/* Billing History */}
-          <section className="mb-10 bg-white border border-gray-200 rounded p-4 md:p-6">
-            <h2 className="text-xl font-semibold mb-4">Billing History</h2>
-            <p className="text-sm text-gray-500 mb-2">  Displaying your 10 most recent invoices. For older billing records, please contact support.
+          <section className="mb-10 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded p-4 md:p-6 !bg-white dark:!bg-gray-900 !text-gray-900 dark:!text-gray-100">
+            <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Billing History</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">  Displaying your 10 most recent invoices. For older billing records, please contact support.
 </p>
             {invoices.length === 0 ? (
-              <p className="text-sm text-gray-600">No billing history yet.</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">No billing history yet.</p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="min-w-full text-xs md:text-sm text-left">
                   <thead>
                     <tr>
-                      <th className="px-3 py-2 md:px-4 border-b">Date</th>
-                      <th className="px-3 py-2 md:px-4 border-b">Amount</th>
-                      <th className="px-3 py-2 md:px-4 border-b">Status</th>
-                      <th className="px-3 py-2 md:px-4 border-b">Invoice</th>
+                      <th className="px-3 py-2 md:px-4 border-b border-gray-200 dark:border-gray-700">Date</th>
+                      <th className="px-3 py-2 md:px-4 border-b border-gray-200 dark:border-gray-700">Amount</th>
+                      <th className="px-3 py-2 md:px-4 border-b border-gray-200 dark:border-gray-700">Status</th>
+                      <th className="px-3 py-2 md:px-4 border-b border-gray-200 dark:border-gray-700">Invoice</th>
                     </tr>
                   </thead>
                   <tbody>
                     {invoices.map((inv: any) => (
                       <tr key={inv.id}>
-                        <td className="px-3 py-2 md:px-4 border-b">{new Date(inv.created * 1000).toISOString().split("T")[0]}</td>
-                        <td className="px-3 py-2 md:px-4 border-b">
+                        <td className="px-3 py-2 md:px-4 border-b border-gray-200 dark:border-gray-700">{new Date(inv.created * 1000).toISOString().split("T")[0]}</td>
+                        <td className="px-3 py-2 md:px-4 border-b border-gray-200 dark:border-gray-700">
                           ${(inv.amount_paid / 100).toFixed(2)} {inv.currency.toUpperCase()}
                         </td>
-                        <td className="px-3 py-2 md:px-4 border-b capitalize">{inv.status}</td>
-                        <td className="px-3 py-2 md:px-4 border-b">
+                        <td className="px-3 py-2 md:px-4 border-b border-gray-200 dark:border-gray-700 capitalize">{inv.status}</td>
+                        <td className="px-3 py-2 md:px-4 border-b border-gray-200 dark:border-gray-700">
                           <a
                             href={inv.invoice_pdf}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
+                            className="text-blue-600 hover:underline dark:text-blue-400"
                           >
                             Download
                           </a>

@@ -180,14 +180,14 @@ export default function PricingPage() {
           "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
         })}
       </Script>
-      <main className="min-h-screen bg-white text-gray-800 px-4 py-10 md:px-6 md:py-24 max-w-7xl mx-auto flex flex-col items-center text-center">
+      <main className="min-h-screen text-gray-900 dark:text-gray-100 px-4 py-10 md:px-6 md:py-24 max-w-7xl mx-auto flex flex-col items-center text-center">
         <h1 className="text-3xl md:text-5xl font-bold text-center mb-8 md:mb-12">Choose Your Plan</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
 
           {/* Developer Plan */}
           <div className="w-full max-w-md md:max-w-xs border border-gray-200 rounded-lg p-4 md:p-6 shadow-sm flex flex-col">
             <h2 className="text-xl font-bold mb-2">Developer</h2>
-            <p className="text-gray-600 mb-4">For solo developers building serious projects</p>
+            <p className="text-gray-600 dark:text-gray-300 mb-4">For solo developers building serious projects</p>
             <div className="text-3xl font-bold mb-4">$9.99<span className="text-base font-medium">/mo</span></div>
             <ul className="flex-1 space-y-2 mb-6 text-sm text-left">
               <li>✅ 2,000 API calls / mo</li>
@@ -197,22 +197,22 @@ export default function PricingPage() {
             {user === null ? (
               <Link
                 href="/register"
-                className="mt-auto w-full text-center bg-black text-white py-2 rounded hover:bg-gray-900"
+                className="mt-auto w-full text-center px-4 py-2 rounded bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 Sign up
               </Link>
             ) : user?.plan && PLAN_LEVEL[user.plan] > PLAN_LEVEL["developer"] ? (
-              <button className="mt-auto w-full text-center bg-gray-200 text-gray-400 py-2 rounded cursor-not-allowed" disabled>
+              <button className="mt-auto w-full text-center px-4 py-2 rounded bg-gray-200 text-gray-400 dark:bg-gray-700 dark:text-gray-400 cursor-not-allowed" disabled>
                 Included
               </button>
             ) : user?.plan === "developer" ? (
-              <button className="mt-auto w-full text-center bg-gray-300 text-gray-600 py-2 rounded cursor-not-allowed" disabled>
+              <button className="mt-auto w-full text-center px-4 py-2 rounded bg-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300 cursor-not-allowed" disabled>
                 Current Plan
               </button>
             ) : (
               <button
                 onClick={() => handleUpgrade("developer")}
-                className="mt-auto w-full text-center bg-black text-white py-2 rounded hover:bg-gray-900"
+                className="mt-auto w-full text-center px-4 py-2 rounded bg-primary text-primary-foreground hover:bg-primary/90"
                 style={{ cursor: "pointer" }}
               >
                 Upgrade
@@ -223,7 +223,7 @@ export default function PricingPage() {
           {/* Pro Plan */}
           <div className="w-full max-w-md md:max-w-xs border border-gray-200 rounded-lg p-4 md:p-6 shadow-sm flex flex-col">
             <h2 className="text-xl font-bold mb-2">Pro</h2>
-            <p className="text-gray-600 mb-4">Unlock full capacity for teams and advanced workflows</p>
+            <p className="text-gray-600 dark:text-gray-300 mb-4">Unlock full capacity for teams and advanced workflows</p>
             <div className="text-3xl font-bold mb-4">$39.99<span className="text-base font-medium">/mo</span></div>
             <ul className="flex-1 space-y-2 mb-6 text-sm text-left">
               <li>✅ 10,000 API calls / mo</li>
@@ -233,22 +233,22 @@ export default function PricingPage() {
             {user === null ? (
               <Link
                 href="/register"
-                className="mt-auto w-full text-center bg-black text-white py-2 rounded hover:bg-gray-900"
+                className="mt-auto w-full text-center px-4 py-2 rounded bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 Sign up
               </Link>
             ) : user?.plan && PLAN_LEVEL[user.plan] > PLAN_LEVEL["pro"] ? (
-              <button className="mt-auto w-full text-center bg-gray-200 text-gray-400 py-2 rounded cursor-not-allowed" disabled>
+              <button className="mt-auto w-full text-center px-4 py-2 rounded bg-gray-200 text-gray-400 dark:bg-gray-700 dark:text-gray-400 cursor-not-allowed" disabled>
                 Included
               </button>
             ) : user?.plan === "pro" ? (
-              <button className="mt-auto w-full text-center bg-gray-300 text-gray-600 py-2 rounded cursor-not-allowed" disabled>
+              <button className="mt-auto w-full text-center px-4 py-2 rounded bg-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300 cursor-not-allowed" disabled>
                 Current Plan
               </button>
             ) : (
               <button
                 onClick={() => handleUpgrade("pro")}
-                className="mt-auto w-full text-center bg-black text-white py-2 rounded hover:bg-gray-900"
+                className="mt-auto w-full text-center px-4 py-2 rounded bg-primary text-primary-foreground hover:bg-primary/90"
                 style={{ cursor: "pointer" }}
               >
                 Upgrade
@@ -259,7 +259,7 @@ export default function PricingPage() {
           {/* Enterprise Plan */}
           <div className="w-full max-w-md md:max-w-xs border border-gray-200 rounded-lg p-4 md:p-6 shadow-sm flex flex-col">
             <h2 className="text-xl font-bold mb-2">Enterprise</h2>
-            <p className="text-gray-600 mb-4">Partner with us for stable, high‑quality delivery at scale.</p>
+            <p className="text-gray-600 dark:text-gray-300 mb-4">Partner with us for stable, high‑quality delivery at scale.</p>
             <div className="text-3xl font-bold mb-4">Custom</div>
             <ul className="flex-1 space-y-2 mb-6 text-sm text-left">
               <li>✅ Unlimited API calls</li>
@@ -270,11 +270,11 @@ export default function PricingPage() {
               <li>✅ Architecture & workflow advisory</li>
             </ul>
             {user?.plan === "enterprise" ? (
-              <button className="mt-auto w-full text-center bg-gray-300 text-gray-600 py-2 rounded cursor-not-allowed" disabled>
+              <button className="mt-auto w-full text-center px-4 py-2 rounded bg-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300 cursor-not-allowed" disabled>
                 Current Plan
               </button>
             ) : (
-              <a href="mailto:sales@talk2dom.com" className="mt-auto w-full text-center bg-black text-white py-2 rounded hover:bg-gray-900">Contact Sales</a>
+              <a href="mailto:sales@talk2dom.com" className="mt-auto w-full text-center px-4 py-2 rounded bg-primary text-primary-foreground hover:bg-primary/90">Contact Sales</a>
             )}
           </div>
         </div>
@@ -336,29 +336,29 @@ function PaymentModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-lg w-full max-w-md mx-4">
-        <h2 className="text-xl font-bold mb-4">
+      <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-6 rounded-lg shadow-lg w-full max-w-md mx-4 border border-gray-200 dark:border-gray-700">
+        <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">
           Enter Payment Info for{" "}
           <span className="text-black underline uppercase">{selectedPlan}</span> Plan
         </h2>
         <div className="mb-4">
-          <label htmlFor="card-name" className="block text-sm font-medium text-gray-700 mb-1">Name on Card</label>
+          <label htmlFor="card-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name on Card</label>
           <input
             id="card-name"
             type="text"
-            className="w-full border rounded px-3 py-2"
+            className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
             placeholder="Jane Doe"
             required
           />
         </div>
-        <div className="mb-4 border rounded p-2">
+        <div className="mb-4 border border-gray-300 dark:border-gray-600 rounded p-2 bg-white dark:bg-gray-900">
           <CardElement />
         </div>
         <div className="flex flex-col-reverse md:flex-row justify-end gap-2">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 w-full md:w-auto"
+            className="px-4 py-2 rounded w-full md:w-auto bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
             style={{ cursor: "pointer" }}
           >
             Cancel
@@ -366,7 +366,7 @@ function PaymentModal({
           <button
             type="submit"
             disabled={!stripe || loading}
-            className="px-4 py-2 bg-black text-white rounded hover:bg-gray-900 w-full md:w-auto"
+            className="px-4 py-2 rounded w-full md:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
             style={{ cursor: "pointer" }}
           >
             {loading ? "Processing..." : "Confirm"}
@@ -388,13 +388,13 @@ function ConfirmPopup({
   const [confirming, setConfirming] = useState(false);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded shadow-lg w-full max-w-md mx-4">
-        <h2 className="text-xl font-bold mb-4">Confirm Plan Upgrade</h2>
-        <p className="mb-4">Are you sure you want to upgrade to the {selectedPlan} plan?</p>
+      <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-6 rounded-lg shadow-lg w-full max-w-md mx-4 border border-gray-200 dark:border-gray-700">
+        <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Confirm Plan Upgrade</h2>
+        <p className="mb-4 text-gray-700 dark:text-gray-300">Are you sure you want to upgrade to the {selectedPlan} plan?</p>
         <div className="flex flex-col-reverse md:flex-row justify-end gap-2">
           <button
             onClick={onCancel}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer w-full md:w-auto"
+            className="px-4 py-2 rounded cursor-pointer w-full md:w-auto bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
           >
             Cancel
           </button>
@@ -404,7 +404,7 @@ function ConfirmPopup({
               await onConfirm();
               setConfirming(false);
             }}
-            className="px-4 py-2 bg-black text-white rounded hover:bg-gray-900 cursor-pointer flex items-center gap-2 w-full md:w-auto"
+            className="px-4 py-2 rounded cursor-pointer flex items-center gap-2 w-full md:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
             style={{ cursor: "pointer" }}
             disabled={confirming}
           >

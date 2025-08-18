@@ -1,4 +1,4 @@
-darkMode: 'false' // 或 'class'
+darkMode: 'media', // 根据系统设置自动切换
 
 theme: {
   extend: {

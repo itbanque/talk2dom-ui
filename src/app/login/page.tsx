@@ -41,7 +41,7 @@ export default function LoginPage() {
   }, [user, loading]);
 
   if (loading || user) {
-    return <div className="h-screen w-screen bg-white" />;
+    return <div className="h-screen w-screen bg-white dark:bg-gray-900" />;
   }
 
 
@@ -81,7 +81,6 @@ export default function LoginPage() {
       event: "login_submit",
       method: "google",
     });
-    let url = `${DOMAIN}/api/v1/auth/google/login`;
     window.location.href = `${DOMAIN}/api/v1/auth/google/login`;
   };
 
@@ -96,13 +95,13 @@ export default function LoginPage() {
   return (
     <>
     <Navbar />
-      <main className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-6 md:py-12">
-        <div className="w-full max-w-md p-6 md:p-8 bg-white rounded-lg shadow-lg">
-          <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">Welcome Back</h1>
+      <main className="min-h-screen flex items-center justify-center dark:text-gray-100 px-4 py-6 md:py-12">
+        <div className="w-full max-w-md p-6 md:p-8 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+          <h1 className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100">Welcome Back</h1>
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Email
               </label>
               <input
@@ -112,7 +111,9 @@ export default function LoginPage() {
                 autoComplete="email"
                 autoCapitalize="none"
                 autoCorrect="off"
-                className="w-full border border-gray-300 px-3 py-3 rounded focus:outline-none focus:ring-2 focus:ring-black text-black placeholder-gray-500 text-base"
+                autoFocus
+                aria-invalid={false}
+                className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-black dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 text-base"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -120,7 +121,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Password
               </label>
               <div className="relative">
@@ -128,7 +129,7 @@ export default function LoginPage() {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
-                  className="w-full border border-gray-300 px-3 py-3 rounded focus:outline-none focus:ring-2 focus:ring-black text-black placeholder-gray-500 text-base pr-12"
+                  className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-black dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 text-base pr-12"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -136,32 +137,56 @@ export default function LoginPage() {
                 <button
                   type="button"
                   aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-pressed={showPassword}
+                  title={showPassword ? "Hide password" : "Show password"}
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute inset-y-0 right-0 px-3 flex items-center text-sm text-gray-600 hover:text-black focus:outline-none"
+                  className="absolute inset-y-0 right-0 px-3 flex items-center text-sm text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white focus:outline-none"
                 >
-                  {showPassword ? "Hide" : "Show"}
+                  {showPassword ? (
+                    // Eye-off icon
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223C2.946 9.41 2.25 10.7 2.25 12c0 0 3.75 7.5 9.75 7.5 2.01 0 3.827-.673 5.33-1.72M6.228 6.228A10.451 10.451 0 0112 4.5c6 0 9.75 7.5 9.75 7.5a12.57 12.57 0 01-2.17 3.093M3 3l18 18" />
+                    </svg>
+                  ) : (
+                    // Eye icon
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12s3.75-7.5 9.75-7.5S21.75 12 21.75 12 18 19.5 12 19.5 2.25 12 2.25 12z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
+                    </svg>
+                  )}
                 </button>
+              </div>
+              <div className="mt-2 text-right">
+                <a href="/reset" className="text-sm text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white underline underline-offset-2">Forgot password?</a>
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full bg-black text-white py-3 rounded hover:bg-gray-900 transition disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+              className="w-full bg-primary text-primary-foreground py-3 rounded hover:bg-primary/90 transition disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
               disabled={isSubmitting}
+              aria-busy={isSubmitting}
             >
-              {isSubmitting ? "Signing in..." : "Sign in"}
+              {isSubmitting && (
+                <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                </svg>
+              )}
+              <span>{isSubmitting ? "Signing in..." : "Sign in"}</span>
             </button>
           </form>
 
           <div className="my-4 md:my-6 flex items-center">
-            <div className="flex-grow h-px bg-gray-300"></div>
-            <span className="mx-4 text-sm text-gray-500">OR</span>
-            <div className="flex-grow h-px bg-gray-300"></div>
+            <div className="flex-grow h-px bg-gray-300 dark:bg-gray-700"></div>
+            <span className="mx-4 text-sm text-gray-500 dark:text-gray-400">OR</span>
+            <div className="flex-grow h-px bg-gray-300 dark:bg-gray-700"></div>
           </div>
 
           <button
+            type="button"
             onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center gap-2 border border-gray-300 px-4 py-3 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 transition text-black cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 border border-gray-300 dark:border-gray-600 px-4 py-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 transition text-black dark:text-gray-100 cursor-pointer"
           >
             <img
               src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -171,8 +196,9 @@ export default function LoginPage() {
             <span>Continue with Google</span>
           </button>
           <button
+            type="button"
             onClick={handleGithubLogin}
-            className="mt-3 w-full flex items-center justify-center gap-2 border border-gray-300 px-4 py-3 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 transition text-black cursor-pointer"
+            className="mt-3 w-full flex items-center justify-center gap-2 border border-gray-300 dark:border-gray-600 px-4 py-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 transition text-black dark:text-gray-100 cursor-pointer"
           >
             <img
               src="https://www.svgrepo.com/show/512317/github-142.svg"
