@@ -12,6 +12,7 @@ export {};
 import SidebarLayout from "@/components/layout/SidebarLayout";
 import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 const DOMAIN = process.env.NEXT_PUBLIC_API_DOMAIN || "";
 
@@ -216,28 +217,29 @@ export default function ApiKeyPage() {
           )}
         </div>
 
-        <div className="flex flex-col md:flex-row justify-center gap-3 mt-6 px-2">
+      </div>
+
+      <div className="fixed bottom-4 md:bottom-6 left-0 md:left-64 right-0 z-40 pointer-events-none">
+        <div className="mx-auto w-fit px-2 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white/90 dark:bg-gray-900/90 backdrop-blur supports-[backdrop-filter]:bg-white/60 supports-[backdrop-filter]:dark:bg-gray-900/60 shadow pointer-events-auto flex flex-row items-center justify-center gap-2">
           <button
             onClick={() => fetchApiKeys(currentPage - 1)}
             disabled={currentPage === 1 || loading}
-            className={`px-4 py-2 border rounded w-full md:w-auto ${
-              currentPage === 1 || loading
-                ? "text-gray-400 dark:text-gray-500 border-gray-300 dark:border-gray-700 cursor-not-allowed"
-                : "text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
-            }`}
+            className="inline-flex items-center justify-center h-9 w-9 rounded-full bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+            aria-label="Previous"
+            title="Previous"
           >
-            Previous
+            <FiChevronLeft className="h-5 w-5" />
+            <span className="sr-only">Previous</span>
           </button>
           <button
             onClick={() => fetchApiKeys(currentPage + 1)}
             disabled={!hasNextPage || loading}
-            className={`px-4 py-2 border rounded w-full md:w-auto ${
-              !hasNextPage || loading
-                ? "text-gray-400 dark:text-gray-500 border-gray-300 dark:border-gray-700 cursor-not-allowed"
-                : "text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
-            }`}
+            className="inline-flex items-center justify-center h-9 w-9 rounded-full bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+            aria-label="Next"
+            title="Next"
           >
-            Next
+            <FiChevronRight className="h-5 w-5" />
+            <span className="sr-only">Next</span>
           </button>
         </div>
       </div>
