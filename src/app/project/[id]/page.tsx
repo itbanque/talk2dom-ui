@@ -384,21 +384,21 @@ export default function ProjectDetailPage() {
 
   return (
     <SidebarLayout>
-      <main className="min-h-screen bg-white text-gray-800 px-4 py-4 md:px-6 md:py-12">
+      <main className="min-h-screen text-gray-900 dark:text-gray-100 px-4 py-4 md:px-6 md:py-12">
         <div className="max-w-5xl mx-auto">
           <div className="mb-6">
             <button
               onClick={() => router.back()}
-              className="text-sm text-black hover:underline flex items-center gap-1 cursor-pointer hover:cursor-pointer"
+              className="text-sm text-gray-900 dark:text-gray-100 hover:underline flex items-center gap-1 cursor-pointer"
             >
               <FaArrowLeft className="inline" />
               <span>Back</span>
             </button>
           </div>
-          <p className="text-gray-500 text-sm mt-1">Manage members, monitor API usage, and invite collaborators.</p>
+          <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Manage members, monitor API usage, and invite collaborators.</p>
           <div className="mb-6 md:mb-8 flex flex-col md:flex-row md:justify-end items-stretch gap-2 text-sm text-gray-600">
             <button
-              className="flex items-center gap-2 bg-gray-100 text-black font-mono px-3 py-2 rounded border hover:bg-gray-200 cursor-pointer w-full md:w-auto justify-between md:justify-center overflow-hidden"
+              className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 font-mono px-3 py-2 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer w-full md:w-auto justify-between md:justify-center overflow-hidden"
               onClick={() => {
                 if (projectId) {
                   navigator.clipboard.writeText(projectId);
@@ -416,11 +416,11 @@ export default function ProjectDetailPage() {
             </button>
           </div>
 
-          <section className="mb-12">
+          <section className="mb-12 !bg-white dark:!bg-gray-900 !text-gray-900 dark:!text-gray-100">
             <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
               <FaChartBar /> API Usage (Last 30 Days)
             </h2>
-            <div className="w-full h-[320px] md:h-[400px] bg-white border border-gray-200 shadow-sm rounded p-3 md:p-4">
+            <div className="w-full h-[320px] md:h-[400px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded p-3 md:p-4">
               {apiUsage.length > 0 ? (
                 <Bar
                   data={{
@@ -459,19 +459,19 @@ export default function ProjectDetailPage() {
                   }}
                 />
               ) : (
-                <div className="text-gray-500 text-sm text-center pt-10">No usage data yet.</div>
+                <div className="text-gray-500 dark:text-gray-400 text-sm text-center pt-10">No usage data yet.</div>
               )}
             </div>
           </section>
 
-          <section className="mb-12">
+          <section className="mb-12 !bg-white dark:!bg-gray-900 !text-gray-900 dark:!text-gray-100">
             <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
               <FaFile className="w-5 h-5" /> Locator Records
             </h2>
-            <div className="w-full bg-white border border-gray-200 shadow-sm rounded p-3 md:p-4 overflow-x-auto">
+            <div className="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded p-3 md:p-4 overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="text-gray-600 border-b">
+                  <tr className="text-gray-600 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700">
                     <th className="py-2 px-3">User Instruction</th>
                     <th className="py-2 px-3">URL</th>
                     <th className="py-2 px-3">Actions</th>
@@ -480,7 +480,7 @@ export default function ProjectDetailPage() {
                 <tbody>
                   {locatorCache.length > 0 ? (
                     locatorCache.map((item) => (
-                      <tr data-id={item.id} key={item.id} className="border-b hover:bg-gray-50">
+                      <tr data-id={item.id} key={item.id} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
                         <td className="py-2 px-3">
                           <div className="max-w-[300px] truncate" title={item.user_instruction}>{item.user_instruction}</div>
                         </td>
@@ -492,7 +492,7 @@ export default function ProjectDetailPage() {
                             onClick={async () => {
                               await handleGetLocator(item.id);
                             }}
-                            className="text-blue-500 hover:text-blue-700 text-xs mr-3 cursor-pointer"
+                            className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs mr-3 cursor-pointer"
                           >
                             Detail
                           </button>
@@ -501,7 +501,7 @@ export default function ProjectDetailPage() {
                               setPendingDeleteLocatorId(item.id);
                               setShowDeleteModal(true);
                             }}
-                            className="text-red-500 hover:text-red-700 text-xs cursor-pointer"
+                            className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-xs cursor-pointer"
                           >
                             Delete
                           </button>
@@ -510,7 +510,7 @@ export default function ProjectDetailPage() {
                     ))
                   ) : (
                     <tr>
-                      <td className="py-2 px-3 text-gray-500" colSpan={3}>
+                      <td className="py-2 px-3 text-gray-500 dark:text-gray-400" colSpan={3}>
                         No usage records found.
                       </td>
                     </tr>
@@ -518,7 +518,7 @@ export default function ProjectDetailPage() {
                 </tbody>
               </table>
               <div className="mt-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-gray-500 dark:text-gray-400">
                   Showing {lcOffset + 1}-{lcOffset + (locatorCache?.length || 0)}
                 </div>
                 <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center w-full md:w-auto">
@@ -531,7 +531,7 @@ export default function ProjectDetailPage() {
                         setLcLimit(Number(e.target.value));
                         setLcOffset(0);
                       }}
-                      className="border rounded px-2 py-1 ml-2 cursor-pointer w-full sm:w-auto"
+                      className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded px-2 py-1 ml-2 cursor-pointer w-full sm:w-auto"
                       aria-label="Select number of records per page"
                     >
                       <option value={5}>5</option>
@@ -542,14 +542,14 @@ export default function ProjectDetailPage() {
                   <button
                     onClick={() => setLcOffset(Math.max(lcOffset - lcLimit, 0))}
                     disabled={lcLoading || lcOffset === 0}
-                    className="px-3 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
+                    className="px-3 py-2 text-sm rounded w-full sm:w-auto bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
                   >
                     Previous
                   </button>
                   <button
                     onClick={() => setLcOffset(lcOffset + lcLimit)}
                     disabled={lcLoading || !lcHasMore}
-                    className="px-3 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
+                    className="px-3 py-2 text-sm rounded w-full sm:w-auto bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
                   >
                     Next
                   </button>
@@ -558,30 +558,30 @@ export default function ProjectDetailPage() {
             </div>
           </section>
 
-          <section>
+          <section className="!bg-white dark:!bg-gray-900 !text-gray-900 dark:!text-gray-100">
             <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
               <FaUsers /> Team & Invitations
             </h2>
-            <div className="bg-white border border-gray-200 rounded shadow-sm p-4 text-gray-800">
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-sm p-4 text-gray-900 dark:text-gray-100">
               {(members === null || invites === null) ? (
                 <p className="text-gray-500">Loading...</p>
               ) : (
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                   <button
-                    className="px-3 py-2 rounded border bg-gray-100 hover:bg-gray-200 text-sm cursor-pointer flex items-center gap-2 w-full sm:w-auto"
+                    className="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-sm cursor-pointer flex items-center gap-2 w-full sm:w-auto"
                     onClick={() => setShowMembersModal(true)}
                   >
                     Members
-                    <span className="ml-1 inline-flex items-center justify-center min-w-[22px] h-5 px-2 text-xs rounded-full bg-gray-200 text-gray-700">
+                    <span className="ml-1 inline-flex items-center justify-center min-w-[22px] h-5 px-2 text-xs rounded-full bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200">
                       {(members?.length ?? 0)}{memHasMore ? '+' : ''}
                     </span>
                   </button>
                   <button
-                    className="px-3 py-2 rounded border bg-gray-100 hover:bg-gray-200 text-sm cursor-pointer flex items-center gap-2 w-full sm:w-auto"
+                    className="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-sm cursor-pointer flex items-center gap-2 w-full sm:w-auto"
                     onClick={() => setShowPendingModal(true)}
                   >
                     Pending
-                    <span className="ml-1 inline-flex items-center justify-center min-w-[22px] h-5 px-2 text-xs rounded-full bg-gray-200 text-gray-700">
+                    <span className="ml-1 inline-flex items-center justify-center min-w-[22px] h-5 px-2 text-xs rounded-full bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200">
                       {invites?.filter(i => i.accepted === false).length ?? 0}{invHasMore ? '+' : ''}
                     </span>
                   </button>
@@ -589,7 +589,7 @@ export default function ProjectDetailPage() {
               )}
             </div>
           </section>
-          <div className="mt-6 border border-gray-200 rounded shadow-sm p-4">
+          <div className="mt-6 border border-gray-200 dark:border-gray-700 rounded shadow-sm p-4">
             <h3 className="text-md font-medium mb-2">Invite New Member</h3>
             <div
               className="flex flex-col md:flex-row items-stretch md:items-center gap-2 relative"
@@ -600,13 +600,13 @@ export default function ProjectDetailPage() {
             >
               <input
                 type="email"
-                className="border border-gray-300 rounded px-3 py-2 flex-grow w-full"
+                className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded px-3 py-2 flex-grow w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                 placeholder="Enter email"
                 value={inviteEmail}
                 onChange={(e) => setInviteEmail(e.target.value)}
               />
               <button
-                className="bg-black text-white px-4 py-2 rounded text-sm disabled:opacity-50 cursor-pointer w-full md:w-auto"
+                className="px-4 py-2 rounded text-sm disabled:opacity-50 cursor-pointer w-full md:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
                 disabled={!inviteEmail || isInviting || !canAddMoreMembers}
                 onClick={async () => {
                   if (!projectId) return;
@@ -643,7 +643,7 @@ export default function ProjectDetailPage() {
                   Your team currently has {members?.length ?? 0} members, which exceeds your plan&apos;s limit ({memberLimit}). Please upgrade your plan or remove extra members to continue.
                 </div>
                 <button
-                  className="bg-white text-black px-3 py-1 rounded text-xs cursor-pointer"
+                  className="bg-white dark:bg-gray-100 text-black dark:text-gray-900 px-3 py-1 rounded text-xs cursor-pointer"
                   onClick={() => {
                     window.open("/pricing", "_blank");
                   }}
@@ -657,12 +657,12 @@ export default function ProjectDetailPage() {
       {/* Delete Locator Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full mx-4">
+          <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg shadow-lg p-6 max-w-sm w-full mx-4 border border-gray-200 dark:border-gray-700">
             <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
-            <p className="text-sm text-gray-700 mb-6">Are you sure you want to delete this locator?</p>
+            <p className="text-sm text-gray-700 dark:text-gray-300 mb-6">Are you sure you want to delete this locator?</p>
             <div className="flex flex-col-reverse md:flex-row justify-end gap-2">
               <button
-                className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 cursor-pointer w-full md:w-auto"
+                className="px-4 py-2 rounded w-full md:w-auto bg-gray-200 text-gray-800 hover:bg-gray-300 cursor-pointer dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
                 onClick={() => {
                   setShowDeleteModal(false);
                   setPendingDeleteLocatorId(null);
@@ -671,7 +671,7 @@ export default function ProjectDetailPage() {
                 Cancel
               </button>
               <button
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 cursor-pointer w-full md:w-auto"
+                className="px-4 py-2 rounded w-full md:w-auto bg-red-600 text-white hover:bg-red-700 cursor-pointer dark:bg-red-500 dark:hover:bg-red-400"
                 onClick={async () => {
                   if (pendingDeleteLocatorId) {
                     await handleDeleteLocator(pendingDeleteLocatorId);
@@ -691,9 +691,9 @@ export default function ProjectDetailPage() {
       {showMembersModal && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-30">
           <div className="flex items-center justify-center h-full">
-            <div className="relative bg-white rounded-lg shadow-lg max-w-lg w-full max-h-[80vh] overflow-y-auto p-6 mx-4">
+            <div className="relative bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg shadow-lg max-w-lg w-full max-h-[80vh] overflow-y-auto p-6 mx-4 border border-gray-200 dark:border-gray-700">
               <button
-                className="absolute top-3 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold cursor-pointer"
+                className="absolute top-3 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 text-2xl font-bold cursor-pointer"
                 onClick={() => setShowMembersModal(false)}
                 aria-label="Close"
               >
@@ -701,7 +701,7 @@ export default function ProjectDetailPage() {
               </button>
               <h3 className="text-lg font-semibold mb-4">Current Members</h3>
               {members && members.length > 0 ? (
-                <ul className="divide-y">
+                <ul className="divide-y divide-gray-200 dark:divide-gray-700">
                   {members.map((member) => {
                     const canRemove =
                       user?.id !== member.user_id &&
@@ -710,11 +710,11 @@ export default function ProjectDetailPage() {
                       <li key={member.user_id} className="flex items-center justify-between py-2">
                         <div>
                           <p className="font-medium">{member.name}</p>
-                          <p className="text-sm text-gray-500">{member.email}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">{member.email}</p>
                         </div>
                         {canRemove && (
                           <button
-                            className="text-red-500 hover:text-red-700 text-sm cursor-pointer"
+                            className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm cursor-pointer"
                             onClick={() => handleRemoveMember(member.user_id)}
                           >
                             Remove
@@ -725,11 +725,11 @@ export default function ProjectDetailPage() {
                   })}
                 </ul>
               ) : (
-                <p className="text-gray-500">No members found.</p>
+                <p className="text-gray-500 dark:text-gray-400">No members found.</p>
               )}
 
               <div className="mt-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-gray-500 dark:text-gray-400">
                   Showing {memOffset + 1}-{memOffset + (members?.length || 0)}
                 </div>
                 <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center w-full md:w-auto">
@@ -738,7 +738,7 @@ export default function ProjectDetailPage() {
                     <select
                       value={memLimit}
                       onChange={(e) => { setMemLimit(Number(e.target.value)); setMemOffset(0); }}
-                      className="border rounded px-2 py-1 cursor-pointer w-full sm:w-auto"
+                      className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded px-2 py-1 cursor-pointer w-full sm:w-auto"
                     >
                       <option value={5}>5</option>
                       <option value={10}>10</option>
@@ -748,14 +748,14 @@ export default function ProjectDetailPage() {
                   <button
                     onClick={() => setMemOffset(Math.max(memOffset - memLimit, 0))}
                     disabled={memLoading || memOffset === 0}
-                    className="px-3 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
+                    className="px-3 py-2 text-sm rounded w-full sm:w-auto bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
                   >
                     Previous
                   </button>
                   <button
                     onClick={() => setMemOffset(memOffset + memLimit)}
                     disabled={memLoading || !memHasMore}
-                    className="px-3 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
+                    className="px-3 py-2 text-sm rounded w-full sm:w-auto bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
                   >
                     Next
                   </button>
@@ -769,9 +769,9 @@ export default function ProjectDetailPage() {
       {showPendingModal && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-30">
           <div className="flex items-center justify-center h-full">
-            <div className="relative bg-white rounded-lg shadow-lg max-w-lg w-full max-h-[80vh] overflow-y-auto p-6 mx-4">
+            <div className="relative bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg shadow-lg max-w-lg w-full max-h-[80vh] overflow-y-auto p-6 mx-4 border border-gray-200 dark:border-gray-700">
               <button
-                className="absolute top-3 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold cursor-pointer"
+                className="absolute top-3 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 text-2xl font-bold cursor-pointer"
                 onClick={() => setShowPendingModal(false)}
                 aria-label="Close"
               >
@@ -779,14 +779,14 @@ export default function ProjectDetailPage() {
               </button>
               <h3 className="text-lg font-semibold mb-4">Pending Invitations</h3>
               {invites && invites.filter((i) => i.accepted === false).length > 0 ? (
-                <ul className="divide-y">
+                <ul className="divide-y divide-gray-200 dark:divide-gray-700">
                   {invites.filter((i) => i.accepted === false).map((invite) => (
                     <li key={invite.id} className="flex items-center justify-between py-2">
                       <div>
                         <p className="font-medium">{invite.email}</p>
                       </div>
                       <button
-                        className="text-red-500 hover:text-red-700 text-sm cursor-pointer"
+                        className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm cursor-pointer"
                         onClick={() => handleRemoveInvite(invite.id)}
                       >
                         Remove
@@ -795,11 +795,11 @@ export default function ProjectDetailPage() {
                   ))}
                 </ul>
               ) : (
-                <p className="text-gray-500">No pending invitations.</p>
+                <p className="text-gray-500 dark:text-gray-400">No pending invitations.</p>
               )}
 
               <div className="mt-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-gray-500 dark:text-gray-400">
                   Showing {invOffset + 1}-{invOffset + (invites?.filter(i => i.accepted === false).length || 0)}
                 </div>
                 <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center w-full md:w-auto">
@@ -808,7 +808,7 @@ export default function ProjectDetailPage() {
                     <select
                       value={invLimit}
                       onChange={(e) => { setInvLimit(Number(e.target.value)); setInvOffset(0); }}
-                      className="border rounded px-2 py-1 cursor-pointer w-full sm:w-auto"
+                      className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded px-2 py-1 cursor-pointer w-full sm:w-auto"
                     >
                       <option value={5}>5</option>
                       <option value={10}>10</option>
@@ -818,14 +818,14 @@ export default function ProjectDetailPage() {
                   <button
                     onClick={() => setInvOffset(Math.max(invOffset - invLimit, 0))}
                     disabled={invLoading || invOffset === 0}
-                    className="px-3 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
+                    className="px-3 py-2 text-sm rounded w-full sm:w-auto bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
                   >
                     Previous
                   </button>
                   <button
                     onClick={() => setInvOffset(invOffset + invLimit)}
                     disabled={invLoading || !invHasMore}
-                    className="px-3 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
+                    className="px-3 py-2 text-sm rounded w-full sm:w-auto bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
                   >
                     Next
                   </button>
@@ -845,13 +845,13 @@ export default function ProjectDetailPage() {
             &times;
           </button>
           <div className="flex items-center justify-center h-full">
-            <div className="relative bg-white rounded-lg shadow-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto mt-12 mx-4">
-              <div className="sticky top-0 z-10 bg-white p-6 border-b">
+            <div className="relative bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg shadow-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto mt-12 mx-4 border border-gray-200 dark:border-gray-700">
+              <div className="sticky top-0 z-10 bg-white dark:bg-gray-800 p-6 border-b border-gray-200 dark:border-gray-700">
                 <h3 className="text-lg font-semibold">Locator Detail</h3>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   * This is a partial page snapshot. Due to the lack of full web context, rendering issues may occur.
                 </p>
-                <div className="text-sm text-gray-700 mt-4">
+                <div className="text-sm text-gray-700 dark:text-gray-300 mt-4">
                   <p>
                     <strong>Type:</strong> {locatorDetail.type}
                   </p>
@@ -861,7 +861,7 @@ export default function ProjectDetailPage() {
                 </div>
               </div>
               <div className="p-6">
-                <div className="border p-3 rounded bg-gray-50 mb-4">
+                <div className="border border-gray-200 dark:border-gray-700 p-3 rounded bg-gray-50 dark:bg-gray-900 mb-4">
                   <div className="relative">
                     <div className="pointer-events-none absolute inset-0 z-10 bg-transparent" />
                     <div id="locator-html-preview" dangerouslySetInnerHTML={{ __html: locatorDetail.html }} />
@@ -869,7 +869,7 @@ export default function ProjectDetailPage() {
                 </div>
                 <div className="flex justify-end">
                   <button
-                    className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 cursor-pointer w-full md:w-auto"
+                    className="px-4 py-2 rounded w-full md:w-auto bg-gray-200 text-gray-800 hover:bg-gray-300 cursor-pointer dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
                     onClick={() => setLocatorDetail(null)}
                   >
                     Close

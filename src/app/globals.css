@@ -1,27 +1,197 @@
+
 @import "tailwindcss";
 
+/* =============================
+   Theme tokens (Light default)
+   ============================= */
 :root {
+  /* Core */
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #111827; /* gray-900 */
+
+  /* Surfaces */
+  --card: #ffffff;
+  --card-foreground: #111827;
+  --muted: #f3f4f6;        /* gray-100 */
+  --muted-foreground: #6b7280; /* gray-500 */
+  --border: #e5e7eb;       /* gray-200 */
+
+  /* Brand */
+  --primary: #000000; /* blue-600 */
+  --primary-foreground: #ffffff;
+  --accent: #0ea5e9;  /* sky-500 */
+  --accent-foreground: #ffffff;
+
+  /* Inputs & ring */
+  --input: #e5e7eb;
+  --ring: #93c5fd;    /* blue-300 */
+
+  /* Links */
+  /* --link: #2563eb;
+  --link-hover: #1d4ed8; */
+
+  /* Code */
+  --code-bg: #f3f4f6;
+  --code-fg: #111827;
 }
 
+/* =============================
+   Dark theme (explicit via .dark)
+   ============================= */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #e5e7eb; /* gray-200 */
+
+  --card: #0f172a;            /* slate-900 */
+  --card-foreground: #e5e7eb;
+  --muted: #111827;           /* gray-900 */
+  --muted-foreground: #9ca3af;/* gray-400 */
+  --border: #1f2937;          /* gray-800 */
+
+  --primary: #ffffff;         /* blue-500 */
+  --primary-foreground: #0b1220;
+  --accent: #38bdf8;          /* sky-400 */
+  --accent-foreground: #071018;
+
+  --input: #374151;           /* gray-700 */
+  --ring: #60a5fa;            /* blue-400 */
+
+  --link: #93c5fd;
+  --link-hover: #bfdbfe;
+
+  --code-bg: #111827;
+  --code-fg: #e5e7eb;
+}
+
+/* Optional explicit light override */
+.light {
+  --background: #ffffff;
+  --foreground: #111827;
+  --card: #ffffff;
+  --card-foreground: #111827;
+  --muted: #f3f4f6;
+  --muted-foreground: #6b7280;
+  --border: #e5e7eb;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --accent: #0ea5e9;
+  --accent-foreground: #ffffff;
+  --input: #e5e7eb;
+  --ring: #93c5fd;
+  --link: #2563eb;
+  --link-hover: #1d4ed8;
+  --code-bg: #f3f4f6;
+  --code-fg: #111827;
+}
+
+/* =============================
+   System preference fallback
+   (used when no explicit .light is present)
+   ============================= */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --background: #0a0a0a;
+    --foreground: #e5e7eb;
+    --card: #0f172a;
+    --card-foreground: #e5e7eb;
+    --muted: #111827;
+    --muted-foreground: #9ca3af;
+    --border: #1f2937;
+    --primary: #ffffff;
+    --primary-foreground: #0b1220;
+    --accent: #38bdf8;
+    --accent-foreground: #071018;
+    --input: #374151;
+    --ring: #60a5fa;
+    /* --link: #93c5fd;
+    --link-hover: #bfdbfe; */
+    --code-bg: #111827;
+    --code-fg: #e5e7eb;
+  }
+}
+
+/* =============================
+   Tailwind design tokens mapping
+   ============================= */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-ring: var(--ring);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-} */
+/* =============================
+   Base styles
+   ============================= */
+html { color-scheme: light dark; }
+
+*:where(:not([class*="border-"])) {
+  border-color: var(--border);
+}
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease;
 }
+
+::selection {
+  background: color-mix(in oklab, var(--primary) 35%, transparent);
+  color: var(--primary-foreground);
+}
+
+a:not([class*="text-"]) {
+  color: var(--link);
+  /* text-decoration: underline; */
+  text-underline-offset: 3px;
+}
+
+a:not([class*="text-"]):hover { color: var(--link-hover); }
+
+pre, code { font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+pre {
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  border: 1px solid var(--border);
+  border-radius: .75rem;
+  padding: 1rem 1.25rem;
+  overflow: auto;
+}
+
+code {
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  padding: 0 .35rem;
+  border-radius: .35rem;
+  font-size: 0.95em;
+}
+
+/* 全局按钮样式 */
+/* button {
+  cursor: pointer;
+} */
+
+section:nth-of-type(odd) {
+  @apply bg-white dark:bg-black;
+}
+
+section:nth-of-type(even) {
+  @apply bg-gray-50 dark:bg-gray-950;
+}
+
+h1, h2, h3, h4, h5, h6 { color: inherit; }
 

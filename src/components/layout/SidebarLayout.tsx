@@ -56,17 +56,17 @@ function SidebarLayoutInner({
   }, [user, router]);
 
   return (
-    <div className="h-screen overflow-hidden flex bg-white text-gray-800">
+    <div className="h-screen overflow-hidden flex bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       {/* Mobile Top Bar */}
-      <div className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between bg-white border-b border-gray-200 px-4 py-3 md:hidden">
+      <div className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-700 px-4 py-3 md:hidden">
         <button
           aria-label="Open sidebar"
           onClick={() => setMobileOpen(true)}
-          className="p-2 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+          className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700"
         >
           <Bars3Icon className="w-6 h-6" />
         </button>
-        <Link href="/projects" className="text-base font-bold">
+        <Link href="/projects" className="text-base font-bold text-gray-900 dark:text-gray-100">
           Talk2Dom
         </Link>
         <div className="w-6" />
@@ -81,11 +81,11 @@ function SidebarLayoutInner({
             onClick={() => setMobileOpen(false)}
           />
           {/* Panel */}
-          <aside className="absolute left-0 top-0 h-full w-64 bg-white text-gray-800 p-6 shadow-xl flex flex-col">
+          <aside className="absolute left-0 top-0 h-full w-64 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6 shadow-xl flex flex-col">
             <div className="flex items-center justify-between mb-6">
               <Link
                 href="/projects"
-                className="inline-block text-lg font-bold px-3 py-1 rounded hover:bg-gray-100 transition"
+                className="inline-block text-lg font-bold px-3 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition"
                 onClick={() => setMobileOpen(false)}
               >
                 Talk2Dom
@@ -93,7 +93,7 @@ function SidebarLayoutInner({
               <button
                 aria-label="Close sidebar"
                 onClick={() => setMobileOpen(false)}
-                className="p-2 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700"
               >
                 <XMarkIcon className="w-6 h-6" />
               </button>
@@ -117,8 +117,8 @@ function SidebarLayoutInner({
                     href={item.href}
                     className={`text-sm font-medium rounded px-2 py-1 transition ${
                       pathname.startsWith(item.href)
-                        ? "bg-gray-100 text-black font-semibold"
-                        : "text-gray-600 hover:text-black hover:bg-gray-50"
+                        ? "bg-gray-100 dark:bg-gray-800 text-black dark:text-white font-semibold"
+                        : "text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
                     }`}
                     onClick={() => setMobileOpen(false)}
                   >
@@ -158,7 +158,7 @@ function SidebarLayoutInner({
                   href="/docs"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm font-medium text-gray-400 hover:text-black flex items-center space-x-2"
+                  className="text-sm font-medium text-gray-400 dark:text-gray-400 hover:text-black dark:hover:text-white flex items-center space-x-2"
                   onClick={() => setMobileOpen(false)}
                 >
                   <DocumentTextIcon className="w-5 h-5" />
@@ -172,11 +172,11 @@ function SidebarLayoutInner({
       )}
 
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex w-60 bg-white text-gray-800 p-6 flex-col h-screen shadow-xl flex-shrink-0">
+      <aside className="hidden md:flex w-60 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6 flex-col h-screen shadow-xl flex-shrink-0">
         <div className="flex-grow">
           <Link
             href="/projects"
-            className="inline-block text-xl font-bold px-4 py-2 mb-8 rounded hover:bg-gray-100 transition hover:shadow-md"
+            className="inline-block text-xl font-bold px-4 py-2 mb-8 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition hover:shadow-md"
           >
             Talk2Dom
           </Link>
@@ -198,8 +198,8 @@ function SidebarLayoutInner({
                   href={item.href}
                   className={`text-sm font-medium rounded px-2 py-1 transition ${
                     pathname.startsWith(item.href)
-                      ? "bg-gray-100 text-black font-semibold"
-                      : "text-gray-600 hover:text-black hover:bg-gray-50"
+                      ? "bg-gray-100 dark:bg-gray-800 text-black dark:text-white font-semibold"
+                      : "text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
                   }`}
                 >
                   <>
@@ -238,7 +238,7 @@ function SidebarLayoutInner({
             href="/docs"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-medium text-gray-400 hover:text-black flex items-center space-x-2"
+            className="text-sm font-medium text-gray-400 dark:text-gray-400 hover:text-black dark:hover:text-white flex items-center space-x-2"
           >
             <DocumentTextIcon className="w-5 h-5" />
             <span>Docs</span>
@@ -283,17 +283,17 @@ function SidebarUserMenu() {
           <div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center text-sm font-bold text-white">
             {user?.name?.[0] || "U"}
           </div>
-          <div className="text-sm font-medium text-black">
+          <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
             {user?.name || user?.email?.split("@")[0] || "Username"}
           </div>
         </button>
         {menuOpen && (
-          <div className="absolute bottom-12 left-0 w-48 bg-white text-black border border-gray-700 rounded shadow-lg z-50">
-            <div className="px-4 py-2 text-sm text-black">{user?.email || "user@example.com"}</div>
-            <hr className="border-gray-200" />
+          <div className="absolute bottom-12 left-0 w-48 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700 rounded shadow-lg z-50">
+            <div className="px-4 py-2 text-sm text-gray-900 dark:text-gray-100">{user?.email || "user@example.com"}</div>
+            <hr className="border-gray-200 dark:border-gray-700" />
             <a
               href={`${DOMAIN}/api/v1/user/logout`}
-              className="block px-4 py-2 text-sm hover:bg-gray-100"
+              className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               Logout
             </a>

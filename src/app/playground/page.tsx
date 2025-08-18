@@ -18,9 +18,15 @@ export default function PlaygroundPage() {
   const [view, setView] = useState<"desktop" | "mobile">(
     typeof window !== "undefined" && window.innerWidth < 768 ? "mobile" : "desktop"
   );
+  const [iframeReady, setIframeReady] = useState(false);
+
+  useEffect(() => {
+    if (html) setIframeReady(false);
+  }, [html]);
 
   const handleGo = async () => {
     if (!url) return;
+    setIframeReady(false);
     setLoading(true);
     try {
       const res = await fetch(`${DOMAIN}/api/v1/inference/locator-playground`, {
@@ -59,7 +65,7 @@ export default function PlaygroundPage() {
 
   useEffect(() => {
     const iframe = document.getElementById("rendered-iframe") as HTMLIFrameElement;
-    if (!iframe || !html || locators.length === 0) return;
+    if (!iframe || !html) return;
 
     const handleIframeLoad = () => {
       const doc = iframe.contentDocument;
@@ -125,6 +131,7 @@ export default function PlaygroundPage() {
           el.scrollIntoView({ behavior: "smooth", block: "center" });
         }
       });
+      setIframeReady(true);
     };
 
     iframe.addEventListener("load", handleIframeLoad);
@@ -135,8 +142,8 @@ export default function PlaygroundPage() {
 
   const iframeClass =
     view === "mobile"
-      ? "w-[360px] md:w-[390px] h-[640px] md:h-[844px] mx-auto border border-gray-300 rounded pointer-events-none"
-      : "w-full md:w-[1280px] h-[70vh] md:h-[1024px] mx-auto border border-gray-300 rounded pointer-events-none";
+      ? "w-[360px] md:w-[390px] h-[640px] md:h-[844px] mx-auto border border-gray-300 dark:border-gray-700 rounded pointer-events-none"
+      : "w-full md:w-[1280px] h-[70vh] md:h-[1024px] mx-auto border border-gray-300 dark:border-gray-700 rounded pointer-events-none";
 
   return (
     <SidebarLayout>
@@ -144,11 +151,11 @@ export default function PlaygroundPage() {
         {/* Top Panel - Controls */}
         <div className="space-y-6">
           <div>
-            <h1 className="text-2xl font-bold mb-3">Playground</h1>
+            <h1 className="text-2xl font-bold mb-3 text-gray-900 dark:text-gray-100">Playground</h1>
           </div>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
-              <label htmlFor="url-input" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="url-input" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Enter a public website URL
               </label>
               <input
@@ -157,18 +164,18 @@ export default function PlaygroundPage() {
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="https://example.com"
-                className="border px-4 py-2 rounded w-full"
+                className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 px-4 py-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
               />
             </div>
             <div className="w-full md:w-40">
-              <label htmlFor="view-select" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="view-select" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 View Mode
               </label>
               <select
                 id="view-select"
                 value={view}
                 onChange={(e) => setView(e.target.value as "desktop" | "mobile")}
-                className="border px-4 py-2 rounded w-full"
+                className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 px-4 py-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
               >
                 <option value="desktop">Desktop</option>
                 <option value="mobile">Mobile</option>
@@ -176,7 +183,7 @@ export default function PlaygroundPage() {
             </div>
           </div>
           <div>
-            <label htmlFor="instruction-input" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="instruction-input" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Describe the element to locate, then Click "Go" to highlight it
             </label>
             <div className="flex flex-col md:flex-row gap-4">
@@ -186,16 +193,16 @@ export default function PlaygroundPage() {
                 value={instruction}
                 onChange={(e) => setInstruction(e.target.value)}
                 placeholder="e.g. Find the login button"
-                className="border px-4 py-2 rounded w-full"
+                className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 px-4 py-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
               />
               <button
                 onClick={handleGo}
-                className="bg-black text-white px-5 py-2 rounded hover:bg-gray-800 transition flex items-center justify-center min-w-[80px] cursor-pointer w-full md:w-auto"
+                className="bg-primary text-primary-foreground px-5 py-2 rounded hover:bg-primary/90 transition flex items-center justify-center min-w-[80px] cursor-pointer w-full md:w-auto"
                 disabled={loading}
               >
                 {loading ? (
                   <svg
-                    className="animate-spin h-5 w-5 text-white"
+                    className="animate-spin h-4 w-4 text-gray-400 dark:text-gray-900"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -223,37 +230,44 @@ export default function PlaygroundPage() {
         </div>
 
         {/* Bottom Panel - Iframe Preview */}
-        <div className="border rounded bg-white overflow-auto relative flex justify-center p-2 md:p-4">
-          <iframe
-            srcDoc={html}
-            className={iframeClass}
-            sandbox="allow-scripts allow-forms allow-same-origin"
-            id="rendered-iframe"
-          />
-          {loading && (
-            <div className="absolute inset-0 bg-white/60 flex items-center justify-center z-10">
-              <svg
-                className="animate-spin h-8 w-8 text-black"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                />
-              </svg>
-            </div>
-          )}
+        <div className="border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-900 overflow-auto relative flex justify-center p-2 md:p-4">
+          {html ? (
+            <>
+              <iframe
+                srcDoc={html}
+                className={`${iframeClass} bg-transparent transition-opacity duration-300 ${iframeReady ? 'opacity-100' : 'opacity-0'}`}
+                style={{ backgroundColor: 'transparent' }}
+                sandbox="allow-scripts allow-forms allow-same-origin"
+                id="rendered-iframe"
+                title="Rendered page preview"
+                aria-hidden={!iframeReady}
+              />
+              {(loading || !iframeReady) && (
+                <div className="absolute inset-0 bg-white/60 dark:bg-black/60 flex items-center justify-center z-20">
+                  <svg
+                    className="animate-spin h-5 w-5 text-gray-300 dark:text-gray-900"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    />
+                  </svg>
+                </div>
+              )}
+            </>
+          ) : null}
         </div>
       </div>
     </SidebarLayout>

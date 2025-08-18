@@ -6,7 +6,7 @@ import Footer from "@/components/layout/Footer";
 
 export default function StatusPage() {
   return (
-    <main className="min-h-screen bg-white text-gray-800">
+    <main className="min-h-screen bg-white dark:bg-black text-gray-800 dark:text-gray-100">
       <Navbar />
       <section className="max-w-4xl mx-auto py-12 md:py-20 px-4 md:px-6 text-center">
         <h1 className="text-2xl md:text-3xl font-bold mb-4">System Status</h1>

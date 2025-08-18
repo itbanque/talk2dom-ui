@@ -148,14 +148,14 @@ export default function ApiKeyPage() {
 
   return (
     <SidebarLayout>
-      <main className="min-h-screen bg-white text-gray-800 px-4 py-4 md:px-6 md:py-12">
+      <main className="min-h-screen text-gray-900 dark:text-gray-100 px-4 py-4 md:px-6 md:py-12">
       <div className="max-w-5xl mx-auto">
-        <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">API Keys</h1>
+        <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-gray-900 dark:text-gray-100">API Keys</h1>
 
         <div className="mb-6 md:mb-8">
           <button
             onClick={() => setShowModal(true)}
-            className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 cursor-pointer w-full md:w-auto"
+            className="px-4 py-2 rounded cursor-pointer w-full md:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
           >
             + Create API Key
           </button>
@@ -177,20 +177,20 @@ export default function ApiKeyPage() {
             apiKeys.map((keyObj) => (
               <div
                 key={keyObj.id}
-                className="bg-white p-4 rounded shadow-sm border border-gray-200 flex flex-col md:flex-row md:justify-between md:items-center gap-3"
+                className="bg-white dark:bg-gray-800 p-4 rounded shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col md:flex-row md:justify-between md:items-center gap-3"
               >
                 <div className="flex flex-col">
-                  <span className="font-semibold text-sm text-gray-900">
+                  <span className="font-semibold text-sm text-gray-900 dark:text-gray-100">
                     {keyObj.name || "Unnamed Key"}
                   </span>
-                  <span className="font-mono text-sm text-gray-700 mt-1">
+                  <span className="font-mono text-sm text-gray-700 dark:text-gray-300 mt-1">
                     {keyObj.key ? `${keyObj.key.slice(0, 6)}••••••••••••` : "sk-xxxxxx••••••"}
                   </span>
-                  <span className="text-xs text-gray-500 mt-1">
+                  <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     Created at: {keyObj.created_at} • Status:{" "}
                     <span
                       className={
-                        keyObj.is_active ? "text-green-600" : "text-red-500"
+                        keyObj.is_active ? "text-green-600 dark:text-green-300" : "text-red-600 dark:text-red-400"
                       }
                     >
                       {keyObj.is_active ? "Active" : "Inactive"}
@@ -200,13 +200,13 @@ export default function ApiKeyPage() {
                 <div className="flex gap-2 w-full md:w-auto md:justify-end">
                   <button
                     onClick={() => handleCopy(keyObj.key!, keyObj.id)}
-                    className="text-sm px-3 py-2 border rounded hover:bg-gray-100 cursor-pointer w-full md:w-auto"
+                    className="text-sm px-3 py-2 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer w-full md:w-auto"
                   >
                     {copiedKeyId === keyObj.id ? "Copied!" : "Copy"}
                   </button>
                   <button
                     onClick={() => setKeyToDelete(keyObj.id)}
-                    className="text-sm px-3 py-2 border rounded hover:bg-red-50 text-red-600 border-red-300 cursor-pointer w-full md:w-auto"
+                    className="text-sm px-3 py-2 border rounded hover:bg-red-50 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 border-red-300 dark:border-red-700 cursor-pointer w-full md:w-auto"
                   >
                     Delete
                   </button>
@@ -220,22 +220,22 @@ export default function ApiKeyPage() {
           <button
             onClick={() => fetchApiKeys(currentPage - 1)}
             disabled={currentPage === 1 || loading}
-            className={`px-4 py-2 border rounded ${
+            className={`px-4 py-2 border rounded w-full md:w-auto ${
               currentPage === 1 || loading
-                ? "text-gray-400 border-gray-300 cursor-not-allowed"
-                : "hover:bg-gray-100 cursor-pointer"
-            } w-full md:w-auto`}
+                ? "text-gray-400 dark:text-gray-500 border-gray-300 dark:border-gray-700 cursor-not-allowed"
+                : "text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
+            }`}
           >
             Previous
           </button>
           <button
             onClick={() => fetchApiKeys(currentPage + 1)}
             disabled={!hasNextPage || loading}
-            className={`px-4 py-2 border rounded ${
+            className={`px-4 py-2 border rounded w-full md:w-auto ${
               !hasNextPage || loading
-                ? "text-gray-400 border-gray-300 cursor-not-allowed"
-                : "hover:bg-gray-100 cursor-pointer"
-            } w-full md:w-auto`}
+                ? "text-gray-400 dark:text-gray-500 border-gray-300 dark:border-gray-700 cursor-not-allowed"
+                : "text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
+            }`}
           >
             Next
           </button>
@@ -244,26 +244,26 @@ export default function ApiKeyPage() {
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-            <h2 className="text-lg font-semibold mb-4">Create New API Key</h2>
-            <p className="mb-4">Are you sure you want to create a new API key?</p>
+          <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-6 rounded-lg shadow-lg w-full max-w-md border border-gray-200 dark:border-gray-700">
+            <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Create New API Key</h2>
+            <p className="mb-4 text-gray-700 dark:text-gray-300">Are you sure you want to create a new API key?</p>
             <input
               type="text"
               placeholder="Enter API key name"
               value={newKeyName}
               onChange={(e) => setNewKeyName(e.target.value)}
-              className="w-full px-3 py-2 border rounded mb-4"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-500"
             />
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-4 py-2 text-sm border rounded hover:bg-gray-100 cursor-pointer"
+                className="px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleCreateKey}
-                className="px-4 py-2 text-sm bg-black text-white rounded hover:bg-gray-800 cursor-pointer"
+                className="px-4 py-2 text-sm rounded cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 Confirm
               </button>
@@ -274,13 +274,13 @@ export default function ApiKeyPage() {
 
       {keyToDelete && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-            <h2 className="text-lg font-semibold mb-4">Delete API Key</h2>
-            <p className="mb-4">Are you sure you want to delete this API key?</p>
+          <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-6 rounded-lg shadow-lg w-full max-w-md border border-gray-200 dark:border-gray-700">
+            <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Delete API Key</h2>
+            <p className="mb-4 text-gray-700 dark:text-gray-300">Are you sure you want to delete this API key?</p>
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setKeyToDelete(null)}
-                className="px-4 py-2 text-sm border rounded hover:bg-gray-100 cursor-pointer"
+                className="px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
               >
                 Cancel
               </button>
@@ -289,7 +289,7 @@ export default function ApiKeyPage() {
                   await handleDeleteKey(keyToDelete);
                   setKeyToDelete(null);
                 }}
-                className="px-4 py-2 text-sm bg-red-600 text-white rounded hover:bg-red-700 cursor-pointer"
+                className="px-4 py-2 text-sm rounded cursor-pointer bg-red-600 text-white hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-400"
               >
                 Delete
               </button>

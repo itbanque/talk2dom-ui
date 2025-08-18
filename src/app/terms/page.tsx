@@ -7,7 +7,7 @@ import Footer from "@/components/layout/Footer";
 
 export default function TermsPage() {
   return (
-    <main className="min-h-screen bg-white text-gray-800">
+    <main className="min-h-screen !bg-white dark:!bg-black !text-gray-900 dark:!text-gray-100">
       <Navbar />
       <section className="max-w-4xl mx-auto py-20 px-6">
         <h1 className="text-3xl font-bold mb-6">Terms of Service</h1>

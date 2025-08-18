@@ -69,7 +69,7 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-white text-gray-800">
+    <main className="min-h-screen text-gray-900 dark:text-gray-100">
       <Navbar />
       <Script id="ldjson-about-org" type="application/ld+json">
         {JSON.stringify({
@@ -85,7 +85,7 @@ export default function AboutPage() {
       </Script>
       <section className="max-w-3xl mx-auto pt-24 md:pt-32 pb-12 md:pb-20 px-4 md:px-6 text-left">
         <h1 className="text-2xl md:text-4xl font-bold mb-3">About Talk2Dom</h1>
-        <p className="text-sm md:text-base text-gray-500 mb-6">AI‑powered service for smarter, more reliable element location.</p>
+        <p className="text-sm md:text-base text-gray-500 dark:text-gray-400 mb-6">AI‑powered service for smarter, more reliable element location.</p>
 
         <p className="mb-6 text-base md:text-lg leading-relaxed">
           <strong>Talk2Dom</strong> turns plain-language descriptions into robust UI locators. Built and run with a lean, AI‑driven approach for fast updates and clear accountability.
@@ -108,7 +108,7 @@ export default function AboutPage() {
           Want a simple way to improve your UI automation? Let’s talk.
         </p>
         <div className="mt-2">
-          <a href="mailto:contact@itbanque.com" className="inline-block text-blue-600 underline hover:text-blue-800 break-words">contact@itbanque.com</a>
+          <a href="mailto:contact@itbanque.com" className="inline-block text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline break-words">contact@itbanque.com</a>
         </div>
       </section>
       <Footer />
