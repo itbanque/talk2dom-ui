@@ -14,7 +14,7 @@ export default function HomePage() {
       const url = `${origin}/`;
 
       // Title
-      document.title = "Talk2Dom – AI-Powered UI Element Locator for Selenium & Playwright";
+      document.title = "Talk2Dom – AI-Powered UI Element Locator For Web Automation";
 
       // Meta description
       const ensureMeta = (name: string, content: string) => {
@@ -71,7 +71,7 @@ export default function HomePage() {
       };
       ensureTwitter('twitter:card', 'summary_large_image');
       ensureTwitter('twitter:title', 'Talk2Dom – AI-Powered UI Element Locator');
-      ensureTwitter('twitter:description', 'Natural language → robust UI selectors. Works with Selenium & Playwright.');
+      ensureTwitter('twitter:description', 'Natural language → robust UI selectors. Works with automation tools');
       ensureTwitter('twitter:image', `${origin}/images/video-fallback.png`);
     } catch (_) {}
   }, []);
