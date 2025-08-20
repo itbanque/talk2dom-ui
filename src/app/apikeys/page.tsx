@@ -36,6 +36,7 @@ export default function ApiKeyPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [apiKeysLoaded, setApiKeysLoaded] = useState(false);
 
   // Guided tour state for first API key creation
   const [tourOpen, setTourOpen] = useState(false);
@@ -87,6 +88,7 @@ export default function ApiKeyPage() {
 
   // Move fetchApiKeys outside useEffect for reuse
   const fetchApiKeys = async (page: number = 1) => {
+    setApiKeysLoaded(false);
     setLoading(true);
     try {
       const limit = 10;
@@ -113,6 +115,7 @@ export default function ApiKeyPage() {
       return undefined;
     } finally {
       setLoading(false);
+      setApiKeysLoaded(true);
     }
   };
 
@@ -162,14 +165,14 @@ export default function ApiKeyPage() {
   }, []);
 
   useEffect(() => {
-    // Start tour if user has no keys
+    if (!apiKeysLoaded) return; // wait for fetch to complete
     if (apiKeys.length === 0) {
       setTourOpen(true);
       setTourStep(1);
     } else {
       setTourOpen(false);
     }
-  }, [apiKeys]);
+  }, [apiKeys.length, apiKeysLoaded]);
 
   useEffect(() => {
     if (!tourOpen) return;

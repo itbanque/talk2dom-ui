@@ -65,7 +65,9 @@ export default function ProjectsPage() {
   // fetchProjects 支持 limit 和 offset 参数
   const [hasMore, setHasMore] = useState(false);
   const [total, setTotal] = useState<number | null>(null);
+  const [projectsLoaded, setProjectsLoaded] = useState(false);
   const fetchProjects = async (limit: number, offset: number) => {
+    setProjectsLoaded(false);
     try {
       const params = new URLSearchParams({ limit: limit.toString(), offset: offset.toString() });
       const res = await fetch(`${DOMAIN}/api/v1/project?${params.toString()}`, {
@@ -89,6 +91,8 @@ export default function ProjectsPage() {
       }
     } catch (err) {
       console.error("Error loading projects:", err);
+    } finally {
+      setProjectsLoaded(true);
     }
   };
 
@@ -139,13 +143,14 @@ export default function ProjectsPage() {
   const [spotRect, setSpotRect] = useState<{top:number;left:number;width:number;height:number} | null>(null);
 
   useEffect(() => {
+    if (!projectsLoaded) return; // wait until projects have been fetched
     if (projects.length === 0) {
       setTourOpen(true);
       setTourStep(1);
     } else {
       setTourOpen(false);
     }
-  }, [projects.length]);
+  }, [projects.length, projectsLoaded]);
 
   useEffect(() => {
     if (tourOpen && showModal) {
