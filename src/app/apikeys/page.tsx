@@ -10,7 +10,7 @@ declare global {
 export {};
 
 import SidebarLayout from "@/components/layout/SidebarLayout";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { toast } from "react-hot-toast";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
@@ -36,6 +36,16 @@ export default function ApiKeyPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // Guided tour state for first API key creation
+  const [tourOpen, setTourOpen] = useState(false);
+  const [tourStep, setTourStep] = useState<1 | 2 | 3>(1);
+  const [spotRect, setSpotRect] = useState<{ top: number; left: number; width: number; height: number } | null>(null);
+
+  // Targets for spotlighting
+  const createBtnRef = useRef<HTMLButtonElement | null>(null);
+  const modalNameRef = useRef<HTMLInputElement | null>(null);
+  const modalCreateRef = useRef<HTMLButtonElement | null>(null);
 
   const handleCopy = (key: string, id: string) => {
     navigator.clipboard.writeText(key);
@@ -129,6 +139,10 @@ export default function ApiKeyPage() {
         key_name: newKeyName,
       });
       toast.success("API key created");
+      if (tourOpen) {
+        setTourOpen(false);
+        setTourStep(1);
+      }
       fetchApiKeys(currentPage); // refresh keys after modal closes
     } catch (error) {
       console.error("Error creating API key:", error);
@@ -147,6 +161,130 @@ export default function ApiKeyPage() {
     });
   }, []);
 
+  useEffect(() => {
+    // Start tour if user has no keys
+    if (apiKeys.length === 0) {
+      setTourOpen(true);
+      setTourStep(1);
+    } else {
+      setTourOpen(false);
+    }
+  }, [apiKeys]);
+
+  useEffect(() => {
+    if (!tourOpen) return;
+    window.dataLayer?.push({ event: 'first_apikey_tour_step', step: tourStep });
+  }, [tourOpen, tourStep]);
+
+  useLayoutEffect(() => {
+    const updateRect = () => {
+      let el: HTMLElement | null = null;
+      if (tourStep === 1) el = createBtnRef.current;
+      else if (tourStep === 2) el = modalNameRef.current as HTMLElement | null;
+      else if (tourStep === 3) el = modalCreateRef.current as HTMLElement | null;
+      if (el) {
+        const r = el.getBoundingClientRect();
+        setSpotRect({ top: r.top, left: r.left, width: r.width, height: r.height });
+      } else {
+        setSpotRect(null);
+      }
+    };
+    updateRect();
+    window.addEventListener('resize', updateRect);
+    window.addEventListener('scroll', updateRect, true);
+    return () => {
+      window.removeEventListener('resize', updateRect);
+      window.removeEventListener('scroll', updateRect, true);
+    };
+  }, [tourOpen, tourStep, showModal]);
+
+  const lastRectRef = useRef<{ top: number; left: number; width: number; height: number } | null>(null);
+  const ensureVisibleAndMeasure = () => {
+    let el: HTMLElement | null = null;
+    if (tourStep === 1) el = createBtnRef.current || null;
+    else if (tourStep === 2) el = (modalNameRef.current as HTMLElement | null);
+    else if (tourStep === 3) el = (modalCreateRef.current as HTMLElement | null);
+    if (!el) { setSpotRect(null); return; }
+    const vr = el.getBoundingClientRect();
+    const fullyOut = vr.bottom < 0 || vr.top > window.innerHeight || vr.right < 0 || vr.left > window.innerWidth;
+    if (fullyOut) { try { el.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'auto' }); } catch {}
+    }
+    let attempts = 0;
+    const measure = () => {
+      attempts += 1;
+      const r = el!.getBoundingClientRect();
+      const next = { top: r.top, left: r.left, width: r.width, height: r.height };
+      const prev = lastRectRef.current;
+      const stable = prev && Math.abs(prev.top - next.top) < 0.5 && Math.abs(prev.left - next.left) < 0.5 && Math.abs(prev.width - next.width) < 0.5 && Math.abs(prev.height - next.height) < 0.5;
+      lastRectRef.current = next;
+      setSpotRect(next);
+      if (!stable && attempts < 6) requestAnimationFrame(measure);
+    };
+    requestAnimationFrame(measure);
+  };
+
+  useEffect(() => {
+    if (!tourOpen) return;
+    ensureVisibleAndMeasure();
+  }, [tourOpen, tourStep, showModal]);
+
+  useEffect(() => {
+    if (!tourOpen) return;
+    const obs = new MutationObserver(() => ensureVisibleAndMeasure());
+    obs.observe(document.body, { childList: true, subtree: true, attributes: true });
+    return () => obs.disconnect();
+  }, [tourOpen, tourStep]);
+
+  const handleTourNext = () => {
+    if (tourStep === 1) {
+      if (!showModal) setShowModal(true);
+      setTourStep(2);
+      window.dataLayer?.push({ event: 'first_apikey_tour_next', from: 1, to: 2 });
+      return;
+    }
+    if (tourStep === 2) {
+      if (!newKeyName.trim()) {
+        toast.error('Please enter a key name.');
+        modalNameRef.current?.focus();
+        return;
+      }
+      setTourStep(3);
+      window.dataLayer?.push({ event: 'first_apikey_tour_next', from: 2, to: 3 });
+      return;
+    }
+  };
+
+  const handleTourBack = () => {
+    if (tourStep === 3) {
+      setTourStep(2);
+      window.dataLayer?.push({ event: 'first_apikey_tour_prev', from: 3, to: 2 });
+      return;
+    }
+    if (tourStep === 2) {
+      setTourStep(1);
+      if (showModal) setShowModal(false);
+      window.dataLayer?.push({ event: 'first_apikey_tour_prev', from: 2, to: 1 });
+      return;
+    }
+  };
+
+  const handleForceCreate = () => {
+    if (!showModal) setShowModal(true);
+    if (tourStep !== 3) setTourStep(3);
+    let tries = 0;
+    const attempt = () => {
+      const btn = modalCreateRef.current;
+      if (btn) {
+        try { btn.scrollIntoView({ block: 'center', inline: 'nearest' }); } catch {}
+        btn.click();
+        window.dataLayer?.push({ event: 'first_apikey_tour_force_create_click' });
+        return;
+      }
+      if (tries++ < 10) requestAnimationFrame(attempt);
+    };
+    requestAnimationFrame(attempt);
+  };
+
   return (
     <SidebarLayout>
       <main className="min-h-screen text-gray-900 dark:text-gray-100 px-4 py-4 md:px-6 md:py-12">
@@ -155,6 +293,7 @@ export default function ApiKeyPage() {
 
         <div className="mb-6 md:mb-8">
           <button
+            ref={createBtnRef}
             onClick={() => setShowModal(true)}
             className="px-4 py-2 rounded cursor-pointer w-full md:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
           >
@@ -163,18 +302,7 @@ export default function ApiKeyPage() {
         </div>
 
         <div className="grid gap-4">
-          {apiKeys.length === 0 ? (
-            <div className="relative w-full overflow-hidden rounded" style={{ paddingTop: "56.25%" }}>
-              <iframe
-                className="absolute inset-0 w-full h-full"
-                src="https://www.youtube.com/embed/n6a6qqpZq3o"
-                title="YouTube video"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            </div>
-          ) : (
+          {apiKeys.length === 0 ? null : (
             apiKeys.map((keyObj) => (
               <div
                 key={keyObj.id}
@@ -250,6 +378,7 @@ export default function ApiKeyPage() {
             <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Create New API Key</h2>
             <p className="mb-4 text-gray-700 dark:text-gray-300">Are you sure you want to create a new API key?</p>
             <input
+              ref={modalNameRef}
               type="text"
               placeholder="Enter API key name"
               value={newKeyName}
@@ -264,6 +393,7 @@ export default function ApiKeyPage() {
                 Cancel
               </button>
               <button
+                ref={modalCreateRef}
                 onClick={handleCreateKey}
                 className="px-4 py-2 text-sm rounded cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90"
               >
@@ -295,6 +425,89 @@ export default function ApiKeyPage() {
               >
                 Delete
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {tourOpen && (
+        <div className="fixed inset-0 z-[70] pointer-events-none">
+          {spotRect && (
+            <div
+              aria-hidden
+              style={{
+                position: 'fixed',
+                top: spotRect.top - 8,
+                left: spotRect.left - 8,
+                width: spotRect.width + 16,
+                height: spotRect.height + 16,
+                borderRadius: 12,
+                boxShadow: '0 0 0 9999px rgba(0,0,0,0.55)',
+                transition: 'all 150ms ease',
+              }}
+            />
+          )}
+          <div
+            role="dialog"
+            aria-live="polite"
+            className={`pointer-events-auto fixed ${spotRect ? '' : 'left-1/2'}`}
+            style={spotRect ? { top: spotRect.top + spotRect.height + 12, left: Math.max(12, spotRect.left) } : { bottom: 24, transform: 'translateX(-50%)' }}
+          >
+            <div className="max-w-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow p-4 text-sm">
+              {tourStep === 1 && (
+                <>
+                  <div className="font-semibold mb-1">Step 1/3 · Create your first API key</div>
+                  <div className="text-gray-600 dark:text-gray-300 mb-3">Click <strong>+ Create API Key</strong> to start.</div>
+                </>
+              )}
+              {tourStep === 2 && (
+                <>
+                  <div className="font-semibold mb-1">Step 2/3 · Name your key</div>
+                  <div className="text-gray-600 dark:text-gray-300 mb-3">Give it a clear name. You can change it later.</div>
+                </>
+              )}
+              {tourStep === 3 && (
+                <>
+                  <div className="font-semibold mb-1">Step 3/3 · Confirm</div>
+                  <div className="text-gray-600 dark:text-gray-300 mb-3">Hit <strong>Confirm</strong> to create the key.</div>
+                </>
+              )}
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setTourOpen(false)}
+                  className="px-3 py-1.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800"
+                >
+                  Close
+                </button>
+                {tourStep > 1 && (
+                  <button
+                    type="button"
+                    onClick={handleTourBack}
+                    className="px-3 py-1.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  >
+                    Back
+                  </button>
+                )}
+                {tourStep < 3 && (
+                  <button
+                    type="button"
+                    onClick={handleTourNext}
+                    className="px-3 py-1.5 rounded bg-indigo-600 text-white hover:bg-indigo-700"
+                  >
+                    Next
+                  </button>
+                )}
+                {tourStep === 3 && (
+                  <button
+                    type="button"
+                    onClick={handleForceCreate}
+                    className="px-3 py-1.5 rounded bg-indigo-600 text-white hover:bg-indigo-700"
+                  >
+                    Force Create
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>

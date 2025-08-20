@@ -122,6 +122,167 @@ export default function ProjectsPage() {
       };
     }, [openDropdownId]);
 
+  // Step-by-step guided tour (coach marks)
+  const [tourOpen, setTourOpen] = useState(false);
+  const [tourStep, setTourStep] = useState<1 | 2 | 3>(1);
+  const createBtnRef = useRef<HTMLButtonElement | null>(null);
+  // Analytics: fire an event on each step change while the tour is open
+  useEffect(() => {
+    if (!tourOpen) return;
+    window.dataLayer?.push({
+      event: 'first_project_tour_step',
+      step: tourStep,
+    });
+  }, [tourStep, tourOpen]);
+  const modalNameRef = useRef<HTMLInputElement | null>(null);
+  const modalCreateRef = useRef<HTMLButtonElement | null>(null);
+  const [spotRect, setSpotRect] = useState<{top:number;left:number;width:number;height:number} | null>(null);
+
+  useEffect(() => {
+    if (projects.length === 0) {
+      setTourOpen(true);
+      setTourStep(1);
+    } else {
+      setTourOpen(false);
+    }
+  }, [projects.length]);
+
+  useEffect(() => {
+    if (tourOpen && showModal) {
+      setTourStep(2);
+    }
+  }, [tourOpen, showModal]);
+
+
+  useEffect(() => {
+    const updateRect = () => {
+      let el: HTMLElement | null = null;
+      if (tourStep === 1) el = createBtnRef.current;
+      else if (tourStep === 2) el = modalNameRef.current as HTMLElement | null;
+      else if (tourStep === 3) el = modalCreateRef.current as HTMLElement | null;
+      if (el) {
+        const r = el.getBoundingClientRect();
+        setSpotRect({ top: r.top, left: r.left, width: r.width, height: r.height });
+      } else {
+        setSpotRect(null);
+      }
+    };
+    updateRect();
+    window.addEventListener('resize', updateRect);
+    window.addEventListener('scroll', updateRect, true);
+    return () => {
+      window.removeEventListener('resize', updateRect);
+      window.removeEventListener('scroll', updateRect, true);
+    };
+  }, [tourStep, tourOpen, showModal]);
+
+  // --- Stabilized measurement for spotlight/tour ---
+  const lastRectRef = useRef<{top:number;left:number;width:number;height:number} | null>(null);
+
+  const ensureVisibleAndMeasure = () => {
+    let el: HTMLElement | null = null;
+    if (tourStep === 1) el = createBtnRef.current || null;
+    else if (tourStep === 2) el = (modalNameRef.current as HTMLElement | null);
+    else if (tourStep === 3) el = (modalCreateRef.current as HTMLElement | null);
+    if (!el) {
+      setSpotRect(null);
+      return;
+    }
+    // If element is outside viewport, bring it to center first
+    const vr = el.getBoundingClientRect();
+    const fullyOut = vr.bottom < 0 || vr.top > window.innerHeight || vr.right < 0 || vr.left > window.innerWidth;
+    if (fullyOut) {
+      try { el.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'auto' }); } catch {}
+    }
+
+    // Measure with rAF until stable to dodge late layout shifts (fonts/SSR hydration)
+    let attempts = 0;
+    const measure = () => {
+      attempts += 1;
+      const r = el!.getBoundingClientRect();
+      const next = { top: r.top, left: r.left, width: r.width, height: r.height };
+      const prev = lastRectRef.current;
+      const stable = prev && Math.abs(prev.top - next.top) < 0.5 && Math.abs(prev.left - next.left) < 0.5 && Math.abs(prev.width - next.width) < 0.5 && Math.abs(prev.height - next.height) < 0.5;
+      lastRectRef.current = next;
+      setSpotRect(next);
+      if (!stable && attempts < 6) {
+        requestAnimationFrame(measure);
+      }
+    };
+    requestAnimationFrame(measure);
+  };
+
+  useEffect(() => {
+    if (!tourOpen) return;
+    ensureVisibleAndMeasure();
+  }, [tourOpen, tourStep, showModal, projects.length, viewMode]);
+
+  useEffect(() => {
+    if (!tourOpen) return;
+    const target = document.body;
+    const obs = new MutationObserver(() => ensureVisibleAndMeasure());
+    obs.observe(target, { childList: true, subtree: true, attributes: true });
+    return () => obs.disconnect();
+  }, [tourOpen, tourStep]);
+
+
+  // Guided tour Next/Back handlers
+  const handleTourNext = () => {
+    if (tourStep === 1) {
+      if (!showModal) setShowModal(true);
+      setTourStep(2);
+      window.dataLayer?.push({ event: 'first_project_tour_next', from: 1, to: 2 });
+      return;
+    }
+    if (tourStep === 2) {
+      if (!projectName.trim()) {
+        toast.error('Please enter a project name.');
+        modalNameRef.current?.focus();
+        return;
+      }
+      setTourStep(3);
+      modalCreateRef.current?.focus();
+      window.dataLayer?.push({ event: 'first_project_tour_next', from: 2, to: 3 });
+      return;
+    }
+  };
+
+  const handleTourBack = () => {
+    if (tourStep === 3) {
+      setTourStep(2);
+      window.dataLayer?.push({ event: 'first_project_tour_prev', from: 3, to: 2 });
+      return;
+    }
+    if (tourStep === 2) {
+      setTourStep(1);
+      if (showModal) setShowModal(false);
+      window.dataLayer?.push({ event: 'first_project_tour_prev', from: 2, to: 1 });
+      return;
+    }
+  };
+
+  // Focus helper for guided tour step 3
+  const handleForceCreate = () => {
+    // Ensure modal visible and on step 3
+    if (!showModal) setShowModal(true);
+    if (tourStep !== 3) setTourStep(3);
+
+    // Try multiple frames until the button mounts, then click it
+    let tries = 0;
+    const attempt = () => {
+      const btn = modalCreateRef.current;
+      if (btn) {
+        try { btn.scrollIntoView({ block: 'center', inline: 'nearest' }); } catch {}
+        // If name is empty, let the original onClick handler show the toast
+        btn.click();
+        window.dataLayer?.push({ event: 'first_project_tour_force_create_click' });
+        return;
+      }
+      if (tries++ < 10) requestAnimationFrame(attempt);
+    };
+    requestAnimationFrame(attempt);
+  };
+
   const handleDelete = async (id: string) => {
     try {
       const res = await fetch(`${DOMAIN}/api/v1/project/${id}`, {
@@ -180,6 +341,7 @@ export default function ProjectsPage() {
                 onMouseLeave={() => setShowTooltip(false)}
               >
                 <button
+                  ref={createBtnRef}
                   onClick={() => canCreateProject && setShowModal(true)}
                   className={`px-5 py-2 rounded-md transition w-full md:w-auto ${
                     canCreateProject
@@ -209,23 +371,7 @@ export default function ProjectsPage() {
             </div>
           </div>
 
-          {/* Empty state (video) */}
-          {projects.length === 0 && (
-            <div className="grid gap-6 grid-cols-1">
-              <div className="col-span-full">
-                <div className="relative w-full overflow-hidden rounded" style={{ paddingTop: '56.25%' }}>
-                  <iframe
-                    className="absolute inset-0 w-full h-full"
-                    src="https://www.youtube.com/embed/V-5IKCwtQ_g"
-                    title="How to create your first project"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-              </div>
-            </div>
-          )}
+
 
           {/* Card View */}
           {projects.length > 0 && viewMode === 'card' && (
@@ -473,6 +619,7 @@ export default function ProjectsPage() {
             <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg p-6 shadow-lg w-full max-w-lg mx-4 border border-gray-200 dark:border-gray-700">
               <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Create New Project</h2>
               <input
+                ref={modalNameRef}
                 type="text"
                 placeholder="Project name"
                 className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
@@ -487,6 +634,7 @@ export default function ProjectsPage() {
                   Cancel
                 </button>
                 <button
+                  ref={modalCreateRef}
                   onClick={async () => {
                     if (!projectName.trim()) {
                       toast.error("Project name cannot be empty.");
@@ -560,6 +708,97 @@ export default function ProjectsPage() {
                 >
                   Delete
                 </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Guided tour overlay */}
+        {tourOpen && (
+          <div className="fixed inset-0 z-[70] pointer-events-none">
+            {/* Spotlight */}
+            {spotRect && (
+              <div
+                aria-hidden
+                style={{
+                  position: 'fixed',
+                  top: spotRect.top - 8,
+                  left: spotRect.left - 8,
+                  width: spotRect.width + 16,
+                  height: spotRect.height + 16,
+                  borderRadius: 12,
+                  boxShadow: '0 0 0 9999px rgba(0,0,0,0.55)',
+                  transition: 'all 150ms ease',
+                }}
+              />
+            )}
+            {/* Tooltip card (clickable) */}
+            <div
+              role="dialog"
+              aria-live="polite"
+              className={`pointer-events-auto fixed ${spotRect ? '' : 'left-1/2'} `}
+              style={spotRect ? { top: spotRect.top + spotRect.height + 12, left: Math.max(12, spotRect.left) } : { bottom: 24, transform: 'translateX(-50%)' }}
+            >
+              <div className="max-w-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow p-4 text-sm">
+                {tourStep === 1 && (
+                  <>
+                    <div className="font-semibold mb-1">Step 1/3 · Create your first project</div>
+                    <div className="text-gray-600 dark:text-gray-300 mb-3">Click the <strong>+ Create Project</strong> button to start.</div>
+                  </>
+                )}
+                {tourStep === 2 && (
+                  <>
+                    <div className="font-semibold mb-1">Step 2/3 · Name your project</div>
+                    <div className="text-gray-600 dark:text-gray-300 mb-3">Give it a clear name. You can change it later.</div>
+                    {!showModal && (
+                      <div className="text-xs text-amber-600 dark:text-amber-400 mb-2">Opening the form… if it doesn't appear, click "+ Create Project".</div>
+                    )}
+                  </>
+                )}
+                {tourStep === 3 && (
+                  <>
+                    <div className="font-semibold mb-1">Step 3/3 · Create</div>
+                    <div className="text-gray-600 dark:text-gray-300 mb-3">Hit <strong>Create</strong>. You can add members and API keys afterwards.</div>
+                  </>
+                )}
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setTourOpen(false)}
+                    className="px-3 py-1.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  >
+                    Close
+                  </button>
+                  {tourStep > 1 && (
+                    <button
+                      type="button"
+                      onClick={handleTourBack}
+                      className="px-3 py-1.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
+                      Back
+                    </button>
+                  )}
+                  {tourStep < 3 && (
+                    <button
+                      type="button"
+                      onClick={handleTourNext}
+                      className="px-3 py-1.5 rounded bg-indigo-600 text-white hover:bg-indigo-700"
+                    >
+                      Next
+                    </button>
+                  )}
+                  {tourStep === 1 && (
+                    <span className="text-xs text-gray-500">(You can also just click the highlighted button)</span>
+                  )}
+                  {tourStep === 3 && (
+                    <button
+                      type="button"
+                      onClick={handleForceCreate}
+                      className="px-3 py-1.5 rounded bg-indigo-600 text-white hover:bg-indigo-700"
+                    >
+                      Force Create
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
