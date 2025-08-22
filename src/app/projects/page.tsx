@@ -16,6 +16,7 @@ import { useState, useEffect, useRef } from "react";
 import React from "react";
 import { useUser } from "@/context/UserContext";
 import SidebarLayout from "@/components/layout/SidebarLayout";
+import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 
 
@@ -34,6 +35,7 @@ type Project = {
   is_active: boolean;
 };
 export default function ProjectsPage() {
+  const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
 
@@ -66,6 +68,19 @@ export default function ProjectsPage() {
   const [hasMore, setHasMore] = useState(false);
   const [total, setTotal] = useState<number | null>(null);
   const [projectsLoaded, setProjectsLoaded] = useState(false);
+
+  useEffect(() => {
+    try {
+      const raw = typeof window !== 'undefined' ? window.localStorage.getItem('playground_tour_done') : null;
+      const tourDone = !!Number(raw ?? '0');
+      if (!tourDone) {
+        router.replace('/playground');
+      }
+    } catch (e) {
+      // if localStorage is unavailable, default to redirecting to ensure the tour runs
+      router.replace('/playground');
+    }
+  }, [router]);
   const fetchProjects = async (limit: number, offset: number) => {
     setProjectsLoaded(false);
     try {
