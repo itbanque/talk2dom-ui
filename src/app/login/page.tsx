@@ -157,7 +157,7 @@ export default function LoginPage() {
                 </button>
               </div>
               <div className="mt-2 text-right">
-                <a href="/reset" className="text-sm text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white underline underline-offset-2">Forgot password?</a>
+                <a href="/forget-password" className="text-sm text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white underline underline-offset-2">Forgot password?</a>
               </div>
             </div>
 
