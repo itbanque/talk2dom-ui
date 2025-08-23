@@ -57,7 +57,7 @@ export default function PricingPage() {
         }
         m.setAttribute('content', content);
       };
-      ensureMeta('description', 'Choose a plan for Talk2Dom. AI-powered element location for Selenium, Playwright, and more. Developer, Pro, and Enterprise options.');
+      ensureMeta('description', 'Choose a plan for Talk2Dom. Developer ($9.99), Pro ($39.99), and a customizable Enterprise tier for AI-powered element location.');
 
       // Canonical
       let canonical = document.querySelector('link[rel="canonical"]');
@@ -144,7 +144,7 @@ export default function PricingPage() {
           "@type": "Product",
           "name": "Talk2Dom Developer Plan",
           "brand": {"@type": "Brand", "name": "Talk2Dom"},
-          "description": "Developer plan for AI-powered UI element location.",
+          "description": "Developer plan: 1,000 API calls per month for AI-powered UI element location.",
           "offers": {
             "@type": "Offer",
             "price": "9.99",
@@ -160,7 +160,7 @@ export default function PricingPage() {
           "@type": "Product",
           "name": "Talk2Dom Pro Plan",
           "brand": {"@type": "Brand", "name": "Talk2Dom"},
-          "description": "Pro plan for teams using AI-powered UI element location.",
+          "description": "Pro plan: 5,000 API calls per month for teams using AI-powered UI element location.",
           "offers": {
             "@type": "Offer",
             "price": "39.99",
@@ -190,7 +190,7 @@ export default function PricingPage() {
             <p className="text-gray-600 dark:text-gray-300 mb-4">For solo developers building serious projects</p>
             <div className="text-3xl font-bold mb-4">$9.99<span className="text-base font-medium">/mo</span></div>
             <ul className="flex-1 space-y-2 mb-6 text-sm text-left">
-              <li>✅ 2,000 API calls / mo</li>
+              <li>✅ 1,000 API calls / mo</li>
               <li>✅ Up to 10 projects</li>
               <li>✅ Up to 2 members / project</li>
             </ul>
@@ -226,7 +226,7 @@ export default function PricingPage() {
             <p className="text-gray-600 dark:text-gray-300 mb-4">Unlock full capacity for teams and advanced workflows</p>
             <div className="text-3xl font-bold mb-4">$39.99<span className="text-base font-medium">/mo</span></div>
             <ul className="flex-1 space-y-2 mb-6 text-sm text-left">
-              <li>✅ 10,000 API calls / mo</li>
+              <li>✅ 5,000 API calls / mo</li>
               <li>✅ Unlimited projects</li>
               <li>✅ Up to 10 members / project</li>
             </ul>
@@ -260,9 +260,9 @@ export default function PricingPage() {
           <div className="w-full max-w-md md:max-w-xs border border-gray-200 rounded-lg p-4 md:p-6 shadow-sm flex flex-col">
             <h2 className="text-xl font-bold mb-2">Enterprise</h2>
             <p className="text-gray-600 dark:text-gray-300 mb-4">Partner with us for stable, high‑quality delivery at scale.</p>
-            <div className="text-3xl font-bold mb-4">Custom</div>
+            <div className="text-3xl font-bold mb-4">Customize</div>
             <ul className="flex-1 space-y-2 mb-6 text-sm text-left">
-              <li>✅ Unlimited API calls</li>
+              <li>✅ Custom API calls quota</li>
               <li>✅ Dedicated engineering partnership</li>
               <li>✅ High-quality, stable delivery across environments</li>
               <li>✅ SLA-backed support</li>

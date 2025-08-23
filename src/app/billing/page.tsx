@@ -58,7 +58,7 @@ function CreditModal({
       <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-6 rounded-lg shadow-lg w-full max-w-md mx-4 border border-gray-200 dark:border-gray-700">
         <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Purchase Credits</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
-          {[{ amount: 1000, price: 999 }, { amount: 2200, price: 1999 }, { amount: 5500, price: 4999 }].map((opt) => (
+          {[{ amount: 1000, price: 999 }, { amount: 2200, price: 1999 }, { amount: 6000, price: 4999 }].map((opt) => (
             <div
               key={opt.amount}
               className={`border rounded p-3 cursor-pointer ${selectedCredit === opt.amount ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20" : "border-gray-300 dark:border-gray-600"}`}
@@ -81,7 +81,7 @@ function CreditModal({
                 }
               }}
             >
-              <p className="font-medium">{opt.amount} credits</p>
+              <p className="font-medium">{opt.amount} calls</p>
               <p className="text-sm text-gray-500 dark:text-gray-400">${(opt.price / 100).toFixed(2)}</p>
             </div>
           ))}
@@ -217,8 +217,8 @@ export default function BillingPage() {
           <section className="mb-10 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded p-4 md:p-6 !bg-white dark:!bg-gray-900 !text-gray-900 dark:!text-gray-100">
             <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Current Plan</h2>
             <p className="mb-2">Plan: <strong>{user?.plan || "N/A"}</strong></p>
-            <p className="mb-2">Subscription Credits: <strong>{user?.subscription_credits ?? "N/A"}</strong></p>
-            <p className="mb-2">One-Time Credits: <strong>{user?.one_time_credits ?? "N/A"}</strong></p>
+            <p className="mb-2">Subscription Calls: <strong>{user?.subscription_credits ?? "N/A"}</strong></p>
+            <p className="mb-2">One-Time Calls: <strong>{user?.one_time_credits ?? "N/A"}</strong></p>
             <p className="mb-2">Subscription Status: <strong>{user?.subscription_status ?? "N/A"}</strong></p>
             <p className="mb-4 text-sm text-gray-500 dark:text-gray-400">Next Billing Date: {user?.subscription_end_date?.split("T")[0] ?? "N/A"}</p>
 
@@ -249,7 +249,7 @@ export default function BillingPage() {
                   setShowCreditModal(true);
                 }}
                 >
-                Add Credits
+                Add Calls
               </button>
               {user?.plan !== "free" && (
                 <>
