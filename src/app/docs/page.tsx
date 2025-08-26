@@ -18,14 +18,32 @@ import Script from "next/script";
 
 export default function DocsPage() {
   const stepByStepRef = useRef<HTMLElement | null>(null);
-  const sampleCodeRef = useRef<HTMLElement | null>(null);
+  const sdkSeleniumRef = useRef<HTMLElement | null>(null);
+  const sdkPlaywrightRef = useRef<HTMLElement | null>(null);
 
   const [copiedStepByStep, setCopiedStepByStep] = useState(false);
-  const [copiedSampleCode, setCopiedSampleCode] = useState(false);
+  const [copiedSdkSel, setCopiedSdkSel] = useState(false);
+  const [copiedSdkPw, setCopiedSdkPw] = useState(false);
 
-  const handleCopy = (ref: React.RefObject<HTMLElement | null>, setCopied: React.Dispatch<React.SetStateAction<boolean>>) => {
+  const [copiedAnchor, setCopiedAnchor] = useState<string | null>(null);
+  const copyAnchor = (id: string) => {
+    try {
+      const origin = typeof window !== 'undefined' ? window.location.origin : '';
+      const link = `${origin}/docs#${id}`;
+      navigator.clipboard.writeText(link).then(() => {
+        setCopiedAnchor(id);
+        setTimeout(() => setCopiedAnchor(null), 2000);
+      });
+    } catch (_) {}
+  };
+
+  const handleCopy = (
+    ref: React.RefObject<HTMLElement | null>,
+    setCopied: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
     if (ref.current) {
-      navigator.clipboard.writeText(ref.current.innerText).then(() => {
+      const text = ref.current.textContent || "";
+      navigator.clipboard.writeText(text).then(() => {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       });
@@ -100,6 +118,36 @@ export default function DocsPage() {
     } catch (_) {}
   }, []);
 
+  // --- Ensure hash anchors scroll correctly on initial load and navigation ---
+  const scrollToHash = (rawHash?: string) => {
+    try {
+      const hashSource = rawHash ?? (typeof window !== 'undefined' ? (window.location.hash ?? '') : '');
+      const hash = (hashSource || '').replace('#', '');
+      if (!hash) return;
+      const target = document.getElementById(hash);
+      if (!target) return;
+      // Use scrollMarginTop via Tailwind classes AND explicit scrollIntoView as fallback
+      target.scrollIntoView({ behavior: 'instant', block: 'start', inline: 'nearest' as ScrollLogicalPosition });
+    } catch {}
+  };
+
+  useEffect(() => {
+    // Initial attempt (immediately after mount)
+    scrollToHash();
+    // In case content/layout shifts after hydration, try again shortly after
+    const t1 = setTimeout(() => scrollToHash(), 60);
+    const t2 = setTimeout(() => scrollToHash(), 250);
+
+    // Listen to future hash changes (e.g., internal nav)
+    const onHashChange = () => scrollToHash();
+    window.addEventListener('hashchange', onHashChange);
+
+    return () => {
+      clearTimeout(t1); clearTimeout(t2);
+      window.removeEventListener('hashchange', onHashChange);
+    };
+  }, []);
+
   return (
     <main className="min-h-screen text-gray-900 dark:text-gray-100 px-6 pb-20">
       <Navbar />
@@ -140,8 +188,18 @@ export default function DocsPage() {
 
         <div className="space-y-16">
           {/* Section: Product Overview */}
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">What is Talk2Dom?</h2>
+          <div id="product-overview" className="scroll-mt-24">
+            <h2 className="text-2xl font-semibold mb-4 flex items-center group">
+              <a href="#product-overview" className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 text-gray-400" aria-label="Permalink">#</a>
+              <span>What is Talk2Dom?</span>
+              <button
+                className="ml-2 text-xs bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded"
+                onClick={() => copyAnchor('product-overview')}
+                type="button"
+              >
+                {copiedAnchor === 'product-overview' ? 'Copied' : 'Copy Link'}
+              </button>
+            </h2>
             <p className="text-gray-700 dark:text-gray-300">
               Talk2Dom is an AI-native platform that lets you locate web elements using natural language. It’s built for developers, testers,
               and automation engineers who are tired of maintaining fragile selectors. Instead of writing XPath or CSS queries, just describe
@@ -165,8 +223,18 @@ export default function DocsPage() {
             </div>
           </div>
           {/* Section: Designed for Real Workflows */}
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">Designed for Real Workflows</h2>
+          <div id="workflows" className="scroll-mt-24">
+            <h2 className="text-2xl font-semibold mb-4 flex items-center group">
+              <a href="#workflows" className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 text-gray-400" aria-label="Permalink">#</a>
+              <span>Designed for Real Workflows</span>
+              <button
+                className="ml-2 text-xs bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded"
+                onClick={() => copyAnchor('workflows')}
+                type="button"
+              >
+                {copiedAnchor === 'workflows' ? 'Copied' : 'Copy Link'}
+              </button>
+            </h2>
             <p className="text-gray-700 dark:text-gray-300">
               Talk2Dom focuses exclusively on intelligent element location. It doesn’t generate test cases or click buttons for you —
               instead, it works as a foundational service that integrates cleanly into your existing workflow.
@@ -179,8 +247,18 @@ export default function DocsPage() {
 
 
           {/* Section: Getting Started */}
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">Step-by-Step: Get Started</h2>
+          <div id="getting-started" className="scroll-mt-24">
+            <h2 className="text-2xl font-semibold mb-4 flex items-center group">
+              <a href="#getting-started" className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 text-gray-400" aria-label="Permalink">#</a>
+              <span>Step-by-Step: Get Started</span>
+              <button
+                className="ml-2 text-xs bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded"
+                onClick={() => copyAnchor('getting-started')}
+                type="button"
+              >
+                {copiedAnchor === 'getting-started' ? 'Copied' : 'Copy Link'}
+              </button>
+            </h2>
             <ol className="list-decimal pl-6 text-gray-700 dark:text-gray-300 space-y-2">
               <li>First, create a <strong>Project</strong> in your dashboard.</li>
               <li>Next, generate an <strong>API Key</strong></li>
@@ -198,94 +276,149 @@ export default function DocsPage() {
               </button>
               <pre className="bg-gray-100 dark:bg-gray-800 dark:text-gray-100 p-4 rounded text-sm overflow-x-auto mt-4">
                 <code ref={stepByStepRef} className="language-javascript">
-                  {`POST /api/v1/inference/locator
+                  {`
+POST /api/v1/locate
 Headers:
+  Authorization: Bearer YOUR_API_KEY
   X-Project-ID: your_project_id
-  Authorization: Bearer your_api_key
 
-Body:
+Body (JSON):
 {
   "url": "https://yourwebsite.com",
   "html": "<html>...</html>",
   "user_instruction": "the blue login button at the top right",
-  "conversation_history": [
-    ["I want to click the login area", "xpath,//div/button"]
-  ]
-}`}
+}
+
+Response:
+{
+  "selector_type": "css", // or "xpath"
+  "selector_value": ".btn.btn-primary.login",
+}
+`}
                 </code>
               </pre>
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-              This will return the selector metadata for your target element.
+              This will return the selector for your target element.
             </p>
           </div>
 
-          {/* Section: Sample Code */}
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">Sample End-to-End Script (Python + Selenium):</h2>
+          {/* Section: Python SDK — Selenium (sync) */}
+          <div id="sdk-selenium" className="scroll-mt-24">
+            <h2 className="text-2xl font-semibold mb-4 flex items-center group">
+              <a href="#sdk-selenium" className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 text-gray-400" aria-label="Permalink">#</a>
+              <span>Python SDK — Selenium (sync)</span>
+              <button
+                className="ml-2 text-xs bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded"
+                onClick={() => copyAnchor('sdk-selenium')}
+                type="button"
+              >
+                {copiedAnchor === 'sdk-selenium' ? 'Copied' : 'Copy Link'}
+              </button>
+            </h2>
             <p className="text-gray-700 dark:text-gray-300">
-              Here’s a minimal working example showing how to use Talk2Dom with Python and Selenium:
+              Install: <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">pip install talk2dom</code>
             </p>
             <div className="relative">
               <button
                 className="absolute top-3 right-3 bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-xs px-2 py-1 rounded"
-                onClick={() => handleCopy(sampleCodeRef, setCopiedSampleCode)}
+                onClick={() => handleCopy(sdkSeleniumRef, setCopiedSdkSel)}
                 aria-label="Copy code"
                 type="button"
               >
-                {copiedSampleCode ? "Copied" : "Copy"}
+                {copiedSdkSel ? "Copied" : "Copy"}
               </button>
               <pre className="bg-gray-100 dark:bg-gray-800 dark:text-gray-100 p-4 rounded text-sm overflow-x-auto mt-4">
-                <code ref={sampleCodeRef} className="language-python">
-                  {`
-import time
-import requests
+                <code ref={sdkSeleniumRef} className="language-python">
+{`
 from selenium import webdriver
-from selenium.webdriver import Keys
+from selenium.webdriver.common.by import By
+from talk2dom import Talk2DomClient
 
-# Config
-API_URL = "https://yourdomain.com/api/v1/inference/locator"
-PROJECT_ID = "your_project_id"
-API_KEY = "your_api_key"
+client = Talk2DomClient(
+    api_key="YOUR_API_KEY",
+    project_id="your_project_id"
+)
 
-# Setup Selenium
 driver = webdriver.Chrome()
-driver.get("http://www.python.org")
+driver.get("https://example.com/login")
+
 html = driver.page_source
+res = client.locate("click the primary login button", html=html, url=driver.current_url)
 
-# Send request to Talk2Dom
-payload = {
-    "url": "http://www.python.org",
-    "html": html,
-    "user_instruction": "Find the Search box",
-    "conversation_history": [],
-}
-headers = {"X-Project-ID": PROJECT_ID, "Authorization": f"Bearer {API_KEY}"}
-
-response = requests.post(API_URL, json=payload, headers=headers)
-selector_type = response.json()["selector_type"]
-selector_value = response.json()["selector_value"]
-
-# Use the selector
-element = driver.find_element(selector_type, selector_value)
-element.send_keys("pycon")
-element.send_keys(Keys.RETURN)
-
-time.sleep(2)
-
-assert "No results found." not in driver.page_source
-assert "PSF PyCon Trademark Usage Policy" in driver.page_source`}
+driver.find_element(res.selector_type, res.selector_value).click()`}
                 </code>
               </pre>
             </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-              This script captures the current page HTML, sends it to Talk2Dom, receives the matching selector, and then clicks it via Selenium.
+          </div>
+
+          {/* Section: Python SDK — Playwright (async) */}
+          <div id="sdk-playwright" className="scroll-mt-24">
+            <h2 className="text-2xl font-semibold mb-4 flex items-center group">
+              <a href="#sdk-playwright" className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 text-gray-400" aria-label="Permalink">#</a>
+              <span>Python SDK — Playwright (async)</span>
+              <button
+                className="ml-2 text-xs bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded"
+                onClick={() => copyAnchor('sdk-playwright')}
+                type="button"
+              >
+                {copiedAnchor === 'sdk-playwright' ? 'Copied' : 'Copy Link'}
+              </button>
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              Install: <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">pip install talk2dom</code>
             </p>
+            <div className="relative">
+              <button
+                className="absolute top-3 right-3 bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-xs px-2 py-1 rounded"
+                onClick={() => handleCopy(sdkPlaywrightRef, setCopiedSdkPw)}
+                aria-label="Copy code"
+                type="button"
+              >
+                {copiedSdkPw ? "Copied" : "Copy"}
+              </button>
+              <pre className="bg-gray-100 dark:bg-gray-800 dark:text-gray-100 p-4 rounded text-sm overflow-x-auto mt-4">
+                <code ref={sdkPlaywrightRef} className="language-python">
+{`
+import asyncio
+from playwright.async_api import async_playwright
+from talk2dom import Talk2DomClient
+
+client = Talk2DomClient(
+    api_key="YOUR_API_KEY", 
+    project_id="your_project_id")
+
+async def main():
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        page = await browser.new_page()
+        await page.goto("https://example.com/login")
+
+        html = await page.content()
+        res = await client.alocate("click the primary login button", html=html, url=page.url)
+
+        await page.locator(res.selector_value).click()
+        await browser.close()
+
+asyncio.run(main())`}
+                </code>
+              </pre>
+            </div>
           </div>
 
           {/* Section: Integration */}
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">Integrate with Your Stack:</h2>
+          <div id="integration" className="scroll-mt-24">
+            <h2 className="text-2xl font-semibold mb-4 flex items-center group">
+              <a href="#integration" className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 text-gray-400" aria-label="Permalink">#</a>
+              <span>Integrate with Your Stack:</span>
+              <button
+                className="ml-2 text-xs bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded"
+                onClick={() => copyAnchor('integration')}
+                type="button"
+              >
+                {copiedAnchor === 'integration' ? 'Copied' : 'Copy Link'}
+              </button>
+            </h2>
             <p className="text-gray-700 dark:text-gray-300">
               Talk2Dom can be used alongside any UI framework or automation tool, such as Cypress, Selenium, or Playwright.
               Simply use the API response to trigger actions, validations, or visual cues.
@@ -293,8 +426,18 @@ assert "PSF PyCon Trademark Usage Policy" in driver.page_source`}
           </div>
 
           {/* Section: Self-Hosting */}
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">Self-Host with Confidence</h2>
+          <div id="self-hosting" className="scroll-mt-24">
+            <h2 className="text-2xl font-semibold mb-4 flex items-center group">
+              <a href="#self-hosting" className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 text-gray-400" aria-label="Permalink">#</a>
+              <span>Self-Host with Confidence</span>
+              <button
+                className="ml-2 text-xs bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded"
+                onClick={() => copyAnchor('self-hosting')}
+                type="button"
+              >
+                {copiedAnchor === 'self-hosting' ? 'Copied' : 'Copy Link'}
+              </button>
+            </h2>
             <p className="text-gray-700 dark:text-gray-300">
               Our system is fully open-source and can be deployed with Docker. Both self-hosting and secondary development support — including installation guides, updates, troubleshooting, and customization — are available exclusively for <strong>Enterprise</strong> customers. This ensures you have full control over your data while tailoring the AI behavior to your specific workflows.
             </p>
@@ -306,8 +449,18 @@ assert "PSF PyCon Trademark Usage Policy" in driver.page_source`}
           </div>
 
           {/* Section: FAQ */}
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">Frequently Asked Questions</h2>
+          <div id="faq" className="scroll-mt-24">
+            <h2 className="text-2xl font-semibold mb-4 flex items-center group">
+              <a href="#faq" className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 text-gray-400" aria-label="Permalink">#</a>
+              <span>Frequently Asked Questions</span>
+              <button
+                className="ml-2 text-xs bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded"
+                onClick={() => copyAnchor('faq')}
+                type="button"
+              >
+                {copiedAnchor === 'faq' ? 'Copied' : 'Copy Link'}
+              </button>
+            </h2>
             <ul className="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
               <li><strong>Q:</strong> Does it support Shadow DOM? <br /> <strong>A:</strong> Yes, our selector engine is Shadow DOM-aware.</li>
               <li><strong>Q:</strong> Can I use this in mobile web testing? <br /> <strong>A:</strong> Yes, as long as the page can be rendered in a browser context.</li>
