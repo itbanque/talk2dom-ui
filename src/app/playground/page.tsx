@@ -261,44 +261,59 @@ export default function PlaygroundPage() {
       const oldHighlights = doc.querySelectorAll(".locator-highlight-border");
       oldHighlights.forEach((el) => el.classList.remove("locator-highlight-border"));
 
-      // 添加红框
+      // 添加红框（支持多元素高亮）
+      let scrolled = false;
       locators.forEach((locator) => {
-        let el: Element | null = null;
+        const matched: Element[] = [];
         switch (locator.selector_type) {
-          case "id":
-            el = doc.getElementById(locator.selector_value);
+          case "id": {
+            const el = doc.getElementById(locator.selector_value);
+            if (el) matched.push(el);
             break;
-          case "tag name":
-            el = doc.getElementsByTagName(locator.selector_value)[0];
+          }
+          case "tag name": {
+            matched.push(...Array.from(doc.getElementsByTagName(locator.selector_value)));
             break;
-          case "name":
-            el = doc.getElementsByName(locator.selector_value)[0];
+          }
+          case "name": {
+            matched.push(...Array.from(doc.getElementsByName(locator.selector_value)) as unknown as Element[]);
             break;
-          case "class name":
-            el = doc.getElementsByClassName(locator.selector_value)[0];
+          }
+          case "class name": {
+            matched.push(...Array.from(doc.getElementsByClassName(locator.selector_value)));
             break;
-          case "css selector":
-            el = doc.querySelector(locator.selector_value);
+          }
+          case "css selector": {
+            matched.push(...Array.from(doc.querySelectorAll(locator.selector_value)));
             break;
-          case "xpath":
+          }
+          case "xpath": {
             try {
-              const result = doc.evaluate(
+              const snapshot = doc.evaluate(
                 locator.selector_value,
                 doc,
                 null,
-                XPathResult.FIRST_ORDERED_NODE_TYPE,
+                XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
                 null
               );
-              el = result.singleNodeValue as Element | null;
+              for (let i = 0; i < snapshot.snapshotLength; i++) {
+                const n = snapshot.snapshotItem(i);
+                if (n && n.nodeType === Node.ELEMENT_NODE) matched.push(n as Element);
+              }
             } catch (err) {
               console.warn("Invalid XPath:", locator.selector_value);
             }
             break;
+          }
         }
-        if (el) {
+
+        matched.forEach((el, idx) => {
           el.classList.add("locator-highlight-border");
-          el.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
+          if (!scrolled && idx === 0) {
+            try { el.scrollIntoView({ behavior: "smooth", block: "center" }); } catch {}
+            scrolled = true;
+          }
+        });
       });
       setIframeReady(true);
     };
