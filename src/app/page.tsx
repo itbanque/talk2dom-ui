@@ -114,7 +114,7 @@ export default function HomePage() {
             Find UI Elements<br /> with <span className="bg-gradient-to-r from-red-500 to-blue-500 bg-clip-text text-transparent animate-pulse">AI</span>
           </h1>
           <p className="text-gray-700 dark:text-gray-300 text-lg mb-6 leading-relaxed">
-            No more fragile locators, No more manual tweaking.
+            Find any element. Anywhere. Instantly.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
@@ -227,27 +227,34 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-6">Element-Level Intelligence for Real Workflows</h2>
         </div>
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 mt-8 text-left">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-8 mt-8 text-left">
           <div className="group bg-white dark:bg-gray-800 rounded-xl border border-gray-300 dark:border-gray-700 p-6 shadow-sm hover:shadow-lg transition hover:border-indigo-300">
             <div className="w-10 h-10 mb-4 rounded-full bg-black text-white flex items-center justify-center text-lg font-bold">
-              💡
+              🧪
             </div>
-            <h3 className="font-semibold text-lg mb-2">Cross-Platform Element Location</h3>
-            <p>We don’t write test cases—we help you locate the elements. Describe them in natural language, and our API finds them for you. Works with Playwright, Selenium, Cypress, and more.</p>
+            <h3 className="font-semibold text-lg mb-2">Automated Testing</h3>
+            <p>Generate resilient selectors for Playwright, Selenium, Cypress, and more. Stop fixing broken locators and focus on test logic.</p>
           </div>
           <div className="group bg-white dark:bg-gray-800 rounded-xl border border-gray-300 dark:border-gray-700 p-6 shadow-sm hover:shadow-lg transition hover:border-indigo-300">
             <div className="w-10 h-10 mb-4 rounded-full bg-black text-white flex items-center justify-center text-lg font-bold">
-              💡
+              📊
             </div>
-            <h3 className="font-semibold text-lg mb-2">AI-Powered Web Scraping</h3>
-            <p>No need to fight layout shifts or class changes. Just say "get the product price" and we’ll locate it—across sessions and versions.</p>
+            <h3 className="font-semibold text-lg mb-2">Web Scraping & Data Extraction</h3>
+            <p>No more brittle XPaths. Just say “get all product prices” and our API finds them reliably across sessions and layout changes.</p>
           </div>
           <div className="group bg-white dark:bg-gray-800 rounded-xl border border-gray-300 dark:border-gray-700 p-6 shadow-sm hover:shadow-lg transition hover:border-indigo-300">
             <div className="w-10 h-10 mb-4 rounded-full bg-black text-white flex items-center justify-center text-lg font-bold">
-              💡
+              🎯
             </div>
-            <h3 className="font-semibold text-lg mb-2">In-App User Guidance</h3>
-            <p>Power onboarding flows and tooltips that always find the right element—even when the UI changes.</p>
+            <h3 className="font-semibold text-lg mb-2">RPA & Workflow Automation</h3>
+            <p>Integrate with robotic process automation or backend workflows to find and interact with elements in enterprise apps.</p>
+          </div>
+          <div className="group bg-white dark:bg-gray-800 rounded-xl border border-gray-300 dark:border-gray-700 p-6 shadow-sm hover:shadow-lg transition hover:border-indigo-300">
+            <div className="w-10 h-10 mb-4 rounded-full bg-black text-white flex items-center justify-center text-lg font-bold">
+              🧭
+            </div>
+            <h3 className="font-semibold text-lg mb-2">In-App Guidance</h3>
+            <p>Power onboarding flows and tooltips that always anchor to the right element—even when the UI changes.</p>
           </div>
         </div>
       </section>
