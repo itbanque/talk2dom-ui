@@ -20,10 +20,16 @@ export default function DocsPage() {
   const stepByStepRef = useRef<HTMLElement | null>(null);
   const sdkSeleniumRef = useRef<HTMLElement | null>(null);
   const sdkPlaywrightRef = useRef<HTMLElement | null>(null);
+  // --- Custom refs for helper/code blocks ---
+  const actionChainsRef = useRef<HTMLElement | null>(null);
+  const pageNavigatorRef = useRef<HTMLElement | null>(null);
 
   const [copiedStepByStep, setCopiedStepByStep] = useState(false);
   const [copiedSdkSel, setCopiedSdkSel] = useState(false);
   const [copiedSdkPw, setCopiedSdkPw] = useState(false);
+  // --- Custom copied state for helper/code blocks ---
+  const [copiedActionChains, setCopiedActionChains] = useState(false);
+  const [copiedPageNavigator, setCopiedPageNavigator] = useState(false);
 
   const [copiedAnchor, setCopiedAnchor] = useState<string | null>(null);
   const copyAnchor = (id: string) => {
@@ -247,61 +253,6 @@ export default function DocsPage() {
 
 
           {/* Section: Getting Started */}
-          <div id="getting-started" className="scroll-mt-24">
-            <h2 className="text-2xl font-semibold mb-4 flex items-center group">
-              <a href="#getting-started" className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 text-gray-400" aria-label="Permalink">#</a>
-              <span>Step-by-Step: Get Started</span>
-              <button
-                className="ml-2 text-xs bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded"
-                onClick={() => copyAnchor('getting-started')}
-                type="button"
-              >
-                {copiedAnchor === 'getting-started' ? 'Copied' : 'Copy Link'}
-              </button>
-            </h2>
-            <ol className="list-decimal pl-6 text-gray-700 dark:text-gray-300 space-y-2">
-              <li>First, create a <strong>Project</strong> in your dashboard.</li>
-              <li>Next, generate an <strong>API Key</strong></li>
-              <li>Store your Project ID in the X-Project-ID header, and include your API key as a Bearer token in the Authorization header.</li>
-              <li>Then, call the inference API:</li>
-            </ol>
-            <div className="relative">
-              <button
-                className="absolute top-3 right-3 bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-xs px-2 py-1 rounded"
-                onClick={() => handleCopy(stepByStepRef, setCopiedStepByStep)}
-                aria-label="Copy code"
-                type="button"
-              >
-                {copiedStepByStep ? "Copied" : "Copy"}
-              </button>
-              <pre className="bg-gray-100 dark:bg-gray-800 dark:text-gray-100 p-4 rounded text-sm overflow-x-auto mt-4">
-                <code ref={stepByStepRef} className="language-javascript">
-                  {`
-POST /api/v1/locate
-Headers:
-  Authorization: Bearer YOUR_API_KEY
-  X-Project-ID: your_project_id
-
-Body (JSON):
-{
-  "url": "https://yourwebsite.com",
-  "html": "<html>...</html>",
-  "user_instruction": "the blue login button at the top right",
-}
-
-Response:
-{
-  "selector_type": "css", // or "xpath"
-  "selector_value": ".btn.btn-primary.login",
-}
-`}
-                </code>
-              </pre>
-            </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-              This will return the selector for your target element.
-            </p>
-          </div>
 
           {/* Section: Python SDK — Selenium (sync) */}
           <div id="sdk-selenium" className="scroll-mt-24">
@@ -346,8 +297,48 @@ driver.get("https://example.com/login")
 html = driver.page_source
 res = client.locate("click the primary login button", html=html, url=driver.current_url)
 
-driver.find_element(res.selector_type, res.selector_value).click()`}
+driver.find_element(res.selector_type, res.selector_value).click()
+`}
                 </code>
+              </pre>
+            </div>
+          </div>
+
+          {/* Section: Selenium ActionChains helper */}
+          <div id="selenium-actionchains" className="scroll-mt-24">
+            <h2 className="text-2xl font-semibold mb-4 flex items-center group">
+              <a href="#selenium-actionchains" className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 text-gray-400" aria-label="Permalink">#</a>
+              <span>Selenium ActionChains</span>
+              <button className="ml-2 text-xs bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded" onClick={() => copyAnchor('selenium-actionchains')} type="button">
+                {copiedAnchor === 'selenium-actionchains' ? 'Copied' : 'Copy Link'}
+              </button>
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">Use our convenience actionchain to predict an element and chain actions.</p>
+            <div className="relative">
+              <button className="absolute top-3 right-3 bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-xs px-2 py-1 rounded" onClick={() => handleCopy(actionChainsRef, setCopiedActionChains)} aria-label="Copy code" type="button">
+                {copiedActionChains ? 'Copied' : 'Copy'}
+              </button>
+              <pre className="bg-gray-100 dark:bg-gray-800 dark:text-gray-100 p-4 rounded text-sm overflow-x-auto mt-4">
+                <code ref={actionChainsRef as any} className="language-python">{`
+from selenium import webdriver
+
+import time
+from talk2dom.selenium import ActionChains
+from talk2dom.client import Talk2DomClient
+
+driver = webdriver.Chrome()
+client = Talk2DomClient()
+
+driver.get("https://python.org")
+
+actions = ActionChains(driver, client)
+
+actions
+    .go("Type 'pycon' in the search box")
+    .go("Click the 'go' button")
+
+time.sleep(2)
+`}</code>
               </pre>
             </div>
           </div>
@@ -400,8 +391,61 @@ async def main():
         await page.locator(res.selector_value).click()
         await browser.close()
 
-asyncio.run(main())`}
+asyncio.run(main())
+`}
                 </code>
+              </pre>
+            </div>
+          </div>
+
+          {/* Section: Playwright PageNavigator helper */}
+          <div id="playwright-pagenavigator" className="scroll-mt-24">
+            <h2 className="text-2xl font-semibold mb-4 flex items-center group">
+              <a href="#playwright-pagenavigator" className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 text-gray-400" aria-label="Permalink">#</a>
+              <span>Playwright PageNavigator</span>
+              <button className="ml-2 text-xs bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded" onClick={() => copyAnchor('playwright-pagenavigator')} type="button">
+                {copiedAnchor === 'playwright-pagenavigator' ? 'Copied' : 'Copy Link'}
+              </button>
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">Use a simple page navigator to predict an element and perform actions with Playwright.</p>
+            <div className="relative">
+              <button className="absolute top-3 right-3 bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-xs px-2 py-1 rounded" onClick={() => handleCopy(pageNavigatorRef, setCopiedPageNavigator)} aria-label="Copy code" type="button">
+                {copiedPageNavigator ? 'Copied' : 'Copy'}
+              </button>
+              <pre className="bg-gray-100 dark:bg-gray-800 dark:text-gray-100 p-4 rounded text-sm overflow-x-auto mt-4">
+                <code ref={pageNavigatorRef as any} className="language-python">{`
+from playwright.sync_api import sync_playwright
+from talk2dom.playwright import PageNavigator
+from talk2dom.client import Talk2DomClient
+
+client = Talk2DomClient()
+
+
+def main():
+    with sync_playwright() as p:
+        # Launch Chromium browser
+        browser = p.chromium.launch(headless=False)
+        page = browser.new_page()
+
+        navigator = PageNavigator(page, client)
+
+        # Navigate to python.org
+        page.goto("https://www.python.org")
+
+        navigator.go("Type 'pycon' in the search box")
+
+        navigator.go("Click the 'go' button")
+
+        # Wait for results to load
+        page.wait_for_timeout(3000)
+
+        # Close the browser
+        browser.close()
+
+
+if __name__ == "__main__":
+    main()
+`}</code>
               </pre>
             </div>
           </div>
