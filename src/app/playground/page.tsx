@@ -812,7 +812,7 @@ export default function PlaygroundPage() {
                   ref={instructionInputRef}
                   value={instruction}
                   onChange={(e) => setInstruction(e.target.value)}
-                  placeholder="Describe what you want to locate or do on the page..."
+                  placeholder="Describe what you want to locate or do on the page, like `get the donate button` ..."
                   className="w-full h-32 resize-y border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                 />
               </div>
