@@ -259,6 +259,28 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Case Study Section */}
+      <section className="py-20 px-6 bg-gray-50 dark:bg-gray-900">
+        <div className="max-w-4xl mx-auto text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Success Story</h2>
+          <p className="text-lg text-gray-700 dark:text-gray-300">
+            See how real companies are transforming their workflows with Talk2Dom.
+          </p>
+        </div>
+        <div className="max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-md p-8 text-left">
+          <h3 className="text-2xl font-semibold mb-4">Sneaker Reseller Powerhouse</h3>
+          <p className="text-gray-700 dark:text-gray-300 mb-4">
+            One fast-growing company specializes in buying and reselling sneakers on platforms like <strong>StockX</strong> and <strong>GOAT</strong>.
+          </p>
+          <p className="text-gray-700 dark:text-gray-300 mb-4">
+            With Talk2Dom, their team automated the process of finding purchase buttons, bid inputs, and checkout flows — cutting manual work and errors dramatically.
+          </p>
+          <p className="text-gray-700 dark:text-gray-300">
+            The result: faster deal execution, more accurate data extraction, and the ability to scale their sneaker business with confidence.
+          </p>
+        </div>
+      </section>
+
       {/* Simple Integration Section */}
       <section className="py-20 px-6">
         <div className="max-w-4xl mx-auto text-center mb-10">
