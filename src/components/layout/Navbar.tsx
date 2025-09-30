@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { FaGithub } from "react-icons/fa";
+import { FaGithub, FaDiscord } from "react-icons/fa";
 import { useUser } from "@/context/UserContext";
 import { usePathname } from "next/navigation";
 
@@ -68,6 +68,14 @@ export default function Navbar({ addSpacer = true, spacerClassName = "h-16" }: {
               className="text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white text-2xl"
             >
               <FaGithub />
+            </a>
+            <a
+              href="https://discord.gg/8EU6QxhB"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white text-2xl"
+            >
+              <FaDiscord />
             </a>
             {isLoggedIn ? (
               <a
