@@ -5,320 +5,357 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Script from "next/script";
 
-
-
 export default function HomePage() {
   useEffect(() => {
     try {
-      const origin = typeof window !== 'undefined' ? window.location.origin : '';
+      const origin = typeof window !== "undefined" ? window.location.origin : "";
       const url = `${origin}/`;
 
-      // Title
-      document.title = "Talk2Dom – AI-Powered UI Element Locator For Web Automation";
+      document.title = "Talk2Dom – Production-Ready AI Element Locator";
 
-      // Meta description
       const ensureMeta = (name: string, content: string) => {
         let m = document.querySelector(`meta[name="${name}"]`);
         if (!m) {
-          m = document.createElement('meta');
-          m.setAttribute('name', name);
+          m = document.createElement("meta");
+          m.setAttribute("name", name);
           document.head.appendChild(m);
         }
-        m.setAttribute('content', content);
+        m.setAttribute("content", content);
       };
       ensureMeta(
-        'description',
-        'Talk2Dom turns plain-language descriptions into robust UI selectors. AI-powered element location for Playwright, Selenium, and more.'
+        "description",
+        "Talk2Dom turns natural-language prompts into durable UI selectors for Playwright, Selenium, and internal tools—built for teams that ship automation to production."
       );
 
-      // Canonical
       let canonical = document.querySelector('link[rel="canonical"]');
       if (!canonical) {
-        canonical = document.createElement('link');
-        canonical.setAttribute('rel', 'canonical');
+        canonical = document.createElement("link");
+        canonical.setAttribute("rel", "canonical");
         document.head.appendChild(canonical);
       }
-      canonical.setAttribute('href', url);
+      canonical.setAttribute("href", url);
 
-      // Open Graph
       const ensureOG = (property: string, content: string) => {
         let t = document.querySelector(`meta[property="${property}"]`);
         if (!t) {
-          t = document.createElement('meta');
-          t.setAttribute('property', property);
+          t = document.createElement("meta");
+          t.setAttribute("property", property);
           document.head.appendChild(t);
         }
-        t.setAttribute('content', content);
+        t.setAttribute("content", content);
       };
-      ensureOG('og:title', 'Talk2Dom – AI-Powered UI Element Locator');
+      ensureOG("og:title", "Talk2Dom – AI-Powered UI Element Locator");
       ensureOG(
-        'og:description',
-        'AI-powered service that converts natural language into reliable UI selectors for Selenium, Playwright, and more.'
+        "og:description",
+        "AI-powered service that converts natural language into reliable UI selectors for Selenium, Playwright, and more."
       );
-      ensureOG('og:type', 'website');
-      ensureOG('og:url', url);
-      ensureOG('og:image', `${origin}/images/video-fallback.png`);
+      ensureOG("og:type", "website");
+      ensureOG("og:url", url);
+      ensureOG("og:image", `${origin}/images/video-fallback.png`);
 
-      // Twitter Card
       const ensureTwitter = (name: string, content: string) => {
         let t = document.querySelector(`meta[name="${name}"]`);
         if (!t) {
-          t = document.createElement('meta');
-          t.setAttribute('name', name);
+          t = document.createElement("meta");
+          t.setAttribute("name", name);
           document.head.appendChild(t);
         }
-        t.setAttribute('content', content);
+        t.setAttribute("content", content);
       };
-      ensureTwitter('twitter:card', 'summary_large_image');
-      ensureTwitter('twitter:title', 'Talk2Dom – AI-Powered UI Element Locator');
-      ensureTwitter('twitter:description', 'Natural language → robust UI selectors. Works with automation tools');
-      ensureTwitter('twitter:image', `${origin}/images/video-fallback.png`);
+      ensureTwitter("twitter:card", "summary_large_image");
+      ensureTwitter("twitter:title", "Talk2Dom – AI-Powered UI Element Locator");
+      ensureTwitter(
+        "twitter:description",
+        "Natural language → robust UI selectors. Works with automation tools"
+      );
+      ensureTwitter("twitter:image", `${origin}/images/video-fallback.png`);
     } catch (_) {}
   }, []);
+
   return (
-    <main className="min-h-screen text-gray-900 dark:text-gray-100">
+    <main className="min-h-screen bg-white text-gray-900 dark:bg-[#05070f] dark:text-gray-100">
       <Navbar />
       <Script id="ldjson-org" type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Organization",
-          "name": "Talk2Dom",
-          "url": "https://www.itbanque.com/",
-          "logo": "https://www.itbanque.com/icon.png",
-          "sameAs": [
-            "https://github.com/itbanque/talk2dom"
-          ]
+          name: "Talk2Dom",
+          url: "https://www.itbanque.com/",
+          logo: "https://www.itbanque.com/icon.png",
+          sameAs: ["https://github.com/itbanque/talk2dom"],
         })}
       </Script>
       <Script id="ldjson-app" type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
-          "name": "Talk2Dom",
-          "applicationCategory": "DeveloperApplication",
-          "operatingSystem": "Web",
-          "description": "AI-powered service that turns plain-language descriptions into robust UI element locators for Playwright, Selenium, and more.",
-          "url": "https://www.itbanque.com/",
-          "offers": {
+          name: "Talk2Dom",
+          applicationCategory: "DeveloperApplication",
+          operatingSystem: "Web",
+          description:
+            "AI-powered service that turns plain-language descriptions into robust UI element locators for Playwright, Selenium, and more.",
+          url: "https://www.itbanque.com/",
+          offers: {
             "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-          }
+            price: "0",
+            priceCurrency: "USD",
+          },
         })}
       </Script>
-      {/* Hero Section */}
-      <section className="flex flex-col md:flex-row items-center justify-between px-6 md:px-12 pt-32 pb-20 text-center">
-        {/* Left: Text & CTA */}
-        <div className="w-full md:w-1/2 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-6">
-            Find UI Elements<br /> with <span className="bg-gradient-to-r from-red-500 to-blue-500 bg-clip-text text-transparent animate-pulse">AI</span>
-          </h1>
-          <p className="text-gray-700 dark:text-gray-300 text-lg mb-6 leading-relaxed">
-            Find any element. Anywhere. Instantly.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="/register"
-              className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white px-6 py-3 rounded-lg text-base font-semibold hover:from-indigo-600 hover:to-blue-600 transition w-fit mx-auto sm:mx-0"
-            >
-              Start for Free
-            </a>
-          </div>
-          <div className="mt-4 mb-12 text-sm text-gray-500 dark:text-gray-400">
-            ⭐️ Trusted by automation engineers and QA teams
-          </div>
-        </div>
 
-        {/* Right: Video or Image */}
-        <div className="w-full md:w-1/2 flex justify-center md:justify-end mb-12 md:mb-0">
-          <div className="relative rounded-xl overflow-hidden shadow-xl max-w-5xl w-full">
-            <video
-              src="/videos/demo.webm"
-              autoPlay
-              muted
-              loop
-              playsInline
-              poster="/images/video-fallback.png"
-              className="w-full h-[460px] object-cover rounded-xl shadow-md"
-              controlsList="nodownload"
-              style={{ pointerEvents: 'none' }}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Accuracy Section */}
-      <section className="py-20 px-6">
-        <div className="max-w-4xl mx-auto text-center mb-10">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Powered by <span className="bg-gradient-to-r from-red-500 to-blue-500 bg-clip-text text-transparent">Generative AI</span>
-          </h2>
-          <p className="text-lg text-gray-700 dark:text-gray-300">
-            One of the world’s most advanced language models — is at the heart of Talk2Dom. It deeply understands HTML structure, text content, and visual layout. Combined with our in-house selector engine and fallback heuristics, this enables precise, reliable element targeting.
-          </p>
-        </div>
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto text-center">
-          <div className="bg-gray-100 dark:bg-gray-800 rounded-xl p-6 shadow-md">
-            <h3 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 text-transparent bg-clip-text mb-2 transition-opacity duration-700 ease-out transform-gpu animate-fade-up">97.4%</h3>
-            <p className="text-gray-700 dark:text-gray-300 text-sm">Top-1 Selector Match Accuracy</p>
-          </div>
-          <div className="bg-gray-100 dark:bg-gray-800 rounded-xl p-6 shadow-md">
-            <h3 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 text-transparent bg-clip-text mb-2 transition-opacity duration-700 ease-out transform-gpu animate-fade-up">99.1%</h3>
-            <p className="text-gray-700 dark:text-gray-300 text-sm">Top-3 Match Coverage</p>
-          </div>
-          <div className="bg-gray-100 dark:bg-gray-800 rounded-xl p-6 shadow-md">
-            <h3 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 text-transparent bg-clip-text mb-2 transition-opacity duration-700 ease-out transform-gpu animate-fade-up">140+</h3>
-            <p className="text-gray-700 dark:text-gray-300 text-sm">Real-World Websites Tested</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Advantages Section */}
-      <section className="relative py-24 px-6">
-        <div className="max-w-6xl mx-auto text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Talk2Dom?</h2>
-          <p className="text-lg text-gray-700 dark:text-gray-300">Experience a new way to interact with the DOM across any platform or framework.</p>
-        </div>
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto text-left">
-          <div className="rounded-xl p-6 transition border border-gray-200 dark:border-gray-700 shadow-md hover:shadow-lg bg-white dark:bg-gray-800">
-            <div className="text-3xl mb-4">🧠</div>
-            <h3 className="text-xl font-semibold mb-2">Resilient Element Location</h3>
-            <p className="text-gray-700 dark:text-gray-300 text-sm">Describe what you see — Talk2Dom can locate UI elements even as your page evolves. No fragile selectors, no maintenance hassle.</p>
-          </div>
-          <div className="rounded-xl p-6 transition border border-gray-200 dark:border-gray-700 shadow-md hover:shadow-lg bg-white dark:bg-gray-800">
-            <div className="text-3xl mb-4">🚀</div>
-            <h3 className="text-xl font-semibold mb-2">Future-Proof Automation</h3>
-            <p className="text-gray-700 dark:text-gray-300 text-sm">AI is reshaping every industry, and element interaction is no exception. Talk2Dom is built to align with the future of software testing and intelligent automation.</p>
-          </div>
-          <div className="rounded-xl p-6 transition border border-gray-200 dark:border-gray-700 shadow-md hover:shadow-lg bg-white dark:bg-gray-800">
-            <div className="text-3xl mb-4">⚡</div>
-            <h3 className="text-xl font-semibold mb-2">Easy Integration</h3>
-            <p className="text-gray-700 dark:text-gray-300 text-sm">Effortlessly integrate with your existing stack — whether you're using Playwright, Selenium, or custom automation tools.</p>
-          </div>
-        </div>
-      </section>
-      
-      {/* Time Saved Metrics Section */}  
-      <section className="py-16 px-6">
-        <div className="max-w-4xl mx-auto text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">See the Impact</h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300">
-            Real metrics from teams using Talk2Dom — stop wasting hours on manual selectors.
-          </p>
-        </div>
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto text-center">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
-            <h3 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 text-transparent bg-clip-text mb-2 transition-opacity duration-700 ease-out transform-gpu animate-fade-up">+120h</h3>
-            <p className="text-gray-700 dark:text-gray-300 text-sm">Average dev hours saved per team per month</p>
-          </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
-            <h3 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 text-transparent bg-clip-text mb-2 transition-opacity duration-700 ease-out transform-gpu animate-fade-up">85%</h3>
-            <p className="text-gray-700 dark:text-gray-300 text-sm">Reduction in selector-related test failures</p>
-          </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
-            <h3 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 text-transparent bg-clip-text mb-2 transition-opacity duration-700 ease-out transform-gpu animate-fade-up">65%</h3>
-            <p className="text-gray-700 dark:text-gray-300 text-sm">Drop in test maintenance workload</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Use Cases Section */}
-      <section className="py-20 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6">Element-Level Intelligence for Real Workflows</h2>
-        </div>
-        <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-8 mt-8 text-left">
-          <div className="group bg-white dark:bg-gray-800 rounded-xl border border-gray-300 dark:border-gray-700 p-6 shadow-sm hover:shadow-lg transition hover:border-indigo-300">
-            <div className="w-10 h-10 mb-4 rounded-full bg-black text-white flex items-center justify-center text-lg font-bold">
-              🧪
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-white px-6 pb-16 pt-28 text-gray-900 dark:from-[#0a0f1f] dark:via-[#0a0f1f] dark:to-[#090d18] dark:text-gray-100 md:px-12">
+        <div className="pointer-events-none absolute left-[-10%] top-[-20%] h-96 w-96 rounded-full bg-sky-300/30 blur-[160px] dark:bg-sky-500/20" />
+        <div className="pointer-events-none absolute right-[-5%] top-[10%] h-80 w-80 rounded-full bg-indigo-300/25 blur-[150px] dark:bg-indigo-600/20" />
+        <div className="mx-auto flex max-w-6xl flex-col gap-10 lg:flex-row lg:items-start">
+          <div className="flex-1 space-y-6">
+            <div className="inline-flex items-center gap-2 rounded-full border border-gray-200/80 bg-white/90 px-4 py-2 text-xs font-semibold text-gray-700 shadow-sm dark:border-white/15 dark:bg-white/5 dark:text-gray-100">
+              Reliable selectors · Built for release cycles
             </div>
-            <h3 className="font-semibold text-lg mb-2">Automated Testing</h3>
-            <p>Generate resilient selectors for Playwright, Selenium, Cypress, and more. Stop fixing broken locators and focus on test logic.</p>
-          </div>
-          <div className="group bg-white dark:bg-gray-800 rounded-xl border border-gray-300 dark:border-gray-700 p-6 shadow-sm hover:shadow-lg transition hover:border-indigo-300">
-            <div className="w-10 h-10 mb-4 rounded-full bg-black text-white flex items-center justify-center text-lg font-bold">
-              📊
+            <h1 className="text-4xl font-semibold leading-tight md:text-5xl lg:text-6xl">
+              Turn any prompt into selectors that survive redesigns.
+            </h1>
+            <p className="max-w-2xl text-lg text-gray-600 dark:text-gray-200">
+              Talk2Dom combines DOM parsing, ARIA and text signals, and fallback heuristics to return selectors that stay stable across deployments.
+              Less flakiness, more shipped features.
+            </p>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <a
+                href="/register"
+                className="rounded-lg bg-gray-900 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-black dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
+              >
+                Start for free
+              </a>
+              <a
+                href="/playground"
+                className="rounded-lg border border-gray-300 px-6 py-3 text-sm font-semibold text-gray-900 transition hover:-translate-y-0.5 hover:border-gray-400 dark:border-white/30 dark:text-white dark:hover:border-white"
+              >
+                Open playground
+              </a>
+              <span className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-300">
+                No credit card · Live selector output
+              </span>
             </div>
-            <h3 className="font-semibold text-lg mb-2">Web Scraping & Data Extraction</h3>
-            <p>No more brittle XPaths. Just say “get all product prices” and our API finds them reliably across sessions and layout changes.</p>
-          </div>
-          <div className="group bg-white dark:bg-gray-800 rounded-xl border border-gray-300 dark:border-gray-700 p-6 shadow-sm hover:shadow-lg transition hover:border-indigo-300">
-            <div className="w-10 h-10 mb-4 rounded-full bg-black text-white flex items-center justify-center text-lg font-bold">
-              🎯
+            <div className="grid gap-3 text-sm text-gray-700 dark:text-gray-200 sm:grid-cols-3 sm:max-w-xl">
+              <div className="rounded-lg border border-gray-200 bg-white/80 p-3 shadow-sm dark:border-white/10 dark:bg-white/5">
+                <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">Top-1 match rate</p>
+                <p className="text-xl font-semibold">97.4%</p>
+              </div>
+              <div className="rounded-lg border border-gray-200 bg-white/80 p-3 shadow-sm dark:border-white/10 dark:bg-white/5">
+                <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">Avg. latency</p>
+                <p className="text-xl font-semibold">&lt; 3s</p>
+              </div>
+              <div className="rounded-lg border border-gray-200 bg-white/80 p-3 shadow-sm dark:border-white/10 dark:bg-white/5">
+                <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">Sites tested</p>
+                <p className="text-xl font-semibold">140+</p>
+              </div>
             </div>
-            <h3 className="font-semibold text-lg mb-2">RPA & Workflow Automation</h3>
-            <p>Integrate with robotic process automation or backend workflows to find and interact with elements in enterprise apps.</p>
           </div>
-          <div className="group bg-white dark:bg-gray-800 rounded-xl border border-gray-300 dark:border-gray-700 p-6 shadow-sm hover:shadow-lg transition hover:border-indigo-300">
-            <div className="w-10 h-10 mb-4 rounded-full bg-black text-white flex items-center justify-center text-lg font-bold">
-              🧭
+          <div className="flex-1">
+            <div className="relative rounded-2xl border border-gray-200 bg-white p-4 shadow-xl dark:border-white/10 dark:bg-white/5">
+              <div className="absolute right-5 top-5 rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-100">
+                Zero-copy selectors
+              </div>
+              <video
+                src="/videos/demo.webm"
+                autoPlay
+                muted
+                loop
+                playsInline
+                poster="/images/video-fallback.png"
+                className="h-[420px] w-full rounded-xl border border-gray-200 object-cover dark:border-white/10"
+                controlsList="nodownload"
+                style={{ pointerEvents: "none" }}
+              />
             </div>
-            <h3 className="font-semibold text-lg mb-2">In-App Guidance</h3>
-            <p>Power onboarding flows and tooltips that always anchor to the right element—even when the UI changes.</p>
           </div>
         </div>
       </section>
 
-      {/* Case Study Section */}
-      <section className="py-20 px-6 bg-gray-50 dark:bg-gray-900">
-        <div className="max-w-4xl mx-auto text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Success Story</h2>
-          <p className="text-lg text-gray-700 dark:text-gray-300">
-            See how real companies are transforming their workflows with Talk2Dom.
-          </p>
-        </div>
-        <div className="max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-md p-8 text-left">
-          <h3 className="text-2xl font-semibold mb-4">Sneaker Reseller Powerhouse</h3>
-          <p className="text-gray-700 dark:text-gray-300 mb-4">
-            One fast-growing company specializes in buying and reselling sneakers on platforms like <strong>StockX</strong> and <strong>GOAT</strong>.
-          </p>
-          <p className="text-gray-700 dark:text-gray-300 mb-4">
-            With Talk2Dom, their team automated the process of finding purchase buttons, bid inputs, and checkout flows — cutting manual work and errors dramatically.
-          </p>
-          <p className="text-gray-700 dark:text-gray-300">
-            The result: faster deal execution, more accurate data extraction, and the ability to scale their sneaker business with confidence.
-          </p>
-        </div>
-      </section>
-
-      {/* Simple Integration Section */}
-      <section className="py-20 px-6">
-        <div className="max-w-4xl mx-auto text-center mb-10">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">One API Call Away</h2>
-          <p className="text-lg text-gray-700 dark:text-gray-300">
-            No complex setup. Just send one HTTP request with a prompt and HTML, and get back the most accurate selector instantly.
-          </p>
-        </div>
-        
-        <p className="text-center text-gray-500 dark:text-gray-400 text-sm mt-6">Works with any test framework, CLI, or web scraper.</p>
-        <div className="max-w-3xl mx-auto text-sm rounded-xl shadow-md overflow-x-auto mt-8">
-          <pre className="bg-gray-100 dark:bg-gray-800 dark:text-gray-100 text-gray-800 rounded-xl p-6 font-mono">
-            <code>{`curl -X POST https://api.talk2dom.itbanque.com/api/v1/inference/locator \\
-  -H "Authorization: Bearer your-token" \\
-  -H "X-Project-ID: your-project-id" \\
-  -H "Content-Type: application/json" \\
-  -d '{
-    "user_instruction": "find the login button",
-    "html": "<html>...</html>",
-    "url": "https://example.com"
-  }'`}</code>
-          </pre>
+      {/* Impact */}
+      <section className="bg-white px-6 py-16 text-gray-900 dark:bg-[#0b0f1c] dark:text-gray-100 md:px-12">
+        <div className="mx-auto flex max-w-6xl flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="space-y-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">
+              Proof in production
+            </p>
+            <h2 className="text-3xl font-semibold md:text-4xl">Fewer flaky runs, less rework</h2>
+            <p className="max-w-2xl text-base text-gray-600 dark:text-gray-200">
+              Teams use Talk2Dom to keep tests and automations stable after design changes. You get selectors with confidence scores and alternates, so
+              your pipelines stay green.
+            </p>
+          </div>
+          <div className="grid w-full max-w-xl gap-4 sm:grid-cols-3">
+            {[
+              { label: "Reduction in locator churn", value: "85%" },
+              { label: "Time saved monthly", value: "120+ hrs" },
+              { label: "Top-3 coverage", value: "99.1%" },
+            ].map((item) => (
+              <div
+                key={item.label}
+                className="rounded-xl border border-gray-200 bg-gray-50 p-4 text-center shadow-sm dark:border-white/10 dark:bg-white/5"
+              >
+                <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">{item.label}</p>
+                <p className="mt-2 text-2xl font-semibold text-gray-900 dark:text-white">{item.value}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Pricing Teaser Section */}
-      <section className="py-20 px-6">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">Start Free, Scale as You Grow</h2>
-          <p className="text-gray-700 dark:text-gray-300 mb-6">
-            Get started instantly with our <strong>Free plan</strong> — includes essential features to explore Talk2Dom without commitment. Upgrade anytime for more projects and team features.
-          </p>
-          <a
-            href="/pricing"
-            className="inline-block bg-gradient-to-r from-indigo-500 to-blue-500 text-white px-6 py-3 rounded-lg text-base font-semibold hover:from-indigo-600 hover:to-blue-600 transition"
-          >
-            View All Plans
-          </a>
+      {/* Reasons */}
+      <section className="bg-gray-50 px-6 py-16 text-gray-900 dark:bg-[#0e1222] dark:text-gray-100 md:px-12">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-10 text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Why teams switch</p>
+            <h2 className="mt-2 text-3xl font-semibold md:text-4xl">Selectors that keep up with your releases</h2>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {[
+              {
+                title: "Resilient discovery",
+                body: "Grounds prompts in DOM, ARIA, labels, and proximity to return CSS/XPath plus alternates. Works across languages.",
+              },
+              {
+                title: "Operational guardrails",
+                body: "Deterministic retries, configurable temperature, and environment tags keep outputs consistent between staging and prod.",
+              },
+              {
+                title: "Observability built-in",
+                body: "Confidence scores and signal metadata show why a selector was chosen. Share traces with QA and devs quickly.",
+              },
+            ].map((item, idx) => (
+              <div
+                key={item.title}
+                className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5"
+              >
+                <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-100 text-sm font-semibold text-sky-700 dark:bg-sky-500/20 dark:text-sky-100">
+                  {idx + 1}
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{item.title}</h3>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-200">{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="bg-white px-6 py-16 text-gray-900 dark:bg-[#0b0f1c] dark:text-gray-100 md:px-12">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-10 text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Flow</p>
+            <h2 className="mt-2 text-3xl font-semibold md:text-4xl">From prompt to stable selector in minutes</h2>
+          </div>
+          <div className="grid gap-6 lg:grid-cols-3">
+            {[
+              {
+                title: "Send context",
+                desc: "Forward the HTML plus URL. We ingest structure, labels, and ARIA hints without scraping hacks.",
+              },
+              {
+                title: "Describe the element",
+                desc: "Prompts like “click the primary checkout button” or “grab all product price cells” are grounded to the DOM.",
+              },
+              {
+                title: "Use the selector",
+                desc: "Receive CSS and XPath with alternates and confidence. Drop into Playwright, Selenium, or your RPA bot.",
+              },
+            ].map((item, idx) => (
+              <div
+                key={item.title}
+                className="rounded-2xl border border-gray-200 bg-gray-50 p-6 shadow-sm dark:border-white/10 dark:bg-white/5"
+              >
+                <p className="text-sm font-semibold text-sky-700 dark:text-sky-200">{String(idx + 1).padStart(2, "0")}</p>
+                <h3 className="mt-3 text-xl font-semibold text-gray-900 dark:text-white">{item.title}</h3>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-200">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Use cases */}
+      <section className="bg-gray-50 px-6 py-16 text-gray-900 dark:bg-[#0e1222] dark:text-gray-100 md:px-12">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-10 text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Where it fits</p>
+            <h2 className="mt-2 text-3xl font-semibold md:text-4xl">Element-level intelligence for your stack</h2>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                title: "Automated testing",
+                body: "Stabilize Playwright, Selenium, and Cypress suites. Less test debt after every release.",
+              },
+              {
+                title: "Web scraping",
+                body: "Extract repeatable data from changing catalogs, forms, and dashboards without brittle XPath.",
+              },
+              {
+                title: "RPA & internal tools",
+                body: "Power bots that interact with legacy apps and in-house portals with consistent selectors.",
+              },
+              {
+                title: "Onboarding & guides",
+                body: "Anchor tooltips and walkthroughs to the right element even as layouts move.",
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5"
+              >
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{item.title}</h3>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-200">{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="bg-gray-900 px-6 py-16 text-gray-50 md:px-12">
+        <div className="mx-auto max-w-5xl rounded-3xl border border-white/10 bg-gradient-to-r from-gray-900 via-sky-900 to-indigo-900 px-8 py-12 shadow-2xl">
+          <div className="grid gap-8 md:grid-cols-[2fr,1fr] md:items-center">
+            <div className="space-y-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200">Get started</p>
+              <h2 className="text-3xl font-semibold md:text-4xl">Ship AI selectors with confidence</h2>
+              <p className="text-lg text-sky-100/80">
+                Start free, validate in your flows, and scale with team seats and higher throughput when you are ready.
+              </p>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                <a
+                  href="/register"
+                  className="rounded-lg bg-white px-6 py-3 text-sm font-semibold text-gray-900 shadow-lg transition hover:-translate-y-0.5"
+                >
+                  Create an account
+                </a>
+                <a
+                  href="/pricing"
+                  className="rounded-lg border border-white/40 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                >
+                  View plans
+                </a>
+              </div>
+            </div>
+            <div className="rounded-2xl border border-white/20 bg-white/5 p-6 text-sm text-white/90 shadow-lg">
+              <p className="text-xs uppercase tracking-wide text-sky-100">What’s included</p>
+              <ul className="mt-3 space-y-2">
+                <li className="flex items-start gap-2">
+                  <span className="mt-1 h-2 w-2 rounded-full bg-white" />
+                  AI selectors with alternates and confidence scores
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-1 h-2 w-2 rounded-full bg-white" />
+                  Playground to validate prompts before CI
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-1 h-2 w-2 rounded-full bg-white" />
+                  Project-based keys and usage visibility
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 

@@ -180,18 +180,4 @@ code {
   font-size: 0.95em;
 }
 
-/* 全局按钮样式 */
-/* button {
-  cursor: pointer;
-} */
-
-section:nth-of-type(odd) {
-  @apply bg-white dark:bg-black;
-}
-
-section:nth-of-type(even) {
-  @apply bg-gray-50 dark:bg-gray-950;
-}
-
 h1, h2, h3, h4, h5, h6 { color: inherit; }
-
