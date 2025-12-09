@@ -180,104 +180,147 @@ export default function PricingPage() {
           "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
         })}
       </Script>
-      <main className="min-h-screen text-gray-900 dark:text-gray-100 px-4 py-10 md:px-6 md:py-24 max-w-7xl mx-auto flex flex-col items-center text-center">
-        <h1 className="text-3xl md:text-5xl font-bold text-center mb-8 md:mb-12">Choose Your Plan</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+      <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-white px-4 py-12 text-gray-900 dark:from-[#05070f] dark:via-[#060815] dark:to-[#05070f] dark:text-gray-100 md:px-8 md:py-20">
+        <section className="mx-auto flex max-w-5xl flex-col items-center text-center space-y-4 pb-12">
+          <div className="inline-flex items-center gap-2 rounded-full border border-gray-200/80 bg-white/90 px-4 py-2 text-xs font-semibold text-gray-700 shadow-sm dark:border-white/15 dark:bg-white/5 dark:text-gray-100">
+            Pricing
+          </div>
+          <h1 className="text-3xl font-semibold leading-tight md:text-5xl">Choose a plan that fits your browser automation</h1>
+          <p className="max-w-3xl text-lg text-gray-600 dark:text-gray-200">
+            Start with Developer, scale with Pro, or partner on Enterprise. All plans include AI selectors with confidence scoring and fallback
+            suggestions.
+          </p>
+        </section>
 
+        <section className="mx-auto grid max-w-6xl grid-cols-1 gap-6 md:grid-cols-3">
           {/* Developer Plan */}
-          <div className="w-full max-w-md md:max-w-xs border border-gray-200 rounded-lg p-4 md:p-6 shadow-sm flex flex-col">
-            <h2 className="text-xl font-bold mb-2">Developer</h2>
-            <p className="text-gray-600 dark:text-gray-300 mb-4">For solo developers building serious projects</p>
-            <div className="text-3xl font-bold mb-4">$9.99<span className="text-base font-medium">/mo</span></div>
-            <ul className="flex-1 space-y-2 mb-6 text-sm text-left">
-              <li>✅ 1,000 API calls / mo</li>
-              <li>✅ Up to 10 projects</li>
-              <li>✅ Up to 2 members / project</li>
+          <div className="flex flex-col rounded-2xl border border-gray-200 bg-white/90 p-6 shadow-lg shadow-indigo-500/10 dark:border-white/10 dark:bg-white/5">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">Developer</p>
+                <h2 className="mt-1 text-2xl font-semibold">For solo builders</h2>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">Perfect for building and validating workflows.</p>
+              </div>
+              <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-800 dark:bg-white/10 dark:text-white">Popular</span>
+            </div>
+            <div className="mt-4 flex items-baseline gap-1 text-4xl font-semibold">
+              $9.99 <span className="text-base font-medium text-gray-600 dark:text-gray-300">/mo</span>
+            </div>
+            <ul className="mt-4 flex-1 space-y-2 text-sm text-left text-gray-700 dark:text-gray-200">
+              <li>• 1,000 API calls / mo</li>
+              <li>• Up to 10 projects</li>
+              <li>• Up to 2 members / project</li>
             </ul>
-            {user === null ? (
-              <Link
-                href="/register"
-                className="mt-auto w-full text-center px-4 py-2 rounded bg-primary text-primary-foreground hover:bg-primary/90"
-              >
-                Sign up
-              </Link>
-            ) : user?.plan && PLAN_LEVEL[user.plan] > PLAN_LEVEL["developer"] ? (
-              <button className="mt-auto w-full text-center px-4 py-2 rounded bg-gray-200 text-gray-400 dark:bg-gray-700 dark:text-gray-400 cursor-not-allowed" disabled>
-                Included
-              </button>
-            ) : user?.plan === "developer" ? (
-              <button className="mt-auto w-full text-center px-4 py-2 rounded bg-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300 cursor-not-allowed" disabled>
-                Current Plan
-              </button>
-            ) : (
-              <button
-                onClick={() => handleUpgrade("developer")}
-                className="mt-auto w-full text-center px-4 py-2 rounded bg-primary text-primary-foreground hover:bg-primary/90"
-                style={{ cursor: "pointer" }}
-              >
-                Upgrade
-              </button>
-            )}
+            <div className="mt-6">
+              {user === null ? (
+                <Link
+                  href="/register"
+                  className="flex w-full items-center justify-center rounded-lg bg-gray-900 px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-black dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
+                >
+                  Sign up
+                </Link>
+              ) : user?.plan && PLAN_LEVEL[user.plan] > PLAN_LEVEL["developer"] ? (
+                <button className="w-full rounded-lg bg-gray-200 px-4 py-3 text-sm font-semibold text-gray-500 dark:bg-gray-700 dark:text-gray-400" disabled>
+                  Included
+                </button>
+              ) : user?.plan === "developer" ? (
+                <button className="w-full rounded-lg bg-gray-200 px-4 py-3 text-sm font-semibold text-gray-700 dark:bg-gray-700 dark:text-gray-300" disabled>
+                  Current plan
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleUpgrade("developer")}
+                  className="flex w-full items-center justify-center rounded-lg bg-gray-900 px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-black dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
+                  style={{ cursor: "pointer" }}
+                >
+                  Upgrade
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Pro Plan */}
-          <div className="w-full max-w-md md:max-w-xs border border-gray-200 rounded-lg p-4 md:p-6 shadow-sm flex flex-col">
-            <h2 className="text-xl font-bold mb-2">Pro</h2>
-            <p className="text-gray-600 dark:text-gray-300 mb-4">Unlock full capacity for teams and advanced workflows</p>
-            <div className="text-3xl font-bold mb-4">$39.99<span className="text-base font-medium">/mo</span></div>
-            <ul className="flex-1 space-y-2 mb-6 text-sm text-left">
-              <li>✅ 5,000 API calls / mo</li>
-              <li>✅ Unlimited projects</li>
-              <li>✅ Up to 10 members / project</li>
+          <div className="flex flex-col rounded-2xl border-2 border-indigo-200 bg-white p-6 shadow-xl shadow-indigo-500/20 dark:border-indigo-500/30 dark:bg-white/5">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.18em] text-indigo-600 dark:text-indigo-200">Pro</p>
+                <h2 className="mt-1 text-2xl font-semibold">For teams</h2>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">Higher throughput and collaboration features.</p>
+              </div>
+              <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-100">
+                Best value
+              </span>
+            </div>
+            <div className="mt-4 flex items-baseline gap-1 text-4xl font-semibold">
+              $39.99 <span className="text-base font-medium text-gray-600 dark:text-gray-300">/mo</span>
+            </div>
+            <ul className="mt-4 flex-1 space-y-2 text-sm text-left text-gray-700 dark:text-gray-200">
+              <li>• 5,000 API calls / mo</li>
+              <li>• Unlimited projects</li>
+              <li>• Up to 10 members / project</li>
             </ul>
-            {user === null ? (
-              <Link
-                href="/register"
-                className="mt-auto w-full text-center px-4 py-2 rounded bg-primary text-primary-foreground hover:bg-primary/90"
-              >
-                Sign up
-              </Link>
-            ) : user?.plan && PLAN_LEVEL[user.plan] > PLAN_LEVEL["pro"] ? (
-              <button className="mt-auto w-full text-center px-4 py-2 rounded bg-gray-200 text-gray-400 dark:bg-gray-700 dark:text-gray-400 cursor-not-allowed" disabled>
-                Included
-              </button>
-            ) : user?.plan === "pro" ? (
-              <button className="mt-auto w-full text-center px-4 py-2 rounded bg-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300 cursor-not-allowed" disabled>
-                Current Plan
-              </button>
-            ) : (
-              <button
-                onClick={() => handleUpgrade("pro")}
-                className="mt-auto w-full text-center px-4 py-2 rounded bg-primary text-primary-foreground hover:bg-primary/90"
-                style={{ cursor: "pointer" }}
-              >
-                Upgrade
-              </button>
-            )}
+            <div className="mt-6">
+              {user === null ? (
+                <Link
+                  href="/register"
+                  className="flex w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-indigo-700"
+                >
+                  Sign up
+                </Link>
+              ) : user?.plan && PLAN_LEVEL[user.plan] > PLAN_LEVEL["pro"] ? (
+                <button className="w-full rounded-lg bg-gray-200 px-4 py-3 text-sm font-semibold text-gray-500 dark:bg-gray-700 dark:text-gray-400" disabled>
+                  Included
+                </button>
+              ) : user?.plan === "pro" ? (
+                <button className="w-full rounded-lg bg-gray-200 px-4 py-3 text-sm font-semibold text-gray-700 dark:bg-gray-700 dark:text-gray-300" disabled>
+                  Current plan
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleUpgrade("pro")}
+                  className="flex w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-indigo-700"
+                  style={{ cursor: "pointer" }}
+                >
+                  Upgrade
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Enterprise Plan */}
-          <div className="w-full max-w-md md:max-w-xs border border-gray-200 rounded-lg p-4 md:p-6 shadow-sm flex flex-col">
-            <h2 className="text-xl font-bold mb-2">Enterprise</h2>
-            <p className="text-gray-600 dark:text-gray-300 mb-4">Partner with us for stable, high‑quality delivery at scale.</p>
-            <div className="text-3xl font-bold mb-4">Customize</div>
-            <ul className="flex-1 space-y-2 mb-6 text-sm text-left">
-              <li>✅ Custom API calls quota</li>
-              <li>✅ Dedicated engineering partnership</li>
-              <li>✅ High-quality, stable delivery across environments</li>
-              <li>✅ SLA-backed support</li>
-              <li>✅ Comprehensive self-host support</li>
-              <li>✅ Architecture & workflow advisory</li>
+          <div className="flex flex-col rounded-2xl border border-gray-200 bg-white/90 p-6 shadow-lg shadow-indigo-500/10 dark:border-white/10 dark:bg-white/5">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">Enterprise</p>
+                <h2 className="mt-1 text-2xl font-semibold">For scale & compliance</h2>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">SLA-backed partnership and deployment options.</p>
+              </div>
+            </div>
+            <div className="mt-4 text-3xl font-semibold">Customize</div>
+            <ul className="mt-4 flex-1 space-y-2 text-sm text-left text-gray-700 dark:text-gray-200">
+              <li>• Custom API calls quota</li>
+              <li>• Dedicated engineering partnership</li>
+              <li>• High-quality, stable delivery across environments</li>
+              <li>• SLA-backed support</li>
+              <li>• Comprehensive self-host support</li>
+              <li>• Architecture & workflow advisory</li>
             </ul>
-            {user?.plan === "enterprise" ? (
-              <button className="mt-auto w-full text-center px-4 py-2 rounded bg-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300 cursor-not-allowed" disabled>
-                Current Plan
-              </button>
-            ) : (
-              <a href="mailto:sales@talk2dom.com" className="mt-auto w-full text-center px-4 py-2 rounded bg-primary text-primary-foreground hover:bg-primary/90">Contact Sales</a>
-            )}
+            <div className="mt-6">
+              {user?.plan === "enterprise" ? (
+                <button className="w-full rounded-lg bg-gray-200 px-4 py-3 text-sm font-semibold text-gray-700 dark:bg-gray-700 dark:text-gray-300" disabled>
+                  Current plan
+                </button>
+              ) : (
+                <a
+                  href="mailto:sales@talk2dom.com"
+                  className="flex w-full items-center justify-center rounded-lg border border-gray-300 px-4 py-3 text-sm font-semibold text-gray-900 transition hover:-translate-y-0.5 hover:border-gray-400 dark:border-white/30 dark:text-white dark:hover:border-white/50"
+                >
+                  Contact sales
+                </a>
+              )}
+            </div>
           </div>
-        </div>
+        </section>
       </main>
       {showConfirmPopup && (
         <ConfirmPopup
