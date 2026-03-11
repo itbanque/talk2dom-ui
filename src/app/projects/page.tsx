@@ -68,6 +68,7 @@ export default function ProjectsPage() {
   const [hasMore, setHasMore] = useState(false);
   const [total, setTotal] = useState<number | null>(null);
   const [projectsLoaded, setProjectsLoaded] = useState(false);
+  const isProjectsLoading = !projectsLoaded;
 
   useEffect(() => {
     try {
@@ -393,8 +394,20 @@ export default function ProjectsPage() {
 
 
 
+          {isProjectsLoading && (
+            <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-8 md:p-12">
+              <div className="flex items-center justify-center gap-3 text-gray-700 dark:text-gray-300">
+                <span
+                  className="inline-block h-5 w-5 rounded-full border-2 border-gray-300 dark:border-gray-600 border-t-indigo-500 animate-spin"
+                  aria-hidden="true"
+                />
+                <p className="text-sm md:text-base font-medium">Loading projects...</p>
+              </div>
+            </div>
+          )}
+
           {/* Card View */}
-          {projects.length > 0 && viewMode === 'card' && (
+          {!isProjectsLoading && projects.length > 0 && viewMode === 'card' && (
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
               {projects.map((p) => {
                 if (!refs.current[p.id]) {
@@ -478,7 +491,7 @@ export default function ProjectsPage() {
           )}
 
           {/* List View */}
-          {projects.length > 0 && viewMode === 'list' && (
+          {!isProjectsLoading && projects.length > 0 && viewMode === 'list' && (
             <div className="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg">
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead>
@@ -542,7 +555,7 @@ export default function ProjectsPage() {
           <div className="mx-auto w-fit px-2 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white/90 dark:bg-gray-900/90 backdrop-blur supports-[backdrop-filter]:bg-white/60 supports-[backdrop-filter]:dark:bg-gray-900/60 shadow pointer-events-auto flex flex-row items-center justify-center gap-2">
             <button
               onClick={() => setOffset(Math.max(offset - limit, 0))}
-              disabled={offset === 0}
+              disabled={offset === 0 || isProjectsLoading}
               className="inline-flex items-center justify-center h-9 w-9 rounded-full bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
               aria-label="Previous"
               title="Previous"
@@ -552,7 +565,7 @@ export default function ProjectsPage() {
             </button>
             <button
               onClick={() => setOffset(offset + limit)}
-              disabled={!hasMore}
+              disabled={!hasMore || isProjectsLoading}
               className="inline-flex items-center justify-center h-9 w-9 rounded-full bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
               aria-label="Next"
               title="Next"
